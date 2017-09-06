@@ -31,8 +31,10 @@ Travel and study of a planet take an amount of time, depending of distance, plan
 
 Player will build a colonization ship. It will choose the composition of the ship.
 The ship will have X slots. Each slot can be occupy with:
-* 100 000 colons
-* a facility
+
+- 100 000 colons
+- a facility
+
 
 Player can choose the best facilities to fit the best beginning depending of the nature of the planet.
 
@@ -48,10 +50,11 @@ If the indicator is negative, the population will decrease.
 If the indicator is positive, the population will increase.
 
 Indicator will take in account :
-* quality of air
-* available lands remaining
-* ressources availibility
-* ....
+
+- quality of air
+- available lands remaining
+- ressources availibility
+- ....
 
 ### Clues about management
 
