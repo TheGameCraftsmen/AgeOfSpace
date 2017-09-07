@@ -60,6 +60,13 @@ Indicator will take in account :
 - ressources availibility
 - ....
 
+### Population growth
+
+Buildings for inhabitants will appear automatically, each time 1 millions is reached.
+
+Each 1 millions habitants will consume X km² from the available lands.
+
+
 ### Viability constraints
 
 Constraints are about:
@@ -79,8 +86,26 @@ If the air remains toxic because too much changement to make, player must build 
 
 #### Ground
 
-Ground composition is about the capacity to make grow plants
+Ground composition is about the capacity to make grow plants.
 
+Is the ground compatible with elements needed by seeds?
+
+The ground can be more or less similar to Earth's ground, or maybe it is toxic.
+
+Toxicity disable the possibility to cultivate. Maybe a player wants to etablish an outpost to create some facilities to mine some ressources. But population can't be autonomous, and lot of stuff must be bringed to this planet (food, water, ....).
+
+
+### Land
+
+A planet has a quantity of land to construct facilities & building to inhabit.
+
+The size of the lands will define the maximum amount of population that a planet can have.
+
+Land will be occupied by facilities (specific buildings built by the player as mine, factory, refinery, ...) ,by buildings for inhabitants or as food fields.
+
+Player must manage the space available.
+
+Lands in % can be toxic, inhabitable, or cultivable.
 
 ### Clues about management
 
@@ -89,5 +114,20 @@ Player can investigate through population survey what happens to its population:
 * Missing space
 * Missing facilities (entertainment)
 
+### Buildings
+
+Player can build several buildings:
+
+* Mine
+* Air Purificator
+* Ground Purificator
+* Factory
+* Refinery
+* Farm
+
 
 ## Manage exchange
+
+
+
+
