@@ -57,8 +57,8 @@ Indicator will take in account :
 
 - quality of air
 - available lands remaining
-- ressources availibility
-- ....
+- ressources availibility to build house
+- amount of food
 
 ### Population growth
 
