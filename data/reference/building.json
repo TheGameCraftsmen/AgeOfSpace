@@ -1,0 +1,54 @@
+{
+    "buildings":[
+        {
+            "type" : "mine",
+            "name" : "iron Mine",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "iron" : 100
+                    },
+                    {
+                        "wood" : 30
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "goods",
+                "product" : "iron",
+                "quantity" : 100
+            },
+            "storage" : 10000
+        },
+        {
+            "type" : "spatioport",
+            "name" : "spatioport",
+            "require" : {
+                "space" : 50,
+                "materials" : [
+                    {"iron" : 1000}
+                ]
+            },
+            "produce" : [
+                {
+                    "type" : "transport",
+                    "name" : "transport SpaceShip",
+                    "require" : {
+                        "materials" : { "iron" : 300}
+                    }
+                },
+                {
+                    "type" : "colon",
+                    "name" : "colon SpaceShip",
+                    "require" : {
+                        "materials" : { "iron" : 400}
+                    }
+                }
+            ]
+        },{
+            "type" : "habitation"
+
+        }
+    ]
+}
