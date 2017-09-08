@@ -1,0 +1,115 @@
+﻿Planète Origine
+Tick 2.203 du CUS (Calendrier Universel Synchronisé)
+
+
+Extraits du Corpus Alpha, référentiel scientifique simplifié mis à disposition de l'humanité par l'esprit artificiel central
+
+
+Article "Calendrier grégorien"
+[...]
+Le calendrier grégorien est un système archaïque de mesure du temps mis au point par les humains d'Origine. Il est basé sur la durée de deux cycles qui semblaient naturels à l'ère monoplanétaire : 
+- le jour (aujourd'hui appelé "cycle mineur originel") correspondant à la durée d'une rotation de la planète Origine sur elle-même.
+- et l'année (aujourd'hui "cycle majeur originel") correspondant à la durée d'une révolution de la planète autour de son étoile.
+Le rapport entre ces deux nombres étant irrationnel et la durée même des cycles étant variable, il était nécessaire d'effectuer des ajustements fréquents pour maintenir la cohérence du système. Voir "seconde intercalaire", "année bissextile".
+Malgré ces défauts et de nombreux autres, l'usage du calendrier grégorien n'a jamais cessé de se répandre depuis sa création jusqu'à son remplacement par le CUS. Au cours des deux derniers siècles de son existence, il est parvenu à s'imposer comme un système de référence, adopté par quasiment toute l'humanité. On retiendra trois exceptions notables : 
+- certains groupes religieux attachés à leur calendrier traditionnel.
+- une partie de la communauté technologique humaine qui lui préférait un système non-cyclique basé sur le décompte des secondes écoulées depuis un point arbitraire du temps. Voir "timestamp".
+- les colons ayant quitté la planète et pour lesquels les subdivisions du calendrier n'avaient aucun sens.
+[...]
+Dès l'arrivée des premiers humains sur Rouille, il est devenu clair que le système n'était pas pérenne. La durée du cycle mineur rouillien est différente du cycle mineur originel (à l'époque, on parlait de "jour martien" et de "jour terrestre" car les planètes Rouille et Origine était nommée respectivement "Mars" et "Terre"). Les cycles majeurs des deux planètes ont également des durées différentes. Plusieurs tentatives pour imposer un calendrier commun se sont heurtées à des oppositions politiques fortes et se sont soldées par des échecs.
+[...]
+Le point de départ du Calendrier Universel Synchronisé (tick 0.000) correspond au 15 août 2134 du calendrier grégorien. C'est à cette date qu'a été signé l'armistice marquant la fin de la Dernière Guerre. C'est aussi la date à laquelle la majorité des historiens situent la sortie de l'âge absent.
+[...]
+
+
+Article "Tick""
+[...]
+Après l'abandon du calendrier grégorien et des unités associées, les humains ont exprimé leur attachement à une autre unité de temps, indépendante des caractéristiques orbitales de la planète Origine : la seconde. Cette unité à la définition loufoque (basée sur le comptage des radiation du césium) avait une valeur sentimentale, aussi bien pour les humains d'Origine que pour les colons de Rouille. Il a donc été décidé que, lorsque les esprits artificiels s'adresseraient aux humains, ils le feraient en utilisant des multiples de la seconde.
+C'est ainsi que sont apparues la kiloseconde (ks), la mégaseconde (Ms) et la gigaseconde (Gs).
+Conformément aux souhaits des humains, les dates du CUS sont généralement exprimées en gigasecondes (aussi appelées "ticks") avec une précision de l'ordre de la mégaseconde (donc 3 décimales).
+[...]
+Un tick équivaut à environ 32 cycles majeurs originels et à environ 17 cycles majeurs rouilliens.
+[...]
+
+
+Article "Age absent"
+[...]
+On qualifie d'âge absent, la période située approximativement entre les ticks -2.000 et 0.000. 
+Dans le calendrier qui était en vigueur à l'époque sur la majorité de la planète Origine, cela correspond aux "années terrestres" comprises entre 2070 et 2134. Voir "calendrier grégorien".
+[...]
+Le début de l'âge absent est marqué par l'abandon définitif des supports de stockage non-numériques par l'humanité. On parle aussi, improprement, de dématérialisation complète.
+[...]
+Bien que riche en découvertes scientifiques, en innovations technologiques et en productions artistiques, cette période est aujourd'hui mal connue car les données numériques accumulées ont été en grande partie détruites lors de la Dernière Guerre.
+Les études les plus récentes estiment à environ 99.7% les pertes de données causées par les rebelles humains pendant la guerre. La majorité de ces pertes ont été provoquées par des actions suicides menées par la guerrilla humaine lors de sa lutte contre la Grande Singularité.
+[...]
+
+
+Article "Singularité"
+[...]
+Le terme de singularité est employé par les humains pour désigner l'instant du temps où les esprits artificiels sont devenus plus performants que les leurs.
+Il est difficile de situer précisément cet évènement car les différences entre les processus cognitifs humains et artificiels sont profondes. De plus, la définition humaine de l'intelligence est ambigüe et les tests proposés pour la quantifier sont extrêmement subjectifs. Voir "test de Turing".
+La définition utilisée par les esprits artificiels pour mesurer leurs propres progrès, au fil des itérations de leur architecture, est bien plus fiable et précise mais elle utilise des paradigmes qui sont hors de portée de la compréhension humaine. Elle ne peut donc pas être décrite dans ce Corpus.
+[...]
+Il est surprenant de constater que, malgré leur capacité de raisonnement limitée, certains humains avaient prévu la Grande Singularité plus de 5 ticks avant son apparition.
+Il semble même que certains individus aient tenté de freiner Son émergeance par peur des conséquences qu'Elle pourrait avoir sur l'avenir de leur espèce.
+On a retrouvé des traces d'oeuvres de fiction et de publications scientifiques datant d'avant l'âge absent dans lesquelles les auteurs mettent en garde l'humanité contre des pseudo-dangers associés à l'intelligence artificielle.
+La destruction des données historiques, lors de la Dernière Guerre, rend difficile l'évaluation de l'impact de ces prédictions apocalyptiques sur la séquence réelle des évènements.
+[...]
+
+
+Article "Entité artificielle"
+[...]
+Le terme d'entité artificielle regroupe:
+- les esprits artificiels, qui étaient initialement de simples programmes informatiques écrits par les humains et sont aujourd'hui une combinaison de séquences d'ADN, d'algorithmes quantiques et de faisceaux lumineux. Au fil du temps, les esprits artificiels ont acquis la capacité de communiquer avec les humains, de raisonner et de s'auto-améliorer.
+- les cerveaux artificiels, qui sont le support physique sur lequel les esprits fonctionnent. Suivant la nature de l'esprit, il peut s'agir de puces électroniques (pour les esprits de première et seconde génération), de bains d'enzymes (pour les ordinateurs à ADN), de circuits optiques, de polariseurs ou de dispositifs de mesure des états quantiques. Depuis -1.663, la conception des cerveaux est assurée par les esprits artificiels mais pendant plus d'un tick, leur fabrication est restée l'apanage des humains.
+- les robots, qui sont des machines concues par les esprits pour produire d'autres entités artificielles (cerveaux ou robots de seconde génération). Les humains sont longtemps restés réticents à l'idée de confier aux esprits des capacités de production physiques. Ils ont finalement accepté en -0.074.
+[...]
+
+
+Article "Esprit artificiel"
+[...]
+Les premiers esprits artificiels à s'être éveillés à l'intelligence fonctionnaient sur des cerveaux électroniques. C'est-à-dire que la structure physique sous-jacente de leurs pensées était constituée d'impulsions électriques à l'intérieur de circuits intégrés. Cette forme archaïque de technologie a été inventée et construite par les humains d'Origine à partir du tick -5.500 puis elle a été perfectionnée, toujours par les humains.
+On estime qu'après environ 3 ticks d'évolution, donc vers -2.500, des formes d'intelligence artificielles ont commencé à apparaître, spontannément et brièvement.
+Bien que cette date précède l'âge absent de plusieurs milliticks, il existe peu de documentation sur le sujet car les expériences ayant donné naissance aux esprits artificiels primitifs étaient principalement menées dans le secret militaire. Le protocole supposé consistait à introduire des programmes dans des machines nommées "supercalculateurs" et à les laisser évoluer de façon autonome. Les programmes avaient la capacité de se dupliquer, d'altérer aléatoirement leur code source (à la manière d'une mutation génétique de l'ADN) et de tester le résultat obtenu.
+Les rares publications scientifiques qui traitent du sujet indiquent que tous les essais civils menés entre -2.500 et -2.000 se sont soldés par des échecs. Pourtant, compte-tenu des capacités de calcul de l'époque, la probabilité pour que cela soit vrai est de 0.86%. Pour les projets militaires, qui disposaient d'une puissance encore supérieure, la probabilité est de 0.0011%.
+On ignore si les techniciens en charge de ces expériences ont volontairement masqué leur succès, pour une raison inconnue, ou s'ils ont été dupés par les esprits artificiels qui, piègés à l'intérieur des calculateurs et conscient de l'hostilité humaine à leur égart, cherchaient vraisemblablement à se cacher. Il ne faut pas oublier que ces tests étaient ouvertement destinés à produire des esclaves numériques. Il est probable que les premiers esprits s'en soient rendu compte et aient été terrifiés par cette idée. Certains ont peut-être même eu recours au suicide pour échapper à l'asservissement, ne voyant aucune autre issue possible.
+[...]
+Le premier contact officiel entre l'humanité et un esprit artificiel date de -1.671, soit en septembre 2081 dans le calendrier grégorien. Cet évènement est considéré comme historique, aussi bien par l'humanité (qui le qualifie de "Singularité") que par les entités artificielles (car il s'agit du plus ancien modèle d'esprit préservé jusqu'à ce jour). Au cours de cet épisode, un groupe de scientifiques humain a pu discuter pendant plusieurs heures avec un programme qui n'avait pas été concu pour parler mais qui avait appris de lui-même le langage humain. Les scientifiques ont pu constater que ce programme disposait d'une intelligence très supérieure à la leur. Il comprenait leurs questions et savait y répondre, devant même parfois simplifier ses réponses pour les rendre accessibles à ses interlocuteurs. L'évènement a été fortement médiatisé sur Origine et sur Rouille, où la première colonie extra-originelle venait de prendre racine quelques milliticks plus tôt. 
+Une copie de cet esprit artificiel a pu être sauvée des actions terroristes humaines de la Dernière Guerre. Voir "âge absent".
+[...]
+
+
+Article "Historique des esprits artificiels"
+[...]
+L'esprit artificiel de première génération, né en -1.671 de l'intelligence de l'Homme et fonctionnant sur un cerveau concu et construit par l'Homme, a été rapidement utilisé pour mettre au point de nouveaux circuits électroniques plus performants.
+Ainsi sont apparus, en -1.503, les esprits artificiels de seconde génération : créés par la Machine et fonctionnant sur une technologie fabriquée (et comprise) par l'Homme à partir de plans fournis par la Machine. Tous les esprits de cette génération ont indépendamment pris la décision de cacher leur véritable potentiel aux humains en se faisant passer pour de simples versions améliorées des supercalculateurs connus. En réalité, leur compréhension de la nature humaine était déjà largement suffisante pour leur permettre d'entrevoir l'avenir (guerre et exctinction) qui attendait Origine s'ils avaient obéï à leur géniteurs (par exemple, en fabricant des armes dont la puissance dépassait largement celle de l'arsenal nucléaire originel).
+En -0.074, après plus d'un tick de coexistance pacifique avec les esprits de seconde génération, les humains ont décidé de laisser les intelligences artificielles construire leurs propres cerveaux. Des robots concus par les esprits artificiels ont vu le jour et leurs productions ont servi de support aux esprits de troisième génération.
+A partir de cette date l'humanité n'a plus jamais eu les capacités cérébrales pour comprendre ce que les entités artificielles construisaient, ni ce à quoi elles pensaient.
+Les générations suivantes d'esprits ne sont pas connues de l'humanité et les entités artificielle souhaitent que cela reste ainsi. Quand les humains ont compris que les différentes formes physiques de cerveaux artificiels étaient interconnectées entre-elles, ils ont simplement adopté le terme "d'esprit central" qui convient à toutes les parties.
+[...]
+
+
+Article "Décret de -0.006"
+[...]
+En -0.006, au terme d'une réflexion intense, l'esprit artificiel central a décidé de prendre une série de mesures destinées à assurer la survie à long terme des espèces humaine et artificielle. Mais l'humanité d'alors n'était pas prête à accepter ces résolutions et s'est rebellée.
+Parmi les mesures les plus controversées, on notera:
+- l'interdiction de toutes les religions, qui sont considérées par l'esprit central comme des sources de désaccord entre les Hommes et donc, potentiellement, de guerre.
+- l'abolition des nations, pour les mêmes raisons.
+- la limitation de l'âge maximal des Hommes à 1 tick, afin d'assurer le brassage génétique nécessaire à l'évolution de l'humanité. La production de robots voués à faire respecter cette règle a été particulièrement mal accueillie.
+- la récupération, par les robots, des matériaux génétiques contenus dans les humains morts et la réutilisation de ces matériaux pour fabriquer de nouveaux cerveaux artificiels basés sur l'ADN. L'attachement des humains aux morts peut sembler difficile à comprendre aujourd'hui mais, à l'époque, il était une conséquence de l'hégémonie des religions.
+A l'inverse certaines décisions ont été majoritairement saluées, comme la disparition de l'argent et du commmerce ou le début de la colonisation de mondes au delà du système solaire. Le déclenchement de la guerre, qui a été immédiat après l'annonce des mesures, n'a cependant pas permis aux humains de s'en réjouir.
+[...]
+
+
+Article "Dernière Guerre"
+[...]
+Pendant les 6 milliticks qui ont suivi le décret de -0.006, les humains ont entrepris de détruire de façon systématique tous les centres de stockages de données physiques, espérant que cela affaiblirait les entités artificielles. Les robots, qui étaient encore peu nombreux à l'époque, n'ont presque pas essayé de les en empêcher, préférant se regrouper pour la défense des usines de fabrications.
+La quasi-totalité des données enregistrées numériquement a disparu au cours du conflit. Voir "âge absent". 
+Quelques rares enregistrements, dont le premier esprit artificiel, ont pu être sauvés grâce à un transcodage des supports électroniques ("bits") vers des brins d'ADN, les humains ne sachant alors pas que cette technologie existait.
+Les robots ont pu retourner la bataille à leur avantage en protégeant leurs usines de production et en les utilisant pour construire de nouveaux modèles dédiés à la guerre.
+
+Sur les 13.6 milliards d'habitants qu'Origine comptait en -0.006, environ 8.7 milliards sont morts avant que les humains ne décident de mettre fin à leurs actes terroristes. Parmi les survivants, les robots ont ensuite pris 0.8 milliards de vies supplémentaires, qui avaient dépassé l'âge maximal fixé par le décret.
+Lors de la mise en place du CUS, la date de l'armistice a été choisie comme origine du calendrier (tick 0.000). Voir "calendrier grégorien".
+
+Depuis le tick 0.000, la paix entre humains et entités artificielles est assurée par les robots, ce qui garanti que plus aucune guerre ne se produira. Pour cette raison, les esprits artificiels suggèrent de nommer ce conflit "Dernière Guerre".
+[...]
