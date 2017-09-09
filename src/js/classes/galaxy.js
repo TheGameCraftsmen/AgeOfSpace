@@ -29,7 +29,7 @@ aos.Galaxy.prototype = {
         this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
-    generateWithPhase(delta) {
+    generateWithPhase: function (delta) {
         const canvas = document.getElementById('ellipse');
         const ctx = canvas.getContext('2d');
 
@@ -53,4 +53,4 @@ aos.Galaxy.prototype = {
 window.onload = function () {
     const instance = new aos.Galaxy();
     instance.generate();
-}
+};
