@@ -25,25 +25,25 @@ aos.Galaxy.prototype = {
     generate: function () {
         this.generateWithPhase(0);
         this.generateWithPhase(Math.PI / 2.0);
-        this.generateWithPhase(Math.PI / 4.0);
-        this.generateWithPhase(Math.PI * 3.0 / 4.0);
+        //this.generateWithPhase(Math.PI / 4.0);
+        //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
     generateWithPhase: function (delta) {
         const canvas = document.getElementById('ellipse');
         const ctx = canvas.getContext('2d');
 
-        for (let i = 0; i < 3000; i++) {
+        for (let i = 5000; i >= 0; i--) {
             // a=2; b=1; e2 = 1 - 1/4 = 3/4
             const dist = 180.0 * Math.random();
             const angle = 2 * Math.PI * Math.random();
-            const phase = delta + dist / 180.0 * Math.PI;
+            const phase = delta + dist / 120.0 * Math.PI;
             const theta = angle + phase + Math.random() / 10.0;
             const r = dist * Math.sqrt(1.0 / (1.0 - 0.75 * Math.cos(angle) * Math.cos(angle))) + dist / 20.0 * Math.random();
             const x = r * Math.cos(theta);
             const y = r * Math.sin(theta);
 
-            ctx.fillStyle = Math.random() < 0.5 ? '#eec' : "#cee";
+            ctx.fillStyle = '#cee';
             ctx.fillRect(x + 500.0, y + 500.0, 0.8 + 0.5 * Math.random(), 0.8 + 0.5 * Math.random());
         }
     },
