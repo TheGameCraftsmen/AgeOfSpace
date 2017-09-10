@@ -33,7 +33,7 @@ aos.Galaxy.prototype = {
         const canvas = document.getElementById('ellipse');
         const ctx = canvas.getContext('2d');
 
-        for (let i = 5000; i >= 0; i--) {
+        for (let i = 20000; i >= 0; i--) {
             // a=2; b=1; e2 = 1 - 1/4 = 3/4
             const dist = 180.0 * Math.random();
             const angle = 2 * Math.PI * Math.random();
@@ -44,7 +44,7 @@ aos.Galaxy.prototype = {
             const y = r * Math.sin(theta);
 
             ctx.fillStyle = '#cee';
-            ctx.fillRect(x + 500.0, y + 500.0, 0.8 + 0.5 * Math.random(), 0.8 + 0.5 * Math.random());
+            ctx.fillRect(x + 500.0, y + 500.0, 0.1 + (1.0 - dist / 180.0) * Math.random(), 0.1 + (1.0 - dist / 180.0) * Math.random());
         }
     },
 
