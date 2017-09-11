@@ -17,16 +17,14 @@ var aos = aos || {};
  * @class
  */
 aos.Planet = function () {
-    /** @type {number} */
+    /** @type {number} 
+     * in Million km2
+    */
     this.size = 0;
-    /** @type {String:number}
-     * Ex : {"O2" : "0.2","CO2" : "0.5", ....}
-    */
-    this.air = {};
-    /** @type {String:number}
-     * Ex : {"Acidity" : "3","Radioactivity" : "10", ....}
-    */
-    this.ground = {};
+    /** @type {aos.ressource} */
+    this.air = [];
+    /** @type {aos.ressource} */
+    this.ground = [];
     /** @type {number} */
     this.landSize = 0;
     /** @type {number} */
@@ -46,8 +44,14 @@ aos.Planet = function () {
 aos.Planet.prototype = {
 
     generate: function () {
-        this.size = Math.floor(Math.random * 5);
+        this.size = Math.floor(Math.random * 5) * 150;
+        this.landSize = Math.random * this.size;
+
     },
+
+    generateAir : function(){
+
+    }
 
     
 };
