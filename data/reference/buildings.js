@@ -1,4 +1,4 @@
-{
+aos.buildings = {
     "buildings":[
         {
             "type" : "mine",
@@ -59,4 +59,4 @@
 
         }
     ]
-}
+};
