@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="./src/css/style.css" media="screen">
 </head>
 <body>
-    <canvas id="ellipse" width="1200" height="1200" style="border:1px solid #888; position:relative; top:-300px; transform: rotateX(60deg);"></canvas>
+    <div style="padding:5px">
+        <canvas id="ellipse" width="1200" height="600" style="z-index:1; position:absolute; transform: rotateX(0deg);"></canvas>
+        <canvas id="starOverlay" width="1200" height="600" style="z-index:2; border:1px solid #444; position:absolute; transform: rotateX(0deg);"></canvas>
+    </div>
     <div id="stats"></div>
     <script src="./src/js/classes/galaxy.js"></script>
 </body>

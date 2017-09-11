@@ -18,11 +18,13 @@ var aos = aos || {};
 aos.Galaxy = function () {
     /** @type {number} */
     this.size = 0;
+    this.starCoordinates = [];
 };
 
 aos.Galaxy.prototype = {
 
     generate: function () {
+        this.starCoordinates = [];
         const galaxyType = Math.random();
         if (galaxyType < 0.3) {
             this.generateE0();
@@ -31,18 +33,28 @@ aos.Galaxy.prototype = {
         } else {
             this.generateSb();
         }
+        const canvas = document.getElementById('starOverlay');
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#0c0';
+        ctx.lineWidth = 2;
+        document.getElementById('stats').innerHTML += '' + this.starCoordinates.length + '<br/>';
+        this.starCoordinates.forEach(function (star) {
+            ctx.beginPath();
+            ctx.arc(600 + star.x, 300 + star.y, 10, 0, 2 * Math.PI);
+            ctx.stroke();
+        });
     },
 
     generateE0: function () {
         const totalStarCount = 13000 + 7000 * Math.random();
-        this.generateWithPhase(Math.PI * Math.random(), totalStarCount, 0.2 + 0.5 * Math.random(), 0.0, 0.0);
+        this.generateWithPhase(Math.random() - 0.5, totalStarCount, 0.2 + 0.5 * Math.random(), 0.0, 0.0, 16);
         //this.generateWithPhase(Math.PI / 4.0);
         //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
     generateSa: function () {
         const totalStarCount = 13000 + 7000 * Math.random();
-        this.generateWithPhase(Math.PI * Math.random(), totalStarCount, 0.2 + 0.5 * Math.random(), 1.0 + 7.0 * Math.random(), Math.random() < 0.5 ? -1.0 : 1.0);
+        this.generateWithPhase(Math.PI * Math.random(), totalStarCount, 0.2 + 0.5 * Math.random(), 1.0 + 7.0 * Math.random(), Math.random() < 0.5 ? -1.0 : 1.0, 16);
         //this.generateWithPhase(Math.PI / 4.0);
         //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
@@ -53,13 +65,13 @@ aos.Galaxy.prototype = {
         const phaseRandomness = 0.1 + 0.2 * Math.random();
         const phaseMax = 2.0 + 2.0 * Math.random()
         const mirror = Math.random() < 0.5 ? -1.0 : 1.0;
-        this.generateWithPhase(0, totalStarCount * (1 - hRatio), phaseRandomness, phaseMax, mirror);
-        this.generateWithPhase(Math.PI / 2.0, totalStarCount * hRatio, phaseRandomness, phaseMax, mirror);
+        this.generateWithPhase(0, totalStarCount * (1 - hRatio), phaseRandomness, phaseMax, mirror, 8);
+        this.generateWithPhase(Math.PI / 2.0, totalStarCount * hRatio, phaseRandomness, phaseMax, mirror, 8);
         //this.generateWithPhase(Math.PI / 4.0);
         //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
-    generateWithPhase: function (phaseOrigin, starAmount, phaseRandomness, phaseMax, mirror) {
+    generateWithPhase: function (phaseOrigin, starAmount, phaseRandomness, phaseMax, mirror, pushToStar) {
         const canvas = document.getElementById('ellipse');
         const ctx = canvas.getContext('2d');
         //let xmin = 1000;
@@ -75,17 +87,23 @@ aos.Galaxy.prototype = {
             const theta = angle + phase + (0.5 - Math.random()) * phaseRandomness;
             const r = dist * Math.sqrt(1.0 / (1.0 - 0.75 * Math.cos(angle) * Math.cos(angle)))/* + dist / 20.0 * Math.random()*/;
             const x = r * Math.cos(theta);
-            const y = r * Math.sin(theta);
+            const y = 0.5 * r * Math.sin(theta);
 
-            if (x > -600 && x < 600 && y > -600 && y < 600) {
-                ctx.fillStyle = dist < 100 ? '#ffd' :
+            if (x > -600 && x < 600 && y > -300 && y < 300) {
+                ctx.fillStyle =
+                    dist < 30 ? '#fff' :
+                    dist < 100 ? '#ffd' :
                     dist < 105 ? '#fdb' :
                     dist < 130 ? '#ffd' :
                     dist < 135 ? '#ddf' :
                     dist < 145 ? '#fcc' :
                     '#fff';
-                const pointSize = 0.1 + (1.0 - dist / 720.0) * Math.random();
-                ctx.fillRect(x + 600.0, y + 600.0, pointSize, pointSize);
+                let pointSize = 0.1 + (1.0 - dist / 720.0) * Math.random();
+                if (i < pushToStar) {
+                    this.starCoordinates.push({ x, y });
+                    pointSize = 2.0;
+                }
+                ctx.fillRect(x + 600.0, y + 300.0, pointSize, pointSize);
             }
             //if (x < xmin) xmin = x;
             //if (x > xmax) xmax = x;
