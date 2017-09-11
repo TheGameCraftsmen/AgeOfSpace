@@ -19,6 +19,8 @@ aos.Galaxy = function () {
     /** @type {number} */
     this.size = 0;
     this.starCoordinates = [];
+    this.edges = [];
+    this.kruskals = [];
 };
 
 aos.Galaxy.prototype = {
@@ -26,35 +28,49 @@ aos.Galaxy.prototype = {
     generate: function () {
         this.starCoordinates = [];
         const galaxyType = Math.random();
-        if (galaxyType < 0.3) {
+        if (galaxyType < 0.2) {
             this.generateE0();
-        } else if (galaxyType < 0.65) {
+        } else if (galaxyType < 0.6) {
             this.generateSa();
         } else {
             this.generateSb();
         }
+        this.filterCenterAndTooClose();
+        this.computeEdges();
+        this.kruskal();
         const canvas = document.getElementById('starOverlay');
         const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#590';
+        ctx.lineWidth = 1;
+        this.kruskals.forEach(function (edge) {
+            const v1 = this.starCoordinates[edge.i];
+            const v2 = this.starCoordinates[edge.j];
+            ctx.beginPath();
+            ctx.moveTo(600 + v1.x, 450 + v1.y);
+            ctx.lineTo(600 + v2.x, 450 + v2.y);
+            ctx.stroke();
+        }, this);
         ctx.strokeStyle = '#0c0';
         ctx.lineWidth = 2;
-        document.getElementById('stats').innerHTML += '' + this.starCoordinates.length + '<br/>';
         this.starCoordinates.forEach(function (star) {
             ctx.beginPath();
-            ctx.arc(600 + star.x, 300 + star.y, 10, 0, 2 * Math.PI);
+            ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
             ctx.stroke();
         });
     },
 
     generateE0: function () {
         const totalStarCount = 13000 + 7000 * Math.random();
-        this.generateWithPhase(Math.random() - 0.5, totalStarCount, 0.2 + 0.5 * Math.random(), 0.0, 0.0, 16);
+        this.generateWithPhase(0.0, totalStarCount, 0.2 + 0.5 * Math.random(), 0.0, 0.0, 16);
         //this.generateWithPhase(Math.PI / 4.0);
         //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
     generateSa: function () {
         const totalStarCount = 13000 + 7000 * Math.random();
-        this.generateWithPhase(Math.PI * Math.random(), totalStarCount, 0.2 + 0.5 * Math.random(), 1.0 + 7.0 * Math.random(), Math.random() < 0.5 ? -1.0 : 1.0, 16);
+        const phaseMax = 1.0 + 7.0 * Math.random();
+        const mirror = Math.random() < 0.5 ? -1.0 : 1.0;
+        this.generateWithPhase(-Math.PI / 2.0 * phaseMax * mirror, totalStarCount, 0.2 + 0.5 * Math.random(), phaseMax, mirror, 16);
         //this.generateWithPhase(Math.PI / 4.0);
         //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
@@ -87,23 +103,23 @@ aos.Galaxy.prototype = {
             const theta = angle + phase + (0.5 - Math.random()) * phaseRandomness;
             const r = dist * Math.sqrt(1.0 / (1.0 - 0.75 * Math.cos(angle) * Math.cos(angle)))/* + dist / 20.0 * Math.random()*/;
             const x = r * Math.cos(theta);
-            const y = 0.5 * r * Math.sin(theta);
+            const y = r * Math.sin(theta);
 
-            if (x > -600 && x < 600 && y > -300 && y < 300) {
+            if (x > -600 && x < 600 && y > -450 && y < 450) {
                 ctx.fillStyle =
                     dist < 30 ? '#fff' :
                     dist < 100 ? '#ffd' :
-                    dist < 105 ? '#fdb' :
-                    dist < 130 ? '#ffd' :
-                    dist < 135 ? '#ddf' :
-                    dist < 145 ? '#fcc' :
+                    dist < 120 ? '#fdb' :
+                    dist < 180 ? '#ffd' :
+                    dist < 200 ? '#ddf' :
+                    dist < 230 ? '#fcc' :
                     '#fff';
                 let pointSize = 0.1 + (1.0 - dist / 720.0) * Math.random();
                 if (i < pushToStar) {
-                    this.starCoordinates.push({ x, y });
+                    this.starCoordinates.push({ x, y, r, keep: true, group: this.starCoordinates.length });
                     pointSize = 2.0;
                 }
-                ctx.fillRect(x + 600.0, y + 300.0, pointSize, pointSize);
+                ctx.fillRect(x + 600.0, y + 450.0, pointSize, pointSize);
             }
             //if (x < xmin) xmin = x;
             //if (x > xmax) xmax = x;
@@ -111,6 +127,61 @@ aos.Galaxy.prototype = {
             //if (y > ymax) ymax = y;
         }
         //document.getElementById('stats').innerHTML += '' + xmin + '/' + xmax + '/' + ymin + '/' + ymax + '<br/>';
+    },
+
+    filterCenterAndTooClose: function () {
+        const filteredStar = this.starCoordinates.filter(function (star) {
+            return star.r > 30;
+        });
+        filteredStar.forEach(function (star, i) {
+            if (star.keep) {
+                filteredStar.forEach(function (otherStar, j) {
+                    const deltaX = star.x - otherStar.x;
+                    const deltaY = star.y - otherStar.y;
+                    const dist = deltaX * deltaX + deltaY * deltaY;
+                    if (j > i && dist < 6400) { // sqrt(dist) < 80.0
+                        otherStar.keep = false;
+                    }
+                });
+            }
+        });
+        this.starCoordinates = filteredStar.filter(function (star) {
+            return star.keep;
+        });
+    },
+
+    computeEdges: function () {
+        this.starCoordinates.forEach(function (star, i) {
+            this.starCoordinates.forEach(function (otherStar, j) {
+                if (j > i) {
+                    const deltaX = star.x - otherStar.x;
+                    const deltaY = star.y - otherStar.y;
+                    const dist = deltaX * deltaX + deltaY * deltaY;
+                    this.edges.push({ i, j, dist });
+                }
+            }, this);
+        }, this);
+        this.edges.sort(function (a, b) {
+            return a.dist - b.dist;
+        });
+    },
+
+    kruskal: function () {
+        let groupCount = this.starCoordinates.length;
+        while (groupCount > 1) {
+            const edge = this.edges.shift();
+            if (this.starCoordinates[edge.i].group !== this.starCoordinates[edge.j].group) {
+                groupCount--;
+                this.kruskals.push(edge);
+                const newGroup = this.starCoordinates[edge.i].group;
+                const oldGroup = this.starCoordinates[edge.j].group;
+                this.starCoordinates.forEach(function (star) {
+                    if (star.group === oldGroup) {
+                        star.group = newGroup;
+                    }
+                }, this);
+            }
+        }
     },
 
 };
