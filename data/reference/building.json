@@ -7,10 +7,12 @@
                 "space" : 10,
                 "materials" : [
                     {
-                        "iron" : 100
+                        "type" :"iron",
+                        "quantity" : 100
                     },
                     {
-                        "wood" : 30
+                        "type" : "wood",
+                        "quantity" : 30
                     }
                 ]
             },
@@ -27,7 +29,7 @@
             "require" : {
                 "space" : 50,
                 "materials" : [
-                    {"iron" : 1000}
+                    {"type" : "iron", "quantity" : 1000}
                 ]
             },
             "produce" : [
@@ -35,19 +37,25 @@
                     "type" : "transport",
                     "name" : "transport SpaceShip",
                     "require" : {
-                        "materials" : { "iron" : 300}
+                        "materials" : { "type":"iron","quantity" : 300}
                     }
                 },
                 {
                     "type" : "colon",
                     "name" : "colon SpaceShip",
                     "require" : {
-                        "materials" : { "iron" : 400}
+                        "materials" : { "type" : "iron", "quantity" : 400}
                     }
                 }
             ]
         },{
-            "type" : "habitation"
+            "type" : "habitation",
+            "name" : "habitation",
+            "require" : {
+                "space" :10,
+                "materials":[{"type" : "iron","quantity":50},{"type": "wood","quantity":20}]
+            },
+            "produce":{"people" : 300000}
 
         }
     ]
