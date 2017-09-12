@@ -18,8 +18,16 @@ button {
 }
 
 canvas {
-    position:absolute;
-    transform: rotateX(0deg);
+    position: absolute;
+    /*transform: rotateX(0deg);*/
+    width: 100%;
+    max-width: 1200px;
+}
+
+@media screen and (max-width: 1650px) {
+    canvas {
+        width: 100%;
+    }
 }
 
 .mainTable {

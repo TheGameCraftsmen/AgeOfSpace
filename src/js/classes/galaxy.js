@@ -54,7 +54,7 @@ aos.Galaxy.prototype = {
         ctx.lineWidth = 2;
         this.starCoordinates.forEach(function (star) {
             ctx.beginPath();
-            ctx.arc(601 + star.x, 451 + star.y, 10, 0, 2 * Math.PI);
+            ctx.arc(601 + star.x, 451 + star.y, 20, 0, 2 * Math.PI);
             ctx.stroke();
         });
     },
@@ -190,8 +190,8 @@ aos.Galaxy.prototype = {
         const stars = this.starCoordinates;
         document.getElementById('starOverlay').addEventListener('mousemove', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
-            const galaxyCoordX = e.offsetX - 600;
-            const galaxyCoordY = e.offsetY - 450;
+            const galaxyCoordX = e.offsetX * 1200 / document.getElementById('starOverlay').offsetWidth - 600;
+            const galaxyCoordY = e.offsetY * 1200 / document.getElementById('starOverlay').offsetWidth - 450;
             //document.getElementById('stats').innerHTML = '' + galaxyCoordX + '/' + galaxyCoordY + '/' + '<br/>';
             document.getElementById('starOverlay').style.cursor = 'default';
             document.getElementById('starSystemBlock').style.display = 'none';
@@ -199,7 +199,7 @@ aos.Galaxy.prototype = {
                 const deltaX = star.x - galaxyCoordX;
                 const deltaY = star.y - galaxyCoordY;
                 const dist = deltaX * deltaX + deltaY * deltaY;
-                if (dist < 100) { // sqrt(dist) < 10.0
+                if (dist < 400) { // sqrt(dist) < 20.0
                     document.getElementById('starOverlay').style.cursor = 'pointer';
                     document.getElementById('starSystemBlock').style.display = 'block';
                     document.getElementById('starSystemName').innerHTML = 'Alpha Centauri';
