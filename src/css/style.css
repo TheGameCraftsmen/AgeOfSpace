@@ -9,6 +9,10 @@ body {
     color: #ccf
 }
 
+h3 {
+    text-align: center;
+}
+
 button {
     font-family: Helvetica, arial, sans-serif;
     font-size: 1em; 
