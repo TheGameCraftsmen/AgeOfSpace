@@ -435,8 +435,8 @@ aos.Galaxy.prototype = {
             }
             else {
                 document.getElementById('starSystemBlock').style.display = 'block';
-                document.getElementById('starSystemName').innerHTML = '' + instance.constellations[constellationId].reference.name
-                + '<br>Constellation';
+                document.getElementById('starSystemName').innerHTML = '' + instance.constellations[constellationId].reference.name +
+                    '<br><em>Constellation</em>';
             }
 
             //document.getElementById('stats').innerHTML = '' + constellationId + '/' + '<br/>';
@@ -446,12 +446,14 @@ aos.Galaxy.prototype = {
                 const deltaY = star.y - galaxyCoordY;
                 const dist = deltaX * deltaX + deltaY * deltaY;
                 const radius = star.notable ? 400.0 : 100.0;
+                const label = star.notable ? 'Notable star' : 'Star';
                 if (dist < radius) { // sqrt(dist) < 20.0
                     document.getElementById('starOverlay').style.cursor = 'pointer';
                     document.getElementById('starSystemBlock').style.display = 'block';
                     document.getElementById('starSystemName').innerHTML = '' +
                         star.greek.name.charAt(0).toUpperCase() + star.greek.name.slice(1) + ' ' +
-                        instance.constellations[constellationId].reference.gen;
+                        instance.constellations[constellationId].reference.gen +
+                    '<br><em>' + label + '</em>';
                 }
                 //document.getElementById('stats').innerHTML += dist + '<br/>';
             });
