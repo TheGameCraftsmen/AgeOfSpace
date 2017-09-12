@@ -20,7 +20,7 @@ aos.Galaxy = function () {
     this.size = 0;
     this.starCoordinates = [];
     this.edges = [];
-    this.kruskals = [];
+    this.kruskalEdges = [];
 };
 
 aos.Galaxy.prototype = {
@@ -42,19 +42,19 @@ aos.Galaxy.prototype = {
         const ctx = canvas.getContext('2d');
         ctx.strokeStyle = '#590';
         ctx.lineWidth = 1;
-        this.kruskals.forEach(function (edge) {
-            const v1 = this.starCoordinates[edge.i];
-            const v2 = this.starCoordinates[edge.j];
-            ctx.beginPath();
-            ctx.moveTo(600 + v1.x, 450 + v1.y);
-            ctx.lineTo(600 + v2.x, 450 + v2.y);
-            ctx.stroke();
-        }, this);
+        //this.kruskalEdges.forEach(function (edge) {
+        //    const v1 = this.starCoordinates[edge.i];
+        //    const v2 = this.starCoordinates[edge.j];
+        //    ctx.beginPath();
+        //    ctx.moveTo(600 + v1.x, 450 + v1.y);
+        //    ctx.lineTo(600 + v2.x, 450 + v2.y);
+        //    ctx.stroke();
+        //}, this);
         ctx.strokeStyle = '#0c0';
         ctx.lineWidth = 2;
         this.starCoordinates.forEach(function (star) {
             ctx.beginPath();
-            ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
+            ctx.arc(601 + star.x, 451 + star.y, 10, 0, 2 * Math.PI);
             ctx.stroke();
         });
     },
@@ -116,7 +116,7 @@ aos.Galaxy.prototype = {
                     '#fff';
                 let pointSize = 0.1 + (1.0 - dist / 720.0) * Math.random();
                 if (i < pushToStar) {
-                    this.starCoordinates.push({ x, y, r, keep: true, group: this.starCoordinates.length });
+                    this.starCoordinates.push({ x: x, y: y, r: r, keep: true, group: this.starCoordinates.length });
                     pointSize = 2.0;
                 }
                 ctx.fillRect(x + 600.0, y + 450.0, pointSize, pointSize);
@@ -157,7 +157,7 @@ aos.Galaxy.prototype = {
                     const deltaX = star.x - otherStar.x;
                     const deltaY = star.y - otherStar.y;
                     const dist = deltaX * deltaX + deltaY * deltaY;
-                    this.edges.push({ i, j, dist });
+                    this.edges.push({ i: i, j: j, dist: dist });
                 }
             }, this);
         }, this);
@@ -167,12 +167,13 @@ aos.Galaxy.prototype = {
     },
 
     kruskal: function () {
+        const edgesSave = this.edges.slice();
         let groupCount = this.starCoordinates.length;
         while (groupCount > 1) {
             const edge = this.edges.shift();
             if (this.starCoordinates[edge.i].group !== this.starCoordinates[edge.j].group) {
                 groupCount--;
-                this.kruskals.push(edge);
+                this.kruskalEdges.push(edge);
                 const newGroup = this.starCoordinates[edge.i].group;
                 const oldGroup = this.starCoordinates[edge.j].group;
                 this.starCoordinates.forEach(function (star) {
@@ -182,6 +183,30 @@ aos.Galaxy.prototype = {
                 }, this);
             }
         }
+        this.edges = edgesSave;
+    },
+
+    setupEvents: function () {
+        const stars = this.starCoordinates;
+        document.getElementById('starOverlay').addEventListener('mousemove', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            const galaxyCoordX = e.offsetX - 600;
+            const galaxyCoordY = e.offsetY - 450;
+            //document.getElementById('stats').innerHTML = '' + galaxyCoordX + '/' + galaxyCoordY + '/' + '<br/>';
+            document.getElementById('starOverlay').style.cursor = 'default';
+            document.getElementById('starSystemBlock').style.display = 'none';
+            stars.forEach(function (star) {
+                const deltaX = star.x - galaxyCoordX;
+                const deltaY = star.y - galaxyCoordY;
+                const dist = deltaX * deltaX + deltaY * deltaY;
+                if (dist < 100) { // sqrt(dist) < 10.0
+                    document.getElementById('starOverlay').style.cursor = 'pointer';
+                    document.getElementById('starSystemBlock').style.display = 'block';
+                    document.getElementById('starSystemName').innerHTML = 'Alpha Centauri';
+                }
+                //document.getElementById('stats').innerHTML += dist + '<br/>';
+            });
+        }, false);
     },
 
 };
@@ -189,4 +214,5 @@ aos.Galaxy.prototype = {
 window.onload = function () {
     const instance = new aos.Galaxy();
     instance.generate();
+    instance.setupEvents();
 };

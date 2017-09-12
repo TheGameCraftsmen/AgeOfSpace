@@ -1,5 +1,36 @@
-﻿body {
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
     margin: 0 !important;
     padding: 0 !important;
     background-color: #000;
+    color: #ccf
 }
+
+button {
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 1em; 
+    line-height: 25px;
+    width: 32px;
+    height: 32px;
+}
+
+canvas {
+    position:absolute;
+    transform: rotateX(0deg);
+}
+
+.mainTable {
+    margin: 3px;
+    border-collapse: collapse; 
+    height: calc(100vh - 6px);
+    width: calc(100vw - 6px);
+}
+
+    .mainTable td {
+        border: 1px solid #444;
+        padding: 0;
+        vertical-align: top;
+    }
