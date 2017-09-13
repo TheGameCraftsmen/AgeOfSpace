@@ -64,6 +64,9 @@ aos.Constellation.prototype = {
         this.edges = edgesSave;
     },
 
+    build: function () {
+    },
+
     render: function (highlight) {
         const canvas = document.getElementById('starOverlay');
         const ctx = canvas.getContext('2d');

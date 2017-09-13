@@ -147,12 +147,13 @@ aos.Galaxy.prototype = {
         const theta2 = theta1 + 2.0 * Math.PI / 3.0;
 
         // convert radial coordinates to cartesian
-        const x0 = 10.0 * Math.cos(theta0);
-        const y0 = 10.0 * Math.sin(theta0);
-        const x1 = 10.0 * Math.cos(theta1);
-        const y1 = 10.0 * Math.sin(theta1);
-        const x2 = 10.0 * Math.cos(theta2);
-        const y2 = 10.0 * Math.sin(theta2);
+        const coreRadius = 1.0 + 99.0 * Math.random();
+        const x0 = coreRadius * Math.cos(theta0);
+        const y0 = coreRadius * Math.sin(theta0);
+        const x1 = coreRadius * Math.cos(theta1);
+        const y1 = coreRadius * Math.sin(theta1);
+        const x2 = coreRadius * Math.cos(theta2);
+        const y2 = coreRadius * Math.sin(theta2);
 
         // line equations
         const a0 = (y1 - y0) / (x1 - x0);

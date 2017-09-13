@@ -26,6 +26,9 @@ canvas {
     /*transform: rotateX(0deg);*/
     width: 100%;
     max-width: 1200px;
+    left: 0;
+    right: 0;
+    margin: auto;
 }
 
 @media screen and (max-width: 1650px) {

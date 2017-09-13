@@ -15,7 +15,7 @@
                     <canvas id="starOverlay" width="1200" height="900" style="z-index: 2;"></canvas>
                 </div>
             </td>
-            <td style="width: 300px;">
+            <td style="width: 310px;">
                 <div id="stats"></div>
                 <div id="starSystemBlock" style="display:none">
                     <h3 id="starSystemName"></h3>
@@ -42,22 +42,24 @@
         </tr>
         <tr>
             <td style="height: 70px; text-align: center; vertical-align: middle;">
-                <div id="speed0" class="speedButton">
-                    <svg width="32" height="32">
-                        <rect x="4" y="0" width="8" height="32" stroke-width="0" fill="#000" />
-                        <rect x="20" y="0" width="8" height="32" stroke-width="0" fill="#000" />
-                    </svg>
-                </div>
-                <div id="speed1" class="speedButton">
-                    <svg width="32" height="32">
-                        <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#000" />
-                    </svg>
-                </div>
-                <div id="speed2" class="speedButton">
-                    <svg width="32" height="32">
-                        <path d="M 0 0 L 0 32 L 16 16 Z" stroke-width="0" fill="#000" />
-                        <path d="M 16 0 L 16 32 L 32 16 Z" stroke-width="0" fill="#000" />
-                    </svg>
+                <div style="transform: scale(0.5);">
+                    <div id="speed0" class="speedButton">
+                        <svg width="32" height="32">
+                            <rect x="4" y="0" width="8" height="32" stroke-width="0" fill="#000" />
+                            <rect x="20" y="0" width="8" height="32" stroke-width="0" fill="#000" />
+                        </svg>
+                    </div>
+                    <div id="speed1" class="speedButton">
+                        <svg width="32" height="32">
+                            <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#000" />
+                        </svg>
+                    </div>
+                    <div id="speed2" class="speedButton">
+                        <svg width="32" height="32">
+                            <path d="M 0 0 L 0 32 L 16 16 Z" stroke-width="0" fill="#000" />
+                            <path d="M 16 0 L 16 32 L 32 16 Z" stroke-width="0" fill="#000" />
+                        </svg>
+                    </div>
                 </div>
             </td>
         </tr>
