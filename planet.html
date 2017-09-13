@@ -7,8 +7,82 @@
     <link rel="stylesheet" href="./src/css/style.css" media="screen">
 </head>
 <body>
-    <canvas id="planet" width="1200" height="1200" style="border:1px solid #888; position:relative; top:-300px; transform: rotateX(60deg);"></canvas>
-    <div id="stats"></div>
+    <table class="mainTable">
+        <tr>
+            <td rowspan="2">
+                <div style="position: relative; overflow: auto; width: 100%; height: 100%;">
+                    <canvas id="planet" width="1000" height="600" style="z-index: 1;"></canvas>
+                </div>
+            </td>
+            <td style="width: 500px;">
+                <div id="stats"></div>
+                <div id="InfoBlock" style="display:block">
+                    <h3 id="Population">Population  </h3>
+                    <table width="50%">
+                        <tr>
+                            <td>Healhting Factor</td><td width="10">:</td><td align="right"><div id="healthingTxt">10000</div></td><td><a href="#">?</a></td>
+                        </tr>
+                        <tr>
+                            <td>Population</td><td width="10">:</td><td align="right"><div id="populationTxt">10000</div></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div id="PlanetRessourcesBlock" style="display:block">
+                    <h3 id="PlanetRessources">Planet Ressources</h3>
+                    <table width="50%">
+                        <tr>
+                                <td>Iron</td><td width="10">:</td><td align="right"><div id="planetIronText">10000</div></td>
+                        </tr>
+                        <tr>
+                                <td>Copper</td><td width="10">:</td><td align="right"><div id="planetCopperText">10000</div></td>
+                        </tr>
+                        <tr>
+                                <td>Water</td><td width="10">:</td><td align="right"><div id="planetWaterText">10000</div></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="RessourcesBlock" style="display:block">
+                    <h3 id="Ressources">Ressources Stored</h3>
+                    <table width="50%">
+                        <tr>
+                                <td>Iron</td><td width="10">:</td><td align="right"><div id="ironText">10000</div></td>
+                        </tr>
+                        <tr>
+                                <td>Copper</td><td width="10">:</td><td align="right"><div id="copperText">10000</div></td>
+                        </tr>
+                        <tr>
+                                <td>Food</td><td width="10">:</td><td align="right"><div id="foodText">10000</div></td>
+                        </tr>
+                        <tr>
+                                <td>Water</td><td width="10">:</td><td align="right"><div id="waterText">10000</div></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="height: 70px; text-align: center; vertical-align: middle;">
+                <div id="speed0" class="speedButton">
+                    <svg width="32" height="32">
+                        <rect x="4" y="0" width="8" height="32" stroke-width="0" fill="#000" />
+                        <rect x="20" y="0" width="8" height="32" stroke-width="0" fill="#000" />
+                    </svg>
+                </div>
+                <div id="speed1" class="speedButton">
+                    <svg width="32" height="32">
+                        <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#000" />
+                    </svg>
+                </div>
+                <div id="speed2" class="speedButton">
+                    <svg width="32" height="32">
+                        <path d="M 0 0 L 0 32 L 16 16 Z" stroke-width="0" fill="#000" />
+                        <path d="M 16 0 L 16 32 L 32 16 Z" stroke-width="0" fill="#000" />
+                    </svg>
+                </div>
+            </td>
+        </tr>
+    </table>
     <script src="./src/js/classes/planet.js"></script>
     <script src="./data/reference/ressources.js"></script>
     <script src="./data/reference/buildings.js"></script>
