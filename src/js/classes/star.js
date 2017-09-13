@@ -11,13 +11,25 @@ var aos = aos || {};
 //debugger;
 
 /**
- * Star is a solar sytem. It will contains several planet
+ * The Star class represents a stellar sytem. It contains one star and several planets.
  *
  * @class
  */
 aos.Star = function () {
+    // star details
+    this.x = 0; // coordinates relative to the galaxy
+    this.y = 0;
+    this.isNotable = false;
+    this.greekLetter = {};
+
+    // technical private stuff, required for kruskal
+    this.r = 0;
+    this.group = 0;
+    this.keep = true;
+
+    //planet details
     /** @type {aos.Planet} */
-    this.planets = {};
+    this.planets = [];
 };
 
 aos.Star.prototype = {

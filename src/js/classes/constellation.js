@@ -17,10 +17,10 @@ var aos = aos || {};
  */
 aos.Constellation = function () {
     /** @type {number} */
-    this.reference = {};
     this.starCoordinates = [];
     this.edges = [];
     this.kruskalEdges = [];
+    this.stars = [];
 };
 
 aos.Constellation.prototype = {
@@ -65,6 +65,14 @@ aos.Constellation.prototype = {
     },
 
     build: function () {
+        this.starCoordinates.forEach(function (star) {
+            const myStar = new aos.Star();
+            myStar.x = star.x;
+            myStar.y = star.y;
+            myStar.isNotable = star.notable;
+            myStar.greekLetter = star.greek;
+            this.stars.push(myStar);
+        }, this);
     },
 
     render: function (highlight) {

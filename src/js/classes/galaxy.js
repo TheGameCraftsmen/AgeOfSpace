@@ -363,7 +363,6 @@ aos.Galaxy.prototype = {
             c.reference = constellationReference[i];
             c.computeEdges();
             c.kruskal();
-            c.build();
             c.starCoordinates.forEach(function (star) {
                 star.group = Math.random();
             }, this);
@@ -375,6 +374,7 @@ aos.Galaxy.prototype = {
                 //star.greek = greekLetters[i].name.charAt(0).toUpperCase() + greekLetters[i].name.slice(1);
                 star.greek = greekLetters[i];
             }, this);
+            c.build();
             c.render(false);
         }, this);
 
