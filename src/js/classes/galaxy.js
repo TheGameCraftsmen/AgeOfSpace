@@ -116,7 +116,7 @@ aos.Galaxy.prototype = {
     },
 
     filterCenterAndTooClose: function (sourceCoordinates, strict, keepCount) {
-        const minDist = strict ? 6400 : 900;
+        const minDist = strict ? 6400 : 625; // 80² , 25²
         const filteredStar = sourceCoordinates.filter(function (star) {
             return star.r > 100.0;
         });
@@ -226,9 +226,9 @@ aos.Galaxy.prototype = {
             //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.starCoordinates.length) + '<br/>';
             const filteredConstellation = this.filterCenterAndTooClose(c.starCoordinates, false, 13);
             c.starCoordinates = filteredConstellation;
-            while (c.starCoordinates.length < 5 && i != 0) {
-                const x = -450.0 + 900.0 * Math.random();
-                const y = -440.0 + 880.0 * Math.random();
+            while (c.starCoordinates.length < 6 && i != 0) {
+                const x = -590.0 + 1180.0 * Math.random();
+                const y = -420.0 + 840.0 * Math.random();
                 if (this.getConstellationId(x, y) === i) {
                     c.starCoordinates.push({ x: x, y: y, r: Math.sqrt(x * x + y * y), keep: true, group: Math.random(), notable: false });
                     const filteredConstellation2 = this.filterCenterAndTooClose(c.starCoordinates, false, 13);
@@ -363,6 +363,7 @@ aos.Galaxy.prototype = {
             c.reference = constellationReference[i];
             c.computeEdges();
             c.kruskal();
+            c.build();
             c.starCoordinates.forEach(function (star) {
                 star.group = Math.random();
             }, this);
@@ -451,7 +452,7 @@ aos.Galaxy.prototype = {
                 const deltaX = star.x - galaxyCoordX;
                 const deltaY = star.y - galaxyCoordY;
                 const dist = deltaX * deltaX + deltaY * deltaY;
-                const radius = star.notable ? 400.0 : 100.0;
+                const radius = star.notable ? 225.0 : 100.0; // 15² , 10²
                 const label = star.notable ? 'Notable star' : 'Star';
                 if (dist < radius) { // sqrt(dist) < 20.0
                     document.getElementById('starOverlay').style.cursor = 'pointer';
@@ -463,7 +464,6 @@ aos.Galaxy.prototype = {
                 }
                 //document.getElementById('stats').innerHTML += dist + '<br/>';
             });
-
         }, false);
     },
 
@@ -473,4 +473,7 @@ window.onload = function () {
     const instance = new aos.Galaxy();
     instance.generate();
     instance.setupEvents();
+    window.requestAnimationFrame(function () {
+        document.getElementById('starSystemBlock').style.display = 'none';
+    });
 };

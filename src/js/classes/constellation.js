@@ -88,7 +88,7 @@ aos.Constellation.prototype = {
                 if (star.notable) {
                     ctx.strokeStyle = '#0a2';
                     ctx.lineWidth = 2;
-                    ctx.arc(600 + star.x, 450 + star.y, 20, 0, 2 * Math.PI);
+                    ctx.arc(600 + star.x, 450 + star.y, 15, 0, 2 * Math.PI);
                 } else {
                     ctx.strokeStyle = '#800';
                     ctx.lineWidth = 2;
@@ -103,8 +103,5 @@ aos.Constellation.prototype = {
         this.starCoordinates.forEach(function (star) {
             ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
         });
-
     },
-
-
 }
