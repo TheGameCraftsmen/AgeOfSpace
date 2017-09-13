@@ -74,15 +74,42 @@ aos.Planet.prototype = {
 
     run : function(speedTick){
 
-        self.calculateHealthIndicator();
-        self.populationGrowing();
+        this.calculateHealthIndicator();
+        this.populationGrowing();
+        this.showStats();
+    },
 
+    showPlanetRessources: function(){
+
+    },
+
+    showStoredRessrouces : function(){
+
+    },
+
+    showStats : function(){
+        document.getElementById('populationTxt').innerHTML = this.population + " colons";    
+        document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";    
+        this.showPlanetRessources();
+        this.showStoredRessrouces();
     }
 
     
 };
-
+var instance = null;
 window.onload = function () {
-    const instance = new aos.Planet();
+    instance = new aos.Planet();
     instance.generate();
+    var canvas = document.getElementById('planet');
+    var context = canvas.getContext('2d');
+    var imageObj = new Image();
+
+    imageObj.onload = function() {
+    context.drawImage(imageObj, 60, 60,600,600);
+    };
+    imageObj.src = './data/img/Desert_planet_resource.png';
 };
+
+window.setInterval(function(){
+    instance.run(1);
+},500);
