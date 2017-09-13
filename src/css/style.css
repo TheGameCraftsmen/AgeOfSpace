@@ -6,7 +6,7 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     background-color: #000;
-    color: #ccf
+    color: #abc;
 }
 
 h3 {
@@ -15,7 +15,7 @@ h3 {
 
 button {
     font-family: Helvetica, arial, sans-serif;
-    font-size: 1em; 
+    font-size: 1em;
     line-height: 25px;
     width: 32px;
     height: 32px;
@@ -36,7 +36,7 @@ canvas {
 
 .mainTable {
     margin: 3px;
-    border-collapse: collapse; 
+    border-collapse: collapse;
     height: calc(100vh - 6px);
     width: calc(100vw - 6px);
 }
@@ -66,4 +66,27 @@ canvas {
 #speed2 {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+#starSystemTxt dl {
+    position: relative;
+    height: 30px;
+    margin: 0;
+}
+
+#starSystemTxt dt {
+    position: absolute;
+    bottom: 0;
+    display: inline-block;
+    width: 10em;
+    text-align: right;
+}
+
+#starSystemTxt dd {
+    position: absolute;
+    bottom: 0;
+    left: 10.5em;
+    padding-left: 0.5em;
+    border-left: 1px solid #444;
+    margin: 0;
 }

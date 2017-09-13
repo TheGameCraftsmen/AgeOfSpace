@@ -147,12 +147,12 @@ aos.Galaxy.prototype = {
         const theta2 = theta1 + 2.0 * Math.PI / 3.0;
 
         // convert radial coordinates to cartesian
-        const x0 = 100.0 * Math.cos(theta0);
-        const y0 = 100.0 * Math.sin(theta0);
-        const x1 = 100.0 * Math.cos(theta1);
-        const y1 = 100.0 * Math.sin(theta1);
-        const x2 = 100.0 * Math.cos(theta2);
-        const y2 = 100.0 * Math.sin(theta2);
+        const x0 = 10.0 * Math.cos(theta0);
+        const y0 = 10.0 * Math.sin(theta0);
+        const x1 = 10.0 * Math.cos(theta1);
+        const y1 = 10.0 * Math.sin(theta1);
+        const x2 = 10.0 * Math.cos(theta2);
+        const y2 = 10.0 * Math.sin(theta2);
 
         // line equations
         const a0 = (y1 - y0) / (x1 - x0);
@@ -379,32 +379,36 @@ aos.Galaxy.prototype = {
     },
 
     getConstellationId: function (x, y) {
-        const a0 = this.constellationBoundaries[0].a;
-        const b0 = this.constellationBoundaries[0].b;
-        const a1 = this.constellationBoundaries[1].a;
-        const b1 = this.constellationBoundaries[1].b;
-        const a2 = this.constellationBoundaries[2].a;
-        const b2 = this.constellationBoundaries[2].b;
+        if (x * x + y * y < 10000.0) {
+            return 0;
+        } else {
+            const a0 = this.constellationBoundaries[0].a;
+            const b0 = this.constellationBoundaries[0].b;
+            const a1 = this.constellationBoundaries[1].a;
+            const b1 = this.constellationBoundaries[1].b;
+            const a2 = this.constellationBoundaries[2].a;
+            const b2 = this.constellationBoundaries[2].b;
 
-        // i want (0,0) === false for all relativeX
-        let relative0 = (y > a0 * x + b0);
-        if (b0 < 0) relative0 = !relative0;
-        let relative1 = (y > a1 * x + b1);
-        if (b1 < 0) relative1 = !relative1;
-        let relative2 = (y > a2 * x + b2);
-        if (b2 < 0) relative2 = !relative2;
+            // i want (0,0) === false for all relativeX
+            let relative0 = (y > a0 * x + b0);
+            if (b0 < 0) relative0 = !relative0;
+            let relative1 = (y > a1 * x + b1);
+            if (b1 < 0) relative1 = !relative1;
+            let relative2 = (y > a2 * x + b2);
+            if (b2 < 0) relative2 = !relative2;
 
-        let zone = 0;
-        if (relative0) {
-            zone += 1;
+            let zone = 0;
+            if (relative0) {
+                zone += 1;
+            }
+            if (relative1) {
+                zone += 2;
+            }
+            if (relative2) {
+                zone += 4;
+            }
+            return zone;
         }
-        if (relative1) {
-            zone += 2;
-        }
-        if (relative2) {
-            zone += 4;
-        }
-        return zone;
     },
 
     setupEvents: function () {
@@ -431,7 +435,8 @@ aos.Galaxy.prototype = {
                 ctx.arc(600, 450, 50, 0, 2 * Math.PI);
                 ctx.stroke();
                 document.getElementById('starSystemBlock').style.display = 'block';
-                document.getElementById('starSystemName').innerHTML = 'Galactic Core';
+                document.getElementById('starSystemName').innerHTML = 'Galactic Core' +
+                    '<br><em>Special area</em>';
             }
             else {
                 document.getElementById('starSystemBlock').style.display = 'block';
