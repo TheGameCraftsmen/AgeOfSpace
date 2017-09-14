@@ -17,8 +17,6 @@ var aos = aos || {};
  */
 aos.Galaxy = function () {
     /** @type {number} */
-    this.starCoordinates = [];
-    this.notableStarCoordinates = [];
     this.constellationBoundaries = [];
     this.constellations = [];
     this.stars = [];
@@ -43,11 +41,6 @@ aos.Galaxy.prototype = {
         } else {
             this.generateSc(); // 20% chance
         }
-        this.notableStarCoordinates = this.filterCenterAndTooClose(this.starCoordinates, true, 15);
-        const removeNotable = this.starCoordinates.filter(function (star) {
-            return !(this.notableStarCoordinates.filter(function (notableStar) { return star.r === notableStar.r }).length > 0);
-        }, this);
-        this.starCoordinates = removeNotable;
         this.computeConstellationBoundaries();
         //this.drawConstellationBoundaries();
         this.createConstellations();
@@ -126,8 +119,15 @@ aos.Galaxy.prototype = {
                 //    pointSize = 4.0;
                 //}
                 if (i < pushToStar && x > -580 && x < 580 && y > -430 && y < 430 && r > 100) {
-                    this.starCoordinates.push({ x: x, y: y, r: r, keep: true, group: Math.random(), notable: false });
-                    //pointSize = 2.0;
+                    const myStar = new aos.Star();
+                    myStar.x = x;
+                    myStar.y = y;
+                    myStar.r = r;
+                    myStar.group = Math.random() + this.stars.length + 1;
+                    myStar.keep = true;
+                    myStar.isNotable = false;
+                    myStar.greekLetter = '?';
+                    this.stars.push(myStar);
                 }
                 ctx.fillRect(x + 600.0 - pointSize / 2.0, y + 450.0 - pointSize / 2.0, pointSize, pointSize);
             }
@@ -142,11 +142,13 @@ aos.Galaxy.prototype = {
         filteredStar.forEach(function (star, i) {
             if (star.keep) {
                 filteredStar.forEach(function (otherStar, j) {
-                    const deltaX = star.x - otherStar.x;
-                    const deltaY = star.y - otherStar.y;
-                    const dist = deltaX * deltaX + deltaY * deltaY;
-                    if (j > i && dist < minDist) { // sqrt(dist) < 80.0
-                        otherStar.keep = false;
+                    if (j > i) {
+                        const deltaX = star.x - otherStar.x;
+                        const deltaY = star.y - otherStar.y;
+                        const dist = deltaX * deltaX + deltaY * deltaY;
+                        if (dist < minDist) { // sqrt(dist) < 80.0
+                            otherStar.keep = false;
+                        }
                     }
                 });
             }
@@ -232,26 +234,37 @@ aos.Galaxy.prototype = {
             const tmp = new aos.Constellation();
             this.constellations.push(tmp);
         }
-        this.notableStarCoordinates.forEach(function (star) {
-            star.notable = true;
+        const notableStars = this.filterCenterAndTooClose(this.stars, true, 15);
+        notableStars.forEach(function (star) {
+            star.isNotable = true;
             const constellationId = this.getConstellationId(star.x, star.y);
-            this.constellations[constellationId].starCoordinates.push(star);
+            this.constellations[constellationId].stars.push(star);
         }, this);
-        this.starCoordinates.forEach(function (star) {
-            const constellationId = this.getConstellationId(star.x, star.y);
-            this.constellations[constellationId].starCoordinates.push(star);
+        this.stars.forEach(function (star) {
+            if (!star.isNotable) {
+                const constellationId = this.getConstellationId(star.x, star.y);
+                this.constellations[constellationId].stars.push(star);
+            }
         }, this);
         this.constellations.forEach(function (c, i) {
-            //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.starCoordinates.length) + '<br/>';
-            const filteredConstellation = this.filterCenterAndTooClose(c.starCoordinates, false, 13);
-            c.starCoordinates = filteredConstellation;
-            while (c.starCoordinates.length < 6 && i != 0) {
+            //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '<br/>';
+            const filteredConstellation = this.filterCenterAndTooClose(c.stars, false, 16);
+            c.stars = filteredConstellation;
+            while (c.stars.length < 6 && i != 0) {
                 const x = -590.0 + 1180.0 * Math.random();
                 const y = -420.0 + 840.0 * Math.random();
                 if (this.getConstellationId(x, y) === i) {
-                    c.starCoordinates.push({ x: x, y: y, r: Math.sqrt(x * x + y * y), keep: true, group: Math.random(), notable: false });
-                    const filteredConstellation2 = this.filterCenterAndTooClose(c.starCoordinates, false, 13);
-                    c.starCoordinates = filteredConstellation2;
+                    const myStar = new aos.Star();
+                    myStar.x = x;
+                    myStar.y = y;
+                    myStar.r = Math.sqrt(x * x + y * y);
+                    myStar.group = Math.random() + c.stars.length + 1000;
+                    myStar.keep = true;
+                    myStar.isNotable = false;
+                    myStar.greekLetter = '?';
+                    c.stars.push(myStar);
+                    const filteredConstellation2 = this.filterCenterAndTooClose(c.stars, false, 16);
+                    c.stars = filteredConstellation2;
                 }
             }
         }, this);
@@ -378,14 +391,14 @@ aos.Galaxy.prototype = {
             return a.rng - b.rng;
         });
         this.constellations.forEach(function (c, i) {
-            //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.starCoordinates.length) + '<br/>';
+            //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '<br/>';
             c.reference = constellationReference[i];
             c.computeEdges();
             c.kruskal();
-            c.starCoordinates.forEach(function (star) {
+            c.stars.forEach(function (star) {
                 star.group = Math.random();
             }, this);
-            const sortedStars = c.starCoordinates.slice()
+            const sortedStars = c.stars.slice()
             sortedStars.sort(function (a, b) {
                 return a.group - b.group;
             });
@@ -393,10 +406,8 @@ aos.Galaxy.prototype = {
                 //star.greek = greekLetters[i].name.charAt(0).toUpperCase() + greekLetters[i].name.slice(1);
                 star.greek = greekLetters[i];
             }, this);
-            c.build();
             c.render(false);
         }, this);
-
     },
 
     getConstellationId: function (x, y) {
@@ -410,7 +421,7 @@ aos.Galaxy.prototype = {
             const a2 = this.constellationBoundaries[2].a;
             const b2 = this.constellationBoundaries[2].b;
 
-            // i want (0,0) === false for all relativeX
+            // i want ([0,0] === false) for all relativeX
             let relative0 = (y > a0 * x + b0);
             if (b0 < 0) relative0 = !relative0;
             let relative1 = (y > a1 * x + b1);
@@ -467,12 +478,12 @@ aos.Galaxy.prototype = {
 
             //document.getElementById('stats').innerHTML = '' + constellationId + '/' + '<br/>';
 
-            instance.constellations[constellationId].starCoordinates.forEach(function (star) {
+            instance.constellations[constellationId].stars.forEach(function (star) {
                 const deltaX = star.x - galaxyCoordX;
                 const deltaY = star.y - galaxyCoordY;
                 const dist = deltaX * deltaX + deltaY * deltaY;
-                const radius = star.notable ? 225.0 : 100.0; // 15² , 10²
-                const label = star.notable ? 'Notable star' : 'Star';
+                const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
+                const label = star.isNotable ? 'Notable star' : 'Star';
                 if (dist < radius) { // sqrt(dist) < 20.0
                     document.getElementById('starOverlay').style.cursor = 'pointer';
                     document.getElementById('starSystemBlock').style.display = 'block';
