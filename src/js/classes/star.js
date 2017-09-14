@@ -11,7 +11,7 @@ var aos = aos || {};
 //debugger;
 
 /**
- * The Star class represents a stellar sytem. It contains one star and several planets.
+ * The Star class represents a stellar and planetary sytem. It contains one star and several planets.
  *
  * @class
  */

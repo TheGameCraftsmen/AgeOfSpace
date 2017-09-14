@@ -21,19 +21,27 @@ aos.Galaxy = function () {
     this.notableStarCoordinates = [];
     this.constellationBoundaries = [];
     this.constellations = [];
+    this.stars = [];
 };
 
 aos.Galaxy.prototype = {
 
     generate: function () {
+        // naming (E0, E5, Sa, Sb, Sc) comes from Hubble sequence
         // see https://en.wikipedia.org/wiki/Hubble_sequence
+        // and https://en.wikipedia.org/wiki/Galaxy#Types_and_morphology
+        // we do not generate barred sprirals (SBx), lenticulars (S0) and irregulars
         const galaxyType = Math.random();
-        if (galaxyType < 0.2) {
-            this.generateE0();
-        } else if (galaxyType < 0.6) {
-            this.generateSa();
+        if (galaxyType < 0.12) {
+            this.generateE0(); // 12% chance
+        } else if (galaxyType < 0.20) {
+            this.generateE5(); // 8% chance
+        } else if (galaxyType < 0.55) {
+            this.generateSa(); // 35% chance
+        } else if (galaxyType < 0.80) {
+            this.generateSb(); // 25% chance
         } else {
-            this.generateSb();
+            this.generateSc(); // 20% chance
         }
         this.notableStarCoordinates = this.filterCenterAndTooClose(this.starCoordinates, true, 15);
         const removeNotable = this.starCoordinates.filter(function (star) {
@@ -47,9 +55,12 @@ aos.Galaxy.prototype = {
 
     generateE0: function () {
         const totalStarCount = 13000 + 7000 * Math.random();
+        this.generateWithPhase(0.0, totalStarCount, 1024, 0.0, 0.0, 100);
+    },
+
+    generateE5: function () {
+        const totalStarCount = 13000 + 7000 * Math.random();
         this.generateWithPhase(0.0, totalStarCount, 0.2 + 0.5 * Math.random(), 0.0, 0.0, 100);
-        //this.generateWithPhase(Math.PI / 4.0);
-        //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
     generateSa: function () {
@@ -57,8 +68,6 @@ aos.Galaxy.prototype = {
         const phaseMax = 1.0 + 7.0 * Math.random();
         const mirror = Math.random() < 0.5 ? -1.0 : 1.0;
         this.generateWithPhase(-Math.PI / 2.0 * phaseMax * mirror, totalStarCount, 0.2 + 0.5 * Math.random(), phaseMax, mirror, 100);
-        //this.generateWithPhase(Math.PI / 4.0);
-        //this.generateWithPhase(Math.PI * 3.0 / 4.0);
     },
 
     generateSb: function () {
@@ -69,25 +78,35 @@ aos.Galaxy.prototype = {
         const mirror = Math.random() < 0.5 ? -1.0 : 1.0;
         this.generateWithPhase(0, totalStarCount * (1 - hRatio), phaseRandomness, phaseMax, mirror, 50);
         this.generateWithPhase(Math.PI / 2.0, totalStarCount * hRatio, phaseRandomness, phaseMax, mirror, 50);
-        //this.generateWithPhase(Math.PI / 4.0);
-        //this.generateWithPhase(Math.PI * 3.0 / 4.0);
+    },
+
+    generateSc: function () {
+        const totalStarCount = 13000 + 7000 * Math.random();
+        const hRatio = 0.1 + 0.3 * Math.random();
+        const phaseRandomness = 0.05 + 0.05 * Math.random();
+        const phaseMax = 2.0 + 2.0 * Math.random()
+        const mirror = Math.random() < 0.5 ? -1.0 : 1.0;
+        this.generateWithPhase(0, totalStarCount * (0.5 - hRatio), phaseRandomness, phaseMax, mirror, 25);
+        this.generateWithPhase(Math.PI / 2.0, totalStarCount * hRatio, phaseRandomness, phaseMax, mirror, 25);
+        this.generateWithPhase(Math.PI / 4.0, totalStarCount * 0.25, phaseRandomness, phaseMax, mirror, 25);
+        this.generateWithPhase(Math.PI * 3.0 / 4.0, totalStarCount * 0.25, phaseRandomness, phaseMax, mirror, 25);
     },
 
     generateWithPhase: function (phaseOrigin, starAmount, phaseRandomness, phaseMax, mirror, pushToStar) {
+        // generation algorithm is based on
+        // https://en.wikipedia.org/wiki/Density_wave_theory
+        // with added randomness
         const canvas = document.getElementById('ellipse');
         const ctx = canvas.getContext('2d');
-        //let xmin = 1000;
-        //let xmax = 0;
-        //let ymin = 1000;
-        //let ymax = 0;
 
         for (let i = starAmount; i >= 0; i--) {
-            // a=2; b=1; e2 = 1 - 1/4 = 3/4
+            // ellipse with parameters
+            // a = 2; b = 1; e² = 1 - 1/4 = 3/4;
             const dist = 360.0 * Math.random();
             const angle = 2 * Math.PI * Math.random();
             const phase = phaseOrigin + dist / 720.0 * phaseMax * Math.PI * mirror;
             const theta = angle + phase + (0.5 - Math.random()) * phaseRandomness;
-            const r = dist * Math.sqrt(1.0 / (1.0 - 0.75 * Math.cos(angle) * Math.cos(angle)))/* + dist / 20.0 * Math.random()*/;
+            const r = dist * Math.sqrt(1.0 / (1.0 - 0.75 * Math.cos(angle) * Math.cos(angle)));
             const x = r * Math.cos(theta);
             const y = r * Math.sin(theta);
 
@@ -101,18 +120,18 @@ aos.Galaxy.prototype = {
                     dist < 230 ? '#fcc' :
                     '#fff';
                 let pointSize = 0.1 + (1.0 - dist / 720.0) * Math.random();
+                // TODO : better coloring
+                //if (angle > 3.0 && angle < 3.28) {
+                //    ctx.fillStyle = '#f00';
+                //    pointSize = 4.0;
+                //}
                 if (i < pushToStar && x > -580 && x < 580 && y > -430 && y < 430 && r > 100) {
-                    this.starCoordinates.push({ x: x, y: y, r: r, keep: true, group: this.starCoordinates.length, notable: false });
+                    this.starCoordinates.push({ x: x, y: y, r: r, keep: true, group: Math.random(), notable: false });
                     //pointSize = 2.0;
                 }
                 ctx.fillRect(x + 600.0 - pointSize / 2.0, y + 450.0 - pointSize / 2.0, pointSize, pointSize);
             }
-            //if (x < xmin) xmin = x;
-            //if (x > xmax) xmax = x;
-            //if (y < ymin) ymin = y;
-            //if (y > ymax) ymax = y;
         }
-        //document.getElementById('stats').innerHTML += '' + xmin + '/' + xmax + '/' + ymin + '/' + ymax + '<br/>';
     },
 
     filterCenterAndTooClose: function (sourceCoordinates, strict, keepCount) {
