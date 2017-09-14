@@ -45,19 +45,69 @@ aos.Planet = function () {
 aos.Planet.prototype = {
 
     generate: function () {
-        this.size = Math.floor(Math.random * 5) * 150;
+        this.size = Math.floor(Math.random() * 5) * 150;
         this.landSize = Math.random * this.size;
         this.generateAir();
+        this.generateGround();
     },
 
     generateAir : function(){
-        for(let i=0;i<aos.ressources["air"].length;i++){
-            console.log(aos.ressources["air"][i]);
+        var compositionPercent=0;
+        for(let i=0;i<aos.ressources["air"].length;i++){   
+            let ressource = new aos.Ressource();
+            ressource.type="air";
+            ressource.name=aos.ressources["air"][i].name;
+            if (i==(aos.ressources["air"].length-1)){
+                ressource.quantity=100-compositionPercent;
+            }else{
+                let itAirPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                ressource.quantity=itAirPrcent;
+                compositionPercent+=itAirPrcent;
+            }
+            this.air.push(ressource);
+        }
+    },
+
+    generateMetal : function(prcent){
+        var compositionPercent = 0;
+        for(let i=0;i<aos.ressources["metal"].length;i++){   
+            let ressource = new aos.Ressource();
+            ressource.type="metal";
+            ressource.name=aos.ressources["metal"][i].name;
+            if (i==(aos.ressources["metal"].length-1)){
+                ressource.quantity=prcent-compositionPercent;
+            }else{
+                let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
+                ressource.quantity=itPrcent * 100000000;
+                compositionPercent+=itPrcent;
+            }
+            this.ground.push(ressource);
         }
     },
 
     generateGround : function(){
-
+        var compositionPercent=0;
+        for(let i=0;i<aos.ressources["ground"].length;i++){   
+            let ressource = new aos.Ressource();
+            ressource.type="ground";
+            ressource.name=aos.ressources["ground"][i].name;
+            if (i==(aos.ressources["ground"].length-1)){
+                ressource.quantity=100-compositionPercent;
+                this.ground.push(ressource);
+            }else{
+                let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                if(aos.ressources["ground"][i].name == "metal"){
+                    this.generateMetal(itPrcent);
+                }else{
+                    
+                    ressource.quantity=itPrcent;
+                    this.ground.push(ressource);
+                }
+                compositionPercent+=itPrcent;
+            }
+            
+        }
+        console.log(this.ground);
     },
 
     calculateHealthIndicator: function(){
@@ -80,7 +130,11 @@ aos.Planet.prototype = {
     },
 
     showPlanetRessources: function(){
-
+        for(let i=0;i<this.ground.length;i++){
+            if (this.ground[i].type == "metal"){
+                document.getElementById('p' + this.ground[i].name + 'Text').innerHTML = this.ground[i].quantity;            
+            }
+        }
     },
 
     showStoredRessrouces : function(){
@@ -100,14 +154,6 @@ var instance = null;
 window.onload = function () {
     instance = new aos.Planet();
     instance.generate();
-    var canvas = document.getElementById('planet');
-    var context = canvas.getContext('2d');
-    var imageObj = new Image();
-
-    imageObj.onload = function() {
-    context.drawImage(imageObj, 60, 60,600,600);
-    };
-    imageObj.src = './data/img/Desert_planet_resource.png';
 };
 
 window.setInterval(function(){
