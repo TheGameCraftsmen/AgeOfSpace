@@ -78,7 +78,7 @@ aos.Planet.prototype = {
                 ressource.quantity=prcent-compositionPercent;
             }else{
                 let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
-                ressource.quantity=itPrcent * 100000000;
+                ressource.quantity=itPrcent * this. size * 100000;
                 compositionPercent+=itPrcent;
             }
             this.ground.push(ressource);
