@@ -114,7 +114,10 @@ aos.Galaxy.prototype = {
                     '#fff';
                 let pointSize = 0.1 + (1.0 - dist / 720.0) * Math.random();
                 // TODO : better coloring
-                //if (angle > 3.0 && angle < 3.28) {
+                //if (mirror !== 0 && angle > phaseOrigin - 0.1 && angle < phaseOrigin + 0.1) {
+                //    ctx.fillStyle = '#aaf';
+                //}
+                //if (dist > 200 & dist < 210) {
                 //    ctx.fillStyle = '#f00';
                 //    pointSize = 4.0;
                 //}
@@ -403,8 +406,7 @@ aos.Galaxy.prototype = {
                 return a.group - b.group;
             });
             sortedStars.forEach(function (star, i) {
-                //star.greek = greekLetters[i].name.charAt(0).toUpperCase() + greekLetters[i].name.slice(1);
-                star.greek = greekLetters[i];
+                star.greekLetter = greekLetters[i];
             }, this);
             c.render(false);
         }, this);
@@ -488,7 +490,7 @@ aos.Galaxy.prototype = {
                     document.getElementById('starOverlay').style.cursor = 'pointer';
                     document.getElementById('starSystemBlock').style.display = 'block';
                     document.getElementById('starSystemName').innerHTML = '' +
-                        star.greek.name.charAt(0).toUpperCase() + star.greek.name.slice(1) + ' ' +
+                        star.greekLetter.name.charAt(0).toUpperCase() + star.greekLetter.name.slice(1) + ' ' +
                         instance.constellations[constellationId].reference.gen +
                     '<br><em>' + label + '</em>';
                 }
