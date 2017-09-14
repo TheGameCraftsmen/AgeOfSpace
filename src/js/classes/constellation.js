@@ -17,7 +17,7 @@ var aos = aos || {};
  */
 aos.Constellation = function () {
     /** @type {number} */
-    this.reference = {};
+    this.reference = {}; // latin name of the constellation
     this.stars = [];
     this.edges = [];
     this.kruskalEdges = [];
@@ -69,7 +69,7 @@ aos.Constellation.prototype = {
         const ctx = canvas.getContext('2d');
 
         // draw constellation edges
-        ctx.strokeStyle = highlight ? '#446' : '#333';
+        ctx.strokeStyle = highlight ? '#777' : '#333';
         ctx.lineWidth = 1;
         this.kruskalEdges.forEach(function (edge) {
             const v1 = this.stars[edge.i];
@@ -87,13 +87,13 @@ aos.Constellation.prototype = {
             this.stars.forEach(function (star) {
                 ctx.beginPath();
                 if (star.isNotable) {
-                    ctx.strokeStyle = '#0a2';
+                    ctx.strokeStyle = '#06a';
                     ctx.lineWidth = 2;
                     ctx.arc(600 + star.x, 450 + star.y, 15, 0, 2 * Math.PI);
                 } else {
-                    ctx.strokeStyle = '#800';
-                    ctx.lineWidth = 2;
-                    ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
+                    //ctx.strokeStyle = '#600';
+                    //ctx.lineWidth = 2;
+                    //ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
                 }
                 ctx.stroke();
             });
@@ -101,8 +101,16 @@ aos.Constellation.prototype = {
 
         // big white points for constellation stars
         ctx.fillStyle = '#fff';
-        const pointSize = 2.0;
+        const pointSize = 20.0;
         this.stars.forEach(function (star) {
+            //ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
+            ctx.beginPath();
+            const gradient = ctx.createRadialGradient(star.x + 600.0, star.y + 450.0, 0, star.x + 600.0, star.y + 450.0, highlight ? 10 : 2);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.5)');
+            gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = gradient;
             ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
         });
     },

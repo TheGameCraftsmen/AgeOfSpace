@@ -253,7 +253,8 @@ aos.Galaxy.prototype = {
             //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '<br/>';
             const filteredConstellation = this.filterCenterAndTooClose(c.stars, false, 16);
             c.stars = filteredConstellation;
-            while (c.stars.length < 6 && i != 0) {
+            const desiredStarCount = 4.0 + 3.0 * Math.random();
+            while (c.stars.length < desiredStarCount && i != 0) {
                 const x = -590.0 + 1180.0 * Math.random();
                 const y = -420.0 + 840.0 * Math.random();
                 if (this.getConstellationId(x, y) === i) {
@@ -463,11 +464,11 @@ aos.Galaxy.prototype = {
                 c.render(i === constellationId);
             });
             if (constellationId === 0) {
-                ctx.beginPath();
-                ctx.strokeStyle = '#c00';
-                ctx.lineWidth = 2;
-                ctx.arc(600, 450, 50, 0, 2 * Math.PI);
-                ctx.stroke();
+                //ctx.beginPath();
+                //ctx.strokeStyle = '#600';
+                //ctx.lineWidth = 2;
+                //ctx.arc(600, 450, 100, 0, 2 * Math.PI);
+                //ctx.stroke();
                 document.getElementById('starSystemBlock').style.display = 'block';
                 document.getElementById('starSystemName').innerHTML = 'Galactic Core' +
                     '<br><em>Special area</em>';
