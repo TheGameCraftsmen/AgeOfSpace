@@ -1,5 +1,17 @@
-aos.ressources = {
-    "air" : [{"name" : "breathable"},{"name":"unbreathable"},{"name":"inert"},{"name":"toxic"}],
-    "ground" : [{"name" : "water"},{"name":"metal"},{"name":"minerals"},{"name":"organic"},{"name":"toxic"}],
-    "metal" : [{"name":"iron"},{"name":"copper"},{"name":"uranium"},{"name":"silver"},{"name":"aluminium"}]
-}
+aos.ressources = 
+    [
+        {"name" : "breathable", "category" : "air"},
+        {"name":"unbreathable", "category" : "air"},
+        {"name":"inert", "category" : "air"},
+        {"name":"toxic", "category" : "air"},
+        {"name" : "water", "category" : "ground"},
+        {"name":"metal", "category" : "ground"},
+        {"name":"minerals", "category" : "ground"},
+        {"name":"organic", "category" : "ground"},
+        {"name":"toxic", "category" : "ground"},
+        {"name":"iron", "category" : "metal"},
+        {"name":"copper", "category" : "metal"},
+        {"name":"uranium", "category" : "metal"},
+        {"name":"silver", "category" : "metal"},
+        {"name":"aluminium", "category" : "metal"}
+    ];

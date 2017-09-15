@@ -51,56 +51,62 @@ aos.Planet.prototype = {
 
     generateAir : function(){
         var compositionPercent = 0;
-        for(let i = 0 ; i < aos.ressources["air"].length ; i++){   
-            let ressource = new aos.Ressource();
-            ressource.type = "air";
-            ressource.name = aos.ressources["air"][i].name;
-            if ( i == ( aos.ressources["air"].length-1 )){
-                ressource.quantity = 100-compositionPercent;
-            }else{
-                let itAirPrcent = Math.floor(Math.random() * (100-compositionPercent))
-                ressource.quantity = itAirPrcent;
-                compositionPercent += itAirPrcent;
+        for(let i = 0 ; i < aos.ressources.length ; i++){   
+            if( aos.ressources[i].category == "air"){
+                let ressource = new aos.Ressource();
+                ressource.type = "air";
+                ressource.name = aos.ressources[i].name;
+                if ( i == ( aos.ressources.length-1 )){
+                    ressource.quantity = 100-compositionPercent;
+                }else{
+                    let itAirPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                    ressource.quantity = itAirPrcent;
+                    compositionPercent += itAirPrcent;
+                }
+                this.ressources.push(ressource);
             }
-            this.ressources.push(ressource);
         }
     },
 
     generateMetal : function(prcent){
         var compositionPercent = 0;
-        for( let i = 0 ; i < aos.ressources["metal"].length ; i++){   
-            let ressource = new aos.Ressource();
-            ressource.type = "metal";
-            ressource.name = aos.ressources["metal"][i].name;
-            if ( i == ( aos.ressources["metal"].length-1 )){
-                ressource.quantity = (prcent - compositionPercent) ;
-            }else{
-                let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
-                ressource.quantity = itPrcent ;
-                compositionPercent += itPrcent;
-            }
-            this.ressources.push(ressource);
+        for( let i = 0 ; i < aos.ressources.length ; i++){   
+            if( aos.ressources[i].category == "metal"){
+                let ressource = new aos.Ressource();
+                ressource.type = "metal";
+                ressource.name = aos.ressources[i].name;
+                if ( i == ( aos.ressources.length-1 )){
+                    ressource.quantity = (prcent - compositionPercent) ;
+                }else{
+                    let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
+                    ressource.quantity = itPrcent ;
+                    compositionPercent += itPrcent;
+                }
+                this.ressources.push(ressource);
+            }   
         }
     },
 
     generateGround : function(){
         var compositionPercent = 0;
-        for( let i = 0 ; i < aos.ressources["ground"].length ; i++){   
-            let ressource = new aos.Ressource();
-            ressource.type = "ground";
-            ressource.name = aos.ressources["ground"][i].name;
-            if ( i == ( aos.ressources["ground"].length-1 )){
-                ressource.quantity = 100 - compositionPercent;
-                this.ressources.push(ressource);
-            }else{
-                let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
-                if( aos.ressources["ground"][i].name == "metal" ){
-                    this.generateMetal(itPrcent);
-                }else{
-                    ressource.quantity = itPrcent;
+        for( let i = 0 ; i < aos.ressources.length ; i++){   
+            if( aos.ressources[i].category == "ground"){
+                let ressource = new aos.Ressource();
+                ressource.type = "ground";
+                ressource.name = aos.ressources[i].name;
+                if ( i == ( aos.ressources.length-1 )){
+                    ressource.quantity = 100 - compositionPercent;
                     this.ressources.push(ressource);
+                }else{
+                    let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                    if( aos.ressources[i].name == "metal" ){
+                        this.generateMetal(itPrcent);
+                    }else{
+                        ressource.quantity = itPrcent;
+                        this.ressources.push(ressource);
+                    }
+                    compositionPercent += itPrcent;
                 }
-                compositionPercent += itPrcent;
             }
             
         }
