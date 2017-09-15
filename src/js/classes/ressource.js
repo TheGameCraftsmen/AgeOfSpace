@@ -24,4 +24,6 @@ aos.Ressource = function () {
     this.name = "";
     /** @type {number} */
     this.quantity=0;
+    /** @type {number} */
+    this.percent=0;
 };

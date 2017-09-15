@@ -22,9 +22,7 @@ aos.Planet = function () {
     */
     this.size = 0;
     /** @type {aos.ressource} */
-    this.air = [];
-    /** @type {aos.ressource} */
-    this.ground = [];
+    this.ressources = [];
     /** @type {number} */
     this.landSize = 0;
     /** @type {number} */
@@ -52,62 +50,60 @@ aos.Planet.prototype = {
     },
 
     generateAir : function(){
-        var compositionPercent=0;
-        for(let i=0;i<aos.ressources["air"].length;i++){   
+        var compositionPercent = 0;
+        for(let i = 0 ; i < aos.ressources["air"].length ; i++){   
             let ressource = new aos.Ressource();
-            ressource.type="air";
-            ressource.name=aos.ressources["air"][i].name;
-            if (i==(aos.ressources["air"].length-1)){
-                ressource.quantity=100-compositionPercent;
+            ressource.type = "air";
+            ressource.name = aos.ressources["air"][i].name;
+            if ( i == ( aos.ressources["air"].length-1 )){
+                ressource.quantity = 100-compositionPercent;
             }else{
                 let itAirPrcent = Math.floor(Math.random() * (100-compositionPercent))
-                ressource.quantity=itAirPrcent;
-                compositionPercent+=itAirPrcent;
+                ressource.quantity = itAirPrcent;
+                compositionPercent += itAirPrcent;
             }
-            this.air.push(ressource);
+            this.ressources.push(ressource);
         }
     },
 
     generateMetal : function(prcent){
         var compositionPercent = 0;
-        for(let i=0;i<aos.ressources["metal"].length;i++){   
+        for( let i = 0 ; i < aos.ressources["metal"].length ; i++){   
             let ressource = new aos.Ressource();
-            ressource.type="metal";
-            ressource.name=aos.ressources["metal"][i].name;
-            if (i==(aos.ressources["metal"].length-1)){
-                ressource.quantity=prcent-compositionPercent;
+            ressource.type = "metal";
+            ressource.name = aos.ressources["metal"][i].name;
+            if ( i == ( aos.ressources["metal"].length-1 )){
+                ressource.quantity = (prcent - compositionPercent) ;
             }else{
                 let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
-                ressource.quantity=itPrcent * this. size * 100000;
-                compositionPercent+=itPrcent;
+                ressource.quantity = itPrcent ;
+                compositionPercent += itPrcent;
             }
-            this.ground.push(ressource);
+            this.ressources.push(ressource);
         }
     },
 
     generateGround : function(){
-        var compositionPercent=0;
-        for(let i=0;i<aos.ressources["ground"].length;i++){   
+        var compositionPercent = 0;
+        for( let i = 0 ; i < aos.ressources["ground"].length ; i++){   
             let ressource = new aos.Ressource();
-            ressource.type="ground";
-            ressource.name=aos.ressources["ground"][i].name;
-            if (i==(aos.ressources["ground"].length-1)){
-                ressource.quantity=100-compositionPercent;
-                this.ground.push(ressource);
+            ressource.type = "ground";
+            ressource.name = aos.ressources["ground"][i].name;
+            if ( i == ( aos.ressources["ground"].length-1 )){
+                ressource.quantity = 100 - compositionPercent;
+                this.ressources.push(ressource);
             }else{
                 let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
-                if(aos.ressources["ground"][i].name == "metal"){
+                if( aos.ressources["ground"][i].name == "metal" ){
                     this.generateMetal(itPrcent);
                 }else{
-                    
-                    ressource.quantity=itPrcent;
-                    this.ground.push(ressource);
+                    ressource.quantity = itPrcent;
+                    this.ressources.push(ressource);
                 }
-                compositionPercent+=itPrcent;
+                compositionPercent += itPrcent;
             }
             
         }
-        console.log(this.ground);
     },
 
     calculateHealthIndicator: function(){
@@ -130,22 +126,45 @@ aos.Planet.prototype = {
     },
 
     showPlanetRessources: function(){
-        for(let i=0;i<this.ground.length;i++){
-            if (this.ground[i].type == "metal"){
-                document.getElementById('p' + this.ground[i].name + 'Text').innerHTML = this.ground[i].quantity;            
+        for( let i = 0; i < this.ressources.length ; i++){
+            if (this.ressources[i].type == "metal"){
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity * this. size * 100000;            
+            }else if (this.ressources[i].name == "water"){
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity * this. size * 100000;            
+            }
+
+        }
+    },
+
+    showStoredRessources : function(){
+
+    },
+
+    showStatsAir : function(){
+        for( let i = 0; i < this.ressources.length ; i++){
+            if ( this.ressources[i].type == "air"){
+                document.getElementById('air' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity + "%";            
             }
         }
     },
 
-    showStoredRessrouces : function(){
-
+    showStatsGround : function(){
+        var metal=0;
+        for( let i = 0; i < this.ressources.length ; i++){
+            if ( this.ressources[i].type == "ground"){
+                document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity + "%";            
+            }else if ( this.ressources[i].type == "metal") metal += this.ressources[i].quantity;
+        }
+        document.getElementById('groundmetalText').innerHTML = metal + "%";            
     },
 
     showStats : function(){
         document.getElementById('populationTxt').innerHTML = this.population + " colons";    
         document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";    
         this.showPlanetRessources();
-        this.showStoredRessrouces();
+        this.showStoredRessources();
+        this.showStatsAir();
+        this.showStatsGround();
     }
 
     
