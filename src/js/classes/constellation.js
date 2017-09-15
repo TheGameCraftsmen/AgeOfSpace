@@ -17,17 +17,17 @@ var aos = aos || {};
  */
 aos.Constellation = function () {
     /** @type {number} */
-    this.starCoordinates = [];
+    this.reference = {}; // latin name of the constellation
+    this.stars = [];
     this.edges = [];
     this.kruskalEdges = [];
-    this.stars = [];
 };
 
 aos.Constellation.prototype = {
 
     computeEdges: function () {
-        this.starCoordinates.forEach(function (star, i) {
-            this.starCoordinates.forEach(function (otherStar, j) {
+        this.stars.forEach(function (star, i) {
+            this.stars.forEach(function (otherStar, j) {
                 if (j > i) {
                     const deltaX = star.x - otherStar.x;
                     const deltaY = star.y - otherStar.y;
@@ -43,18 +43,18 @@ aos.Constellation.prototype = {
 
     kruskal: function () {
         const edgesSave = this.edges.slice();
-        let groupCount = this.starCoordinates.length;
+        let groupCount = this.stars.length;
         while (groupCount > 1) {
             if (this.edges.length === 0) {
                 debugger;
             }
             const edge = this.edges.shift();
-            if (this.starCoordinates[edge.i].group !== this.starCoordinates[edge.j].group) {
+            if (this.stars[edge.i].group !== this.stars[edge.j].group) {
                 groupCount--;
                 this.kruskalEdges.push(edge);
-                const newGroup = this.starCoordinates[edge.i].group;
-                const oldGroup = this.starCoordinates[edge.j].group;
-                this.starCoordinates.forEach(function (star) {
+                const newGroup = this.stars[edge.i].group;
+                const oldGroup = this.stars[edge.j].group;
+                this.stars.forEach(function (star) {
                     if (star.group === oldGroup) {
                         star.group = newGroup;
                     }
@@ -64,51 +64,53 @@ aos.Constellation.prototype = {
         this.edges = edgesSave;
     },
 
-    build: function () {
-        this.starCoordinates.forEach(function (star) {
-            const myStar = new aos.Star();
-            myStar.x = star.x;
-            myStar.y = star.y;
-            myStar.isNotable = star.notable;
-            myStar.greekLetter = star.greek;
-            this.stars.push(myStar);
-        }, this);
-    },
-
     render: function (highlight) {
         const canvas = document.getElementById('starOverlay');
         const ctx = canvas.getContext('2d');
 
-        ctx.strokeStyle = highlight ? '#446' : '#333';
+        // draw constellation edges
+        ctx.strokeStyle = highlight ? '#777' : '#333';
         ctx.lineWidth = 1;
         this.kruskalEdges.forEach(function (edge) {
-            const v1 = this.starCoordinates[edge.i];
-            const v2 = this.starCoordinates[edge.j];
+            const v1 = this.stars[edge.i];
+            const v2 = this.stars[edge.j];
             ctx.beginPath();
             ctx.moveTo(600 + v1.x, 450 + v1.y);
             ctx.lineTo(600 + v2.x, 450 + v2.y);
             ctx.stroke();
         }, this);
 
+        // circle around main stars
+        // green for notable (15px radius)
+        // red for common (10px radius)
         if (highlight) {
-            this.starCoordinates.forEach(function (star) {
+            this.stars.forEach(function (star) {
                 ctx.beginPath();
-                if (star.notable) {
-                    ctx.strokeStyle = '#0a2';
+                if (star.isNotable) {
+                    ctx.strokeStyle = '#06a';
                     ctx.lineWidth = 2;
                     ctx.arc(600 + star.x, 450 + star.y, 15, 0, 2 * Math.PI);
                 } else {
-                    ctx.strokeStyle = '#800';
-                    ctx.lineWidth = 2;
-                    ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
+                    //ctx.strokeStyle = '#600';
+                    //ctx.lineWidth = 2;
+                    //ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
                 }
                 ctx.stroke();
             });
         }
 
+        // big white points for constellation stars
         ctx.fillStyle = '#fff';
-        const pointSize = 2.0;
-        this.starCoordinates.forEach(function (star) {
+        const pointSize = 20.0;
+        this.stars.forEach(function (star) {
+            //ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
+            ctx.beginPath();
+            const gradient = ctx.createRadialGradient(star.x + 600.0, star.y + 450.0, 0, star.x + 600.0, star.y + 450.0, highlight ? 10 : 2);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.5)');
+            gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = gradient;
             ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
         });
     },
