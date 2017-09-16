@@ -408,9 +408,14 @@ aos.Galaxy.prototype = {
             });
             sortedStars.forEach(function (star, i) {
                 star.greekLetter = greekLetters[i];
+                star.constellation = c;
             }, this);
             c.render(false);
         }, this);
+        this.stars.forEach(function (star) {
+            star.generate();
+        }, this);
+
     },
 
     getConstellationId: function (x, y) {
