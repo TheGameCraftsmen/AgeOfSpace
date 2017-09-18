@@ -23,6 +23,8 @@ aos.Planet = function () {
     this.size = 0;
     /** @type {aos.ressource} */
     this.ressources = [];
+    /** @type {aos.ressource} */
+    this.ressourcesStored = [];
     /** @type {number} */
     this.landSize = 0;
     /** @type {number} */
@@ -47,6 +49,10 @@ aos.Planet.prototype = {
         this.landSize = Math.random * this.size;
         this.generateAir();
         this.generateGround();
+        let b = new aos.Building();
+        b.construct("iron Mine");
+        this.buildings.push(b);
+        
     },
 
     generateAir : function(){
@@ -124,32 +130,72 @@ aos.Planet.prototype = {
         }
     },
 
+    mine : function(){
+        for( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++){
+            let building = this.buildings[itBuilding];  
+            if ( building.type == "mine" ){
+                for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
+                    if ( this.ressources[itPlanetRes].name == building.production.product && this.ressources[itPlanetRes].quantity>0){
+                        console.log("a ="+this.ressources[itPlanetRes].quantity);
+                        let nbMined = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - building.production.quantity) > 0 ? building.production.quantity : building.production.quantity - this.ressources[itPlanetRes].quantity* this. size * 100000;
+                        let newPercent = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - nbMined) / (100 * this. size * 100000);
+                        console.log(newPercent);
+                        this.ressources[itPlanetRes].quantity = newPercent * 100;
+                        let findRes = null;
+                        for ( let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes ++){
+                            if ( this.ressourcesStored[itRes].name == building.production.product ){
+                                findRes = this.ressourcesStored[itRes];
+                                break;
+                            }
+                        }
+                        if ( findRes == null ){
+                            findRes = new aos.Ressource();
+                            findRes.name = building.production.product;
+                            findRes.type = building.production.type;
+                            findRes.quantity = nbMined;
+                            this.ressourcesStored.push(findRes);
+                        }else{
+                            findRes.quantity += nbMined;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    },
+
     run : function(speedTick){
 
         this.calculateHealthIndicator();
         this.populationGrowing();
         this.showStats();
+        this.mine();
     },
 
     showPlanetRessources: function(){
         for( let i = 0; i < this.ressources.length ; i++){
             if (this.ressources[i].type == "metal"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity * this. size * 100000;            
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * 100000);            
             }else if (this.ressources[i].name == "water"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity * this. size * 100000;            
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * 100000);            
             }
 
         }
     },
 
     showStoredRessources : function(){
-
+        for ( let i = 0 ; i < this.ressourcesStored.length ; i++){
+            let htmlVar = document.getElementById( this.ressourcesStored[i].name + 'Text');
+            if ( htmlVar != null && typeof htmlVar !== "undefined"){
+                htmlVar.innerHTML = this.ressourcesStored[i].quantity;
+            }
+        }
     },
 
     showStatsAir : function(){
         for( let i = 0; i < this.ressources.length ; i++){
             if ( this.ressources[i].type == "air"){
-                document.getElementById('air' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity + "%";            
+                document.getElementById('air' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity) + "%";            
             }
         }
     },
@@ -158,10 +204,10 @@ aos.Planet.prototype = {
         var metal=0;
         for( let i = 0; i < this.ressources.length ; i++){
             if ( this.ressources[i].type == "ground"){
-                document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = this.ressources[i].quantity + "%";            
+                document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity) + "%";            
             }else if ( this.ressources[i].type == "metal") metal += this.ressources[i].quantity;
         }
-        document.getElementById('groundmetalText').innerHTML = metal + "%";            
+        document.getElementById('groundmetalText').innerHTML = Math.floor(metal) + "%";            
     },
 
     showStats : function(){
@@ -171,6 +217,7 @@ aos.Planet.prototype = {
         this.showStoredRessources();
         this.showStatsAir();
         this.showStatsGround();
+    
     }
 
     

@@ -1,5 +1,4 @@
-aos.buildings = {
-    "buildings":[
+aos.buildings = [
         {
             "type" : "mine",
             "name" : "iron Mine",
@@ -17,7 +16,7 @@ aos.buildings = {
                 ]
             },
             "produce" : {
-                "type" : "goods",
+                "type" : "metal",
                 "product" : "iron",
                 "quantity" : 100
             },
@@ -59,4 +58,4 @@ aos.buildings = {
 
         }
     ]
-};
+;
