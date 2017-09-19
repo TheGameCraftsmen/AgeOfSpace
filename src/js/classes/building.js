@@ -26,6 +26,8 @@ aos.Building = function () {
     this.production= {};
     /** @type {number} */
     this.storage = 0;
+    /** @type {boolean} */
+    this.functional = true;
 };
 
 aos.Building.prototype = {

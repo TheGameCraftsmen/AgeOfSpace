@@ -52,6 +52,9 @@ aos.Planet.prototype = {
         let b = new aos.Building();
         b.construct("iron Mine");
         this.buildings.push(b);
+        b = new aos.Building();
+        b.construct("solar plant");
+        this.buildings.push(b);
         
     },
 
@@ -130,38 +133,91 @@ aos.Planet.prototype = {
         }
     },
 
+    removeRessource : function(name, quantity,planetRessource){
+        let qtyRemoved = 0;
+        if (planetRessource){
+            for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
+                if ( this.ressources[itPlanetRes].name == name && this.ressources[itPlanetRes].quantity>0){
+                    qtyRemoved = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - quantity) > 0 ? quantity : quantity - this.ressources[itPlanetRes].quantity* this. size * 100000;
+                    let newPercent = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - qtyRemoved) / (100 * this. size * 100000);
+                    this.ressources[itPlanetRes].quantity = newPercent * 100;
+                }
+            }
+        }else{
+            for (let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes++){
+                if (this.ressourcesStored[itRes].name == name && this.ressourcesStored[itRes].quantity>0 ){
+                    qtyRemoved = (this.ressources[itRes].quantity - quantity) > 0 ? quantity : quantity - this.ressources[itRes].quantity;
+                    this.ressourcesStored[itRes].quantity -= qtyRemoved;
+                }
+            }
+        }
+        return qtyRemoved;
+    },
+
     mine : function(){
         for( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++){
             let building = this.buildings[itBuilding];  
             if ( building.type == "mine" ){
-                for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
-                    if ( this.ressources[itPlanetRes].name == building.production.product && this.ressources[itPlanetRes].quantity>0){
-                        console.log("a ="+this.ressources[itPlanetRes].quantity);
-                        let nbMined = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - building.production.quantity) > 0 ? building.production.quantity : building.production.quantity - this.ressources[itPlanetRes].quantity* this. size * 100000;
-                        let newPercent = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - nbMined) / (100 * this. size * 100000);
-                        console.log(newPercent);
-                        this.ressources[itPlanetRes].quantity = newPercent * 100;
-                        let findRes = null;
-                        for ( let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes ++){
-                            if ( this.ressourcesStored[itRes].name == building.production.product ){
-                                findRes = this.ressourcesStored[itRes];
-                                break;
+                building.functional = true;
+                for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
+                    let removeRes = this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource);
+                    if (removeRes != building.production.require[itProd].quantity) building.functional = false;
+                }
+                if ( building.functional){
+                    for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
+                        if ( this.ressources[itPlanetRes].name == building.production.product && this.ressources[itPlanetRes].quantity>0){
+                            let nbMined = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - building.production.quantity) > 0 ? building.production.quantity : building.production.quantity - this.ressources[itPlanetRes].quantity* this. size * 100000;
+                            let newPercent = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - nbMined) / (100 * this. size * 100000);
+                            this.ressources[itPlanetRes].quantity = newPercent * 100;
+                            for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
+
                             }
+                            let findRes = null;
+                            for ( let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes ++){
+                                if ( this.ressourcesStored[itRes].name == building.production.product ){
+                                    findRes = this.ressourcesStored[itRes];
+                                    break;
+                                }
+                            }
+                            if ( findRes == null ){
+                                findRes = new aos.Ressource();
+                                findRes.name = building.production.product;
+                                findRes.type = building.production.type;
+                                findRes.quantity = nbMined;
+                                this.ressourcesStored.push(findRes);
+                            }else{
+                                findRes.quantity += nbMined;
+                            }
+                            break;
                         }
-                        if ( findRes == null ){
-                            findRes = new aos.Ressource();
-                            findRes.name = building.production.product;
-                            findRes.type = building.production.type;
-                            findRes.quantity = nbMined;
-                            this.ressourcesStored.push(findRes);
-                        }else{
-                            findRes.quantity += nbMined;
-                        }
-                        break;
                     }
                 }
             }
         }
+    },
+
+    produceEnergy : function(){
+      for ( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++ ){
+          let building = this.buildings[itBuilding];
+          if ( building.type == "plant" ){
+            let findRes = null;
+            for ( let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes ++){
+                if ( this.ressourcesStored[itRes].name == building.production.product ){
+                    findRes = this.ressourcesStored[itRes];
+                    break;
+                }
+            }
+            if ( findRes == null ){
+                findRes = new aos.Ressource();
+                findRes.name = building.production.product;
+                findRes.type = building.production.type;
+                findRes.quantity = building.production.quantity;
+                this.ressourcesStored.push(findRes);
+            }else{
+                findRes.quantity += building.production.quantity;
+            }
+          }
+      }  
     },
 
     run : function(speedTick){
@@ -169,6 +225,7 @@ aos.Planet.prototype = {
         this.calculateHealthIndicator();
         this.populationGrowing();
         this.showStats();
+        this.produceEnergy();
         this.mine();
     },
 

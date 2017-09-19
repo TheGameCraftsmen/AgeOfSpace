@@ -18,6 +18,26 @@ aos.buildings = [
             "produce" : {
                 "type" : "metal",
                 "product" : "iron",
+                "quantity" : 100,
+                "require" : [{"name":"energy", "quantity":"50", "planetRessource" : false}]
+            },
+            "storage" : 10000
+        },
+        {
+            "type" : "plant",
+            "name" : "solar plant",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"iron",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "energy",
+                "product" : "energy",
                 "quantity" : 100
             },
             "storage" : 10000
