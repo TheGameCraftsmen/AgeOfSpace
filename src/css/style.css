@@ -7,18 +7,17 @@ body {
     padding: 0 !important;
     background-color: #000;
     color: #abc;
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 0.9em;
 }
 
 h3 {
     text-align: center;
 }
 
-button {
-    font-family: Helvetica, arial, sans-serif;
-    font-size: 1em;
-    line-height: 25px;
-    width: 32px;
-    height: 32px;
+hr {
+    border: 0;
+    border-bottom: 1px solid #444;
 }
 
 canvas {

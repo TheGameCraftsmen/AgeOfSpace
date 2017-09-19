@@ -87,7 +87,7 @@ aos.Constellation.prototype = {
             this.stars.forEach(function (star) {
                 ctx.beginPath();
                 if (star.isNotable) {
-                    ctx.strokeStyle = '#06a';
+                    ctx.strokeStyle = '#360';
                     ctx.lineWidth = 2;
                     ctx.arc(600 + star.x, 450 + star.y, 15, 0, 2 * Math.PI);
                 } else {
@@ -105,11 +105,11 @@ aos.Constellation.prototype = {
         this.stars.forEach(function (star) {
             //ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
             ctx.beginPath();
-            const gradient = ctx.createRadialGradient(star.x + 600.0, star.y + 450.0, 0, star.x + 600.0, star.y + 450.0, highlight ? 10 : 2);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.5)');
-            gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
-            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            const gradient = ctx.createRadialGradient(star.x + 600.0, star.y + 450.0, 0, star.x + 600.0, star.y + 450.0, highlight ? 3 + Math.log(star.radius) : 1.2 + 0.2 * Math.log(star.radius));
+            const starColor = star.color;
+            gradient.addColorStop(0, 'rgba(' + starColor.R + ', ' + starColor.G + ', ' + starColor.B + ', 1)');
+            gradient.addColorStop(0.3, 'rgba(' + starColor.R + ', ' + starColor.G + ', ' + starColor.B + ', 0.8)');
+            gradient.addColorStop(1, 'rgba(' + starColor.R + ', ' + starColor.G + ', ' + starColor.B + ', 0)');
             ctx.fillStyle = gradient;
             ctx.fillRect(star.x + 600.0 - pointSize / 2.0, star.y + 450.0 - pointSize / 2.0, pointSize, pointSize);
         });

@@ -26,11 +26,13 @@ aos.Star = function () {
     // detail data for star (lore)
     this.luminosityClass = '?';
     this.spectralClass = '?';
+    this.subSpectral = 0;
     this.temperature = 0;
     this.mass = 0;
     this.radius = 0;
     this.bolometricLuminosity = 0;
     this.color = { R: 0, G: 0, B: 0 };
+    this.hasFlare = false;
 
     // technical private stuff, required for kruskal
     this.r = 0;
@@ -49,7 +51,8 @@ aos.Star.prototype = {
         // source: https://astronomy.stackexchange.com/questions/13165/what-is-the-frequency-distribution-for-luminosity-classes-in-the-milky-way-galax
         let classRatio;
         if (this.isNotable) {
-            classRatio = 7.0 * Math.random(); // not squared because we want the highest possible variation, for gameplay reason
+            classRatio = 6.0 * Math.random(); // not squared because we want the highest possible variation, for gameplay reason
+            // also blue stars are very unlikely to have an HZ but we keep them because they're awesome
         } else {
             classRatio = 7.0 * Math.random() * Math.random(); // squared because low energy stars are supposed to be more common in a real-world galaxy
         }
@@ -57,20 +60,25 @@ aos.Star.prototype = {
             // source: https://en.wikipedia.org/wiki/Stellar_classification#Modern_classification
             this.luminosityClass = 'V'; // main sequence
             this.spectralClass = 'M';
-            this.temperature = 2400.0 + 1300.0 * classRatio; // unit is K
+            this.temperature = 2000.0 + 1700.0 * classRatio; // unit is K
             this.mass = 2.0 + 7.0 * classRatio; // unit is 10^29 kg ; divide by 20 to get mass in M☉
             this.radius = 3.0 + 1.9 * classRatio; // unit is 10^8 m ; divide by 7 to get radius in R☉
-            this.bolometricLuminosity = 1.0 + 319.0 * classRatio; // unit is 10^22 W ; divide by 4000 to get luminosity in L☉
+            this.bolometricLuminosity = 20.0 + 300.0 * classRatio; // unit is 10^22 W ; divide by 4000 to get luminosity in L☉
             // source for color is black body radiation
             // see : https://en.wikipedia.org/wiki/File:Color_temperature_black_body_radiation_logarithmic_kelvins.svg
-            const colorLeft = { R: 0xFF, G: 0x9C, B: 0x3D }; // 2400 K
+            const colorLeft = { R: 0xFF, G: 0x88, B: 0x0F }; // 2000 K
             const colorRight = { R: 0xFF, G: 0xC8, B: 0x90 }; // 3700 K
             this.color = { // lerp --> dirty but close enough
                 R: Math.floor(colorLeft.R + classRatio * (colorRight.R - colorLeft.R)),
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
+            if (Math.random() < 0.2) {
+                this.hasFlare = true;
+            }
         } else if (classRatio < 2.0) {
+            classRatio -= 1.0;
             this.luminosityClass = 'V';
             this.spectralClass = 'K';
             this.temperature = 3700.0 + 1500.0 * classRatio;
@@ -84,7 +92,9 @@ aos.Star.prototype = {
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
         } else if (classRatio < 3.0) {
+            classRatio -= 2.0;
             this.luminosityClass = 'V';
             this.spectralClass = 'G';
             this.temperature = 5200.0 + 800.0 * classRatio;
@@ -98,7 +108,9 @@ aos.Star.prototype = {
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
         } else if (classRatio < 4.0) {
+            classRatio -= 3.0;
             this.luminosityClass = 'V';
             this.spectralClass = 'F';
             this.temperature = 6000.0 + 1500.0 * classRatio;
@@ -112,7 +124,9 @@ aos.Star.prototype = {
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
         } else if (classRatio < 5.0) {
+            classRatio -= 4.0;
             this.luminosityClass = 'V';
             this.spectralClass = 'A';
             this.temperature = 7500.0 + 2500.0 * classRatio;
@@ -126,8 +140,10 @@ aos.Star.prototype = {
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
         } else if (classRatio < 6.0) {
-            this.luminosityClass = 'V';
+            classRatio -= 5.0;
+            this.luminosityClass = 'IV';
             this.spectralClass = 'B';
             this.temperature = 10000.0 + 20000.0 * classRatio;
             this.mass = 42.0 + 278.0 * classRatio;
@@ -140,8 +156,10 @@ aos.Star.prototype = {
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
         } else if (classRatio < 7.0) {
-            this.luminosityClass = 'V';
+            classRatio -= 6.0;
+            this.luminosityClass = 'III';
             this.spectralClass = 'O';
             this.temperature = 30000.0 + 20000.0 * classRatio;
             this.mass = 320.0 + 1360.0 * classRatio;
@@ -154,6 +172,7 @@ aos.Star.prototype = {
                 G: Math.floor(colorLeft.G + classRatio * (colorRight.G - colorLeft.G)),
                 B: Math.floor(colorLeft.B + classRatio * (colorRight.B - colorLeft.B))
             };
+            this.subSpectral = Math.floor(10 * (1 - classRatio));
         }
         const nbPlanets = Math.floor(Math.random() * 10);
     },

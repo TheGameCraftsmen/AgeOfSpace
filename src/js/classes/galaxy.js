@@ -394,13 +394,15 @@ aos.Galaxy.prototype = {
         constellationReference.sort(function (a, b) {
             return a.rng - b.rng;
         });
+        this.stars = [];
         this.constellations.forEach(function (c, i) {
-            //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '<br/>';
             c.reference = constellationReference[i];
             c.computeEdges();
             c.kruskal();
             c.stars.forEach(function (star) {
                 star.group = Math.random();
+                star.generate();
+                this.stars.push(star);
             }, this);
             const sortedStars = c.stars.slice()
             sortedStars.sort(function (a, b) {
@@ -408,14 +410,19 @@ aos.Galaxy.prototype = {
             });
             sortedStars.forEach(function (star, i) {
                 star.greekLetter = greekLetters[i];
-                star.constellation = c;
+                //star.constellation = c; // circular structure prevents JSON.stringify :(
             }, this);
             c.render(false);
+            //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '/' /*+ JSON.stringify(c.stars)*/ + '<br/>';
         }, this);
-        this.stars.forEach(function (star) {
-            star.generate();
-        }, this);
-
+        //this.stars.forEach(function (star) {
+        //    star.generate();
+        //}, this);
+        //document.getElementById('stats').innerHTML +=
+        //    '' + 'stars' + '/'
+        //    + JSON.stringify(this.stars.length) + '/'
+        //    + JSON.stringify(this.stars.filter(function (star) { return star.keep; }).length) + '/'
+        //    + JSON.stringify(this.stars) + '<br/>';
     },
 
     getConstellationId: function (x, y) {
@@ -499,6 +506,64 @@ aos.Galaxy.prototype = {
                         star.greekLetter.name.charAt(0).toUpperCase() + star.greekLetter.name.slice(1) + ' ' +
                         instance.constellations[constellationId].reference.gen +
                     '<br><em>' + label + '</em>';
+                    document.getElementById('starSystemTxt').innerHTML = '';
+                    {
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Type' + '</dt><dd>' +
+                            (star.spectralClass === 'M' ? 'Red dwarf' : 
+                            star.spectralClass === 'K' ? 'Orange dwarf' :
+                            star.spectralClass === 'G' ? 'Yellow dwarf' : 
+                            star.spectralClass === 'F' ? 'Yellow-white dwarf' :
+                            star.spectralClass === 'A' ? 'White main sequence' :
+                            star.spectralClass === 'B' ? 'Blue subgiant' : 'Blue giant') + '</dd></dl>';
+                    }
+                    {
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Spectral class' + '</dt><dd>' + star.spectralClass + star.subSpectral + '</dd></dl>';
+                    }
+                    {
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Luminosity class' + '</dt><dd>' + star.luminosityClass + '</dd></dl>';
+                    }
+                    {
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Surface temperature' + '</dt><dd>' + 100 * Math.floor(star.temperature / 100) + ' K</dd></dl>';
+                    }
+                    {
+                        let radical = star.mass;
+                        let power = 29;
+                        while (radical > 10.0) {
+                            radical /= 10.0;
+                            power++;
+                        }
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Mass' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> kg</dd></dl>';
+                    }
+                    {
+                        let radical = star.radius;
+                        let power = 8;
+                        while (radical > 10.0) {
+                            radical /= 10.0;
+                            power++;
+                        }
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Radius' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> m</dd></dl>';
+                    }
+                    {
+                        let radical = star.bolometricLuminosity;
+                        let power = 22;
+                        while (radical > 10.0) {
+                            radical /= 10.0;
+                            power++;
+                        }
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Bolometric luminosity' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> W</dd></dl>';
+                    }
+                    {
+                        const mbol = -2.5 * Math.log10(star.bolometricLuminosity / 4000.0) + 5;
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Absolute magnitude' + '</dt><dd>' + mbol.toFixed(1) + '</dd></dl>';
+                    }
                 }
                 //document.getElementById('stats').innerHTML += dist + '<br/>';
             });
