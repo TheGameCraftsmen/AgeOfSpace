@@ -18,6 +18,7 @@ var aos = aos || {};
 aos.Constellation = function () {
     /** @type {number} */
     this.reference = {}; // latin name of the constellation
+    this.loreStarCount = 0;
     this.stars = [];
     this.edges = [];
     this.kruskalEdges = [];

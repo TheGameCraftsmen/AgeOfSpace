@@ -364,39 +364,259 @@ aos.Galaxy.prototype = {
         ];
         const greekLetters = [
 { id: 1, maj: 'Α', min: 'α', name: 'alpha' },
-{ id: 2, maj: 'Β', min: 'β', name: 'bêta' },
+{ id: 2, maj: 'Β', min: 'β', name: 'beta' },
 { id: 3, maj: 'Γ', min: 'γ', name: 'gamma' },
 { id: 4, maj: 'Δ', min: 'δ', name: 'delta' },
 { id: 5, maj: 'Ε', min: 'ε', name: 'epsilon' },
-{ id: 6, maj: 'Ζ', min: 'ζ', name: 'zêta' },
-{ id: 7, maj: 'Η', min: 'η', name: 'êta' },
-{ id: 8, maj: 'Θ', min: 'θ', name: 'thêta' },
+{ id: 6, maj: 'Ζ', min: 'ζ', name: 'zeta' },
+{ id: 7, maj: 'Η', min: 'η', name: 'eta' },
+{ id: 8, maj: 'Θ', min: 'θ', name: 'theta' },
 { id: 9, maj: 'Ι', min: 'ι', name: 'iota' },
 { id: 10, maj: 'Κ', min: 'κ', name: 'kappa' },
 { id: 11, maj: 'Λ', min: 'λ', name: 'lambda' },
 { id: 12, maj: 'Μ', min: 'μ', name: 'mu' },
 { id: 13, maj: 'Ν', min: 'ν', name: 'nu' },
-{ id: 14, maj: 'Ξ', min: 'ξ', name: 'ksi/xi' },
+{ id: 14, maj: 'Ξ', min: 'ξ', name: 'xi' },
 { id: 15, maj: 'Ο', min: 'ο', name: 'omicron' },
 { id: 16, maj: 'Π', min: 'π', name: 'pi' },
-{ id: 17, maj: 'Ρ', min: 'ρ', name: 'rhô' },
+{ id: 17, maj: 'Ρ', min: 'ρ', name: 'rho' },
 { id: 18, maj: 'Σ', min: 'σ', name: 'sigma' },
 { id: 19, maj: 'Τ', min: 'τ', name: 'tau' },
 { id: 20, maj: 'Υ', min: 'υ', name: 'upsilon' },
 { id: 21, maj: 'Φ', min: 'ϕ', name: 'phi' },
-{ id: 22, maj: 'Χ', min: 'χ', name: 'khi/chi' },
+{ id: 22, maj: 'Χ', min: 'χ', name: 'chi' },
 { id: 23, maj: 'Ψ', min: 'ψ', name: 'psi' },
-{ id: 24, maj: 'Ω', min: 'ω', name: 'oméga' },
+{ id: 24, maj: 'Ω', min: 'ω', name: 'omega' },
         ];
+        const properName = [
+{ id: 1, name: 'Acamar' },
+{ id: 2, name: 'Achernar' },
+{ id: 3, name: 'Acrux' },
+{ id: 4, name: 'Acubens' },
+{ id: 5, name: 'Adhara' },
+{ id: 6, name: 'Al Kaprah' },
+{ id: 7, name: 'Al Nair' },
+{ id: 8, name: 'Al Niyat' },
+{ id: 9, name: 'Al Suhail' },
+{ id: 10, name: 'Albaldah' },
+{ id: 11, name: 'Albireo' },
+{ id: 12, name: 'Alchiba' },
+{ id: 13, name: 'Alcor' },
+{ id: 14, name: 'Alcyone' },
+{ id: 15, name: 'Aldebaran' },
+{ id: 16, name: 'Alderamin' },
+{ id: 17, name: 'Aldhafera' },
+{ id: 18, name: 'Alfirk' },
+{ id: 19, name: 'Algedi' },
+{ id: 20, name: 'Algenib' },
+{ id: 21, name: 'Algieba' },
+{ id: 22, name: 'Algiebba' },
+{ id: 23, name: 'Algol' },
+{ id: 24, name: 'Algorab' },
+{ id: 25, name: 'Alhena' },
+{ id: 26, name: 'Alioth' },
+{ id: 27, name: 'Alkaid' },
+{ id: 28, name: 'Alkalurops' },
+{ id: 29, name: 'Almaaz' },
+{ id: 30, name: 'Almach' },
+{ id: 31, name: 'Alnasl' },
+{ id: 32, name: 'Alnilam' },
+{ id: 33, name: 'Alnitak' },
+{ id: 34, name: 'Alphard' },
+{ id: 35, name: 'Alphecca' },
+{ id: 36, name: 'Alpheratz' },
+{ id: 37, name: 'Alrakis' },
+{ id: 38, name: 'Alrescha' },
+{ id: 39, name: 'Alshain' },
+{ id: 40, name: 'Altair' },
+{ id: 41, name: 'Altais' },
+{ id: 42, name: 'Altarf' },
+{ id: 43, name: 'Alterf' },
+{ id: 44, name: 'Althalimain' },
+{ id: 45, name: 'Aludra' },
+{ id: 46, name: 'Alula' },
+{ id: 47, name: 'Alzirr' },
+{ id: 48, name: 'Ancha' },
+{ id: 49, name: 'Ankaa' },
+{ id: 50, name: 'Antares' },
+{ id: 51, name: 'Arcturus' },
+{ id: 52, name: 'Arkab' },
+{ id: 53, name: 'Arneb' },
+{ id: 54, name: 'Ascella' },
+{ id: 55, name: 'Asmidiske' },
+{ id: 56, name: 'Aspidiske' },
+{ id: 57, name: 'Atik' },
+{ id: 58, name: 'Atlas' },
+{ id: 59, name: 'Atria' },
+{ id: 60, name: 'Auva' },
+{ id: 61, name: 'Avior' },
+{ id: 62, name: 'Azha' },
+{ id: 63, name: 'Baham' },
+{ id: 64, name: 'Baten Kaitos' },
+{ id: 65, name: 'Beid' },
+{ id: 66, name: 'Bellatrix' },
+{ id: 67, name: 'Betelgeuse' },
+{ id: 68, name: 'Botein' },
+{ id: 69, name: 'Canopus' },
+{ id: 70, name: 'Capella' },
+{ id: 71, name: 'Caph' },
+{ id: 72, name: 'Castor' },
+{ id: 73, name: 'Cebalrai' },
+{ id: 74, name: 'Celaeno' },
+{ id: 75, name: 'Chara' },
+{ id: 76, name: 'Chertan' },
+{ id: 77, name: 'Cor Caroli' },
+{ id: 78, name: 'Cursa' },
+{ id: 79, name: 'Dabih' },
+{ id: 80, name: 'Deneb' },
+{ id: 81, name: 'Denebola' },
+{ id: 82, name: 'Diadem' },
+{ id: 83, name: 'Dschubba' },
+{ id: 84, name: 'Dubhe' },
+{ id: 85, name: 'Edasich' },
+{ id: 86, name: 'Electra' },
+{ id: 87, name: 'Elnath' },
+{ id: 88, name: 'Eltanin' },
+{ id: 89, name: 'Enif' },
+{ id: 90, name: 'Er Rai' },
+{ id: 91, name: 'Erakis' },
+{ id: 92, name: 'Fomalhaut' },
+{ id: 93, name: 'Furud' },
+{ id: 94, name: 'Gacrux' },
+{ id: 95, name: 'Giausar' },
+{ id: 96, name: 'Gienah' },
+{ id: 97, name: 'Girtab' },
+{ id: 98, name: 'Gomeisa' },
+{ id: 99, name: 'Graffias' },
+{ id: 100, name: 'Grumium' },
+{ id: 101, name: 'Hadar' },
+{ id: 102, name: 'Hamal' },
+{ id: 103, name: 'Han' },
+{ id: 104, name: 'Hassaleh' },
+{ id: 105, name: 'Heze' },
+{ id: 106, name: 'Homam' },
+{ id: 107, name: 'Izar' },
+{ id: 108, name: 'Jabbah' },
+{ id: 109, name: 'Kaffalijidhma' },
+{ id: 110, name: 'Keid' },
+{ id: 111, name: 'Kitalpha' },
+{ id: 112, name: 'Kochab' },
+{ id: 113, name: 'Kornephoros' },
+{ id: 114, name: 'Kraz' },
+{ id: 115, name: 'Kurhah' },
+{ id: 116, name: 'Lesath' },
+{ id: 117, name: 'Maia' },
+{ id: 118, name: 'Marfik' },
+{ id: 119, name: 'Markab' },
+{ id: 120, name: 'Matar' },
+{ id: 121, name: 'Mebsuta' },
+{ id: 122, name: 'Megrez' },
+{ id: 123, name: 'Meissa' },
+{ id: 124, name: 'Mekbuda' },
+{ id: 125, name: 'Menkalinan' },
+{ id: 126, name: 'Menkar' },
+{ id: 127, name: 'Menkent' },
+{ id: 128, name: 'Menkib' },
+{ id: 129, name: 'Merak' },
+{ id: 130, name: 'Merope' },
+{ id: 131, name: 'Mesarthim' },
+{ id: 132, name: 'Miaplacidus' },
+{ id: 133, name: 'Mimosa' },
+{ id: 134, name: 'Minkar' },
+{ id: 135, name: 'Mintaka' },
+{ id: 136, name: 'Mira' },
+{ id: 137, name: 'Mirach' },
+{ id: 138, name: 'Mirfak' },
+{ id: 139, name: 'Mirzam' },
+{ id: 140, name: 'Mizar' },
+{ id: 141, name: 'Muliphein' },
+{ id: 142, name: 'Muphrid' },
+{ id: 143, name: 'Muscida' },
+{ id: 144, name: 'Nair al Saif' },
+{ id: 145, name: 'Naos' },
+{ id: 146, name: 'Nashira' },
+{ id: 147, name: 'Nekkar' },
+{ id: 148, name: 'Nihal' },
+{ id: 149, name: 'Nodus' },
+{ id: 150, name: 'Nunki' },
+{ id: 151, name: 'Nusakan' },
+{ id: 152, name: 'Ophiuchus' },
+{ id: 153, name: 'Phaet' },
+{ id: 154, name: 'Phecda' },
+{ id: 155, name: 'Pherkad' },
+{ id: 156, name: 'Pleione' },
+{ id: 157, name: 'Polaris' },
+{ id: 158, name: 'Pollux' },
+{ id: 159, name: 'Porrima' },
+{ id: 160, name: 'Procyon' },
+{ id: 161, name: 'Propus' },
+{ id: 162, name: 'Rasalas' },
+{ id: 163, name: 'Rasalgethi' },
+{ id: 164, name: 'Rasalhague' },
+{ id: 165, name: 'Rasalmothallah' },
+{ id: 166, name: 'Regulus' },
+{ id: 167, name: 'Rigel' },
+{ id: 168, name: 'Rotanev' },
+{ id: 169, name: 'Ruchbah' },
+{ id: 170, name: 'Rukbat' },
+{ id: 171, name: 'Sabik' },
+{ id: 172, name: 'Sadachbia' },
+{ id: 173, name: 'Sadr' },
+{ id: 174, name: 'Saiph' },
+{ id: 175, name: 'Sargas' },
+{ id: 176, name: 'Sarin' },
+{ id: 177, name: 'Scheat' },
+{ id: 178, name: 'Schedar' },
+{ id: 179, name: 'Segin' },
+{ id: 180, name: 'Seginus' },
+{ id: 181, name: 'Shaula' },
+{ id: 182, name: 'Sheliak' },
+{ id: 183, name: 'Sheratan' },
+{ id: 184, name: 'Sirius' },
+{ id: 185, name: 'Skat' },
+{ id: 186, name: 'Spica' },
+{ id: 187, name: 'Sterope' },
+{ id: 188, name: 'Sualocin' },
+{ id: 189, name: 'Suhail al Muhlif' },
+{ id: 190, name: 'Sulafat' },
+{ id: 191, name: 'Syrma' },
+{ id: 192, name: 'Talitha' },
+{ id: 193, name: 'Tarazed' },
+{ id: 194, name: 'Taygeta' },
+{ id: 195, name: 'Tegmine' },
+{ id: 196, name: 'Thuban' },
+{ id: 197, name: 'Unukalhai' },
+{ id: 198, name: 'Vega' },
+{ id: 199, name: 'Vindemiatrix' },
+{ id: 200, name: 'Wasat' },
+{ id: 201, name: 'Wazn' },
+{ id: 202, name: 'Wei' },
+{ id: 203, name: 'Wesen' },
+{ id: 204, name: 'Zaniah' },
+{ id: 205, name: 'Zaurak' },
+{ id: 206, name: 'Zavijava' },
+{ id: 207, name: 'Zosma' },
+{ id: 208, name: 'Zubenelakrab' },
+{ id: 209, name: 'Zubenelgenubi' },
+{ id: 210, name: 'Zubeneschamali' },
+        ];
+
         constellationReference.forEach(function (c) {
             c.rng = Math.random();
         }, this);
         constellationReference.sort(function (a, b) {
             return a.rng - b.rng;
         });
+        properName.forEach(function (c) {
+            c.rng = Math.random();
+        }, this);
+        properName.sort(function (a, b) {
+            return a.rng - b.rng;
+        });
         this.stars = [];
         this.constellations.forEach(function (c, i) {
             c.reference = constellationReference[i];
+            c.loreStarCount = Math.random() * Math.random() * 1000.0;
             c.computeEdges();
             c.kruskal();
             c.stars.forEach(function (star) {
@@ -408,16 +628,16 @@ aos.Galaxy.prototype = {
             sortedStars.sort(function (a, b) {
                 return a.group - b.group;
             });
-            sortedStars.forEach(function (star, i) {
-                star.greekLetter = greekLetters[i];
+            sortedStars.forEach(function (star, j) {
+                star.greekLetter = greekLetters[j];
                 //star.constellation = c; // circular structure prevents JSON.stringify :(
             }, this);
             c.render(false);
             //document.getElementById('stats').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '/' /*+ JSON.stringify(c.stars)*/ + '<br/>';
         }, this);
-        //this.stars.forEach(function (star) {
-        //    star.generate();
-        //}, this);
+        this.stars.forEach(function (star, i) {
+            star.properName = properName[i];
+        }, this);
         //document.getElementById('stats').innerHTML +=
         //    '' + 'stars' + '/'
         //    + JSON.stringify(this.stars.length) + '/'
@@ -484,11 +704,40 @@ aos.Galaxy.prototype = {
                 document.getElementById('starSystemBlock').style.display = 'block';
                 document.getElementById('starSystemName').innerHTML = 'Galactic Core' +
                     '<br><em>Special area</em>';
+                document.getElementById('starSystemTxt').innerHTML = '';
+                document.getElementById('starSystemTxt').innerHTML +=
+                    '<div style="text-align: center;">DANGER<br><br>Black hole<br><br>Don\'t come close !</div>';
             }
             else {
                 document.getElementById('starSystemBlock').style.display = 'block';
                 document.getElementById('starSystemName').innerHTML = '' + instance.constellations[constellationId].reference.name +
                     '<br><em>Constellation</em>';
+                document.getElementById('starSystemTxt').innerHTML = '';
+                {
+                    let radical = instance.constellations[constellationId].loreStarCount;
+                    let power = 8;
+                    while (radical > 10.0) {
+                        radical /= 10.0;
+                        power++;
+                    }
+                    document.getElementById('starSystemTxt').innerHTML +=
+                        '<dl><dt>' + 'Stars (total)' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup></dd></dl>';
+                }
+                const constellationStars = instance.constellations[constellationId].stars;
+                {
+                    document.getElementById('starSystemTxt').innerHTML +=
+                        '<dl><dt>' + 'Notable stars' + '</dt><dd>' + constellationStars.length + '</dd></dl>';
+                }
+                {
+                    document.getElementById('starSystemTxt').innerHTML +=
+                        '<dl><dt>' + 'Stars with at least' + '</dt><dd>' +  '</dd></dl>';
+                    document.getElementById('starSystemTxt').innerHTML +=
+                        '<dl><dt>' + 'one planet in the' + '</dt><dd>' + constellationStars.filter(function (star) {
+                            return star.isNotable;
+                        }).length + '</dd></dl>';
+                    document.getElementById('starSystemTxt').innerHTML +=
+                        '<dl><dt>' + 'habitable zone' + '</dt><dd>' +  '</dd></dl>';
+                }
             }
 
             //document.getElementById('stats').innerHTML = '' + constellationId + '/' + '<br/>';
@@ -498,7 +747,7 @@ aos.Galaxy.prototype = {
                 const deltaY = star.y - galaxyCoordY;
                 const dist = deltaX * deltaX + deltaY * deltaY;
                 const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
-                const label = star.isNotable ? 'Notable star' : 'Star';
+                const label = star.isNotable ? 'Star' : 'Star';
                 if (dist < radius) { // sqrt(dist) < 20.0
                     document.getElementById('starOverlay').style.cursor = 'pointer';
                     document.getElementById('starSystemBlock').style.display = 'block';
@@ -507,6 +756,10 @@ aos.Galaxy.prototype = {
                         instance.constellations[constellationId].reference.gen +
                     '<br><em>' + label + '</em>';
                     document.getElementById('starSystemTxt').innerHTML = '';
+                    {
+                        document.getElementById('starSystemTxt').innerHTML +=
+                            '<dl><dt>' + 'Proper name' + '</dt><dd>' + star.properName.name + '</dd></dl>';
+                    }
                     {
                         document.getElementById('starSystemTxt').innerHTML +=
                             '<dl><dt>' + 'Type' + '</dt><dd>' +
