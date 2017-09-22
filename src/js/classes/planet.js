@@ -162,8 +162,8 @@ aos.Planet.prototype = {
         if (planetRessource){
             for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
                 if ( this.ressources[itPlanetRes].name == name && this.ressources[itPlanetRes].quantity>0){
-                    qtyRemoved = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - quantity) > 0 ? quantity : quantity - this.ressources[itPlanetRes].quantity* this. size * 100000;
-                    let newPercent = ((this.ressources[itPlanetRes].quantity * this. size * 100000) - qtyRemoved) / (100 * this. size * 100000);
+                    qtyRemoved = ((this.ressources[itPlanetRes].quantity * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - quantity) > 0 ? quantity : quantity - this.ressources[itPlanetRes].quantity* this. size * aos.volumeRessources[this.ressources[itPlanetRes].type];
+                    let newPercent = ((this.ressources[itPlanetRes].quantity * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - qtyRemoved) / (100 * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]);
                     this.ressources[itPlanetRes].quantity = newPercent * 100;
                 }
             }
@@ -192,7 +192,7 @@ aos.Planet.prototype = {
                 if ( building.functional){
                     for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
                         if ( this.ressources[itPlanetRes].name == building.production.from && this.ressources[itPlanetRes].quantity>0){
-                            let nbMined = ((this.ressources[itPlanetRes].percent * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - building.production.quantity) > 0 ? building.production.quantity : building.production.quantity - this.ressources[itPlanetRes].percent * this. size * 100000;
+                            let nbMined = ((this.ressources[itPlanetRes].percent * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - building.production.quantity) > 0 ? building.production.quantity : building.production.quantity - this.ressources[itPlanetRes].percent * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type];
                             let newPercent = ((this.ressources[itPlanetRes].percent * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - nbMined) / (100 * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]);
                             this.ressources[itPlanetRes].percent = newPercent * 100;
                             let findRes = null;
@@ -266,9 +266,9 @@ aos.Planet.prototype = {
     showPlanetRessources: function(){
         for( let i = 0; i < this.ressources.length ; i++){
             if (this.ressources[i].type == "metal"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * 100000);            
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * aos.volumeRessources["metal"]);            
             }else if (this.ressources[i].name == "water"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * 100000);            
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * aos.volumeRessources["liquid"]);            
             }
 
         }
