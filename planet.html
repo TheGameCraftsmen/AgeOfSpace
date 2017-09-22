@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no">
     <title>Age of Space</title>
     <link rel="stylesheet" href="./src/css/style.css" media="screen">
+    <link href="data/img/planet.ico" rel="shortcut icon" type="image/x-icon" />
 </head>
 <body>
     <table class="mainTable">
@@ -18,16 +19,16 @@
 
         </tr>
         <tr>
-            <td style="width: 800px;">
+            <td style="width: 500px;">
                 <div id="stats"></div>
                 <div id="InfoBlock" style="display:block">
                     <h3 id="Population">Population  </h3>
                     <table width="50%">
                         <tr>
-                            <td>Expansion Rate</td><td width="10">:</td><td align="right"><div id="healthingTxt">10000</div></td><td><a href="#">?</a></td>
+                            <td>Expansion Rate</td><td width="10">:</td><td align="right"><div id="healthingTxt">0</div></td><td><a href="#">?</a></td>
                         </tr>
                         <tr>
-                            <td>Population</td><td width="10">:</td><td align="right"><div id="populationTxt">10000</div></td>
+                            <td>Population</td><td width="10">:</td><td align="right"><div id="populationTxt">0</div></td>
                         </tr>
                     </table>
 
@@ -57,60 +58,101 @@
                         <h3 id="PlanetRessources">Planet Ressources</h3>
                         <table width="50%">
                             <tr>
-                                    <td>Iron</td><td width="10">:</td><td align="right"><div id="pironText">10000</div></td>
+                                    <td>Iron</td><td width="10">:</td><td align="right"><div id="pironText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>Copper</td><td width="10">:</td><td align="right"><div id="pcopperText">10000</div></td>
+                                    <td>Copper</td><td width="10">:</td><td align="right"><div id="pcopperText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>Silver</td><td width="10">:</td><td align="right"><div id="psilverText">10000</div></td>
+                                    <td>Silver</td><td width="10">:</td><td align="right"><div id="psilverText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>Uranium</td><td width="10">:</td><td align="right"><div id="puraniumText">10000</div></td>
+                                    <td>Uranium</td><td width="10">:</td><td align="right"><div id="puraniumText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>Aluminium</td><td width="10">:</td><td align="right"><div id="paluminiumText">10000</div></td>
+                                    <td>Aluminium</td><td width="10">:</td><td align="right"><div id="paluminiumText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>Water</td><td width="10">:</td><td align="right"><div id="pwaterText">10000</div></td>
+                                    <td>Water</td><td width="10">:</td><td align="right"><div id="pwaterText">0</div></td>
                             </tr>
                         </table>
                     </div>
             </td>
+            <td width=400>
+                <h3>Mines</h3>
+                <table width="100%">
+                        <tr>
+                            <th>Name</th><th>number</th><th>status</th><th>production</th>
+                        </tr>
+                        <tr>
+                                <td>Iron Mine</td><td align="right">1</td><td>Enable</td><td>100</td>
+                        </tr>
+                </table>
+                <h3>Plants</h3>
+                <table width="100%">
+                        <tr>
+                                <th>Name</th><th>number</th><th>status</th><th>production</th>
+                        </tr>
+                        <tr>
+                                <td>Solar Plant</td><td align="right">1</td><td>Enable</td><td>40</td>
+                        </tr>
+                </table>
+                <h3>Habitations</h3>
+                <h3>Terraformation</h3>
+
+            </td>
             <td align="center">
                 <div id="CamBlock" style="display:block">
                     <h3 id="Ressources">Air Composition</h3>
-                    <table width="50%">
+                    <table width="80%">
                             <tr>
-                                    <td>breathable</td><td width="10">:</td><td align="right"><div id="airbreathableText">10000</div></td>
+                                    <td>oxygen</td><td width="10">:</td><td align="right"><div id="airoxygenText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>unbreathable</td><td width="10">:</td><td align="right"><div id="airunbreathableText">10000</div></td>
+                                    <td>hydrogen</td><td width="10">:</td><td align="right"><div id="airhydrogenText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>inert</td><td width="10">:</td><td align="right"><div id="airinertText">10000</div></td>
+                                    <td>carbon</td><td width="10">:</td><td align="right"><div id="aircarbonText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>toxic</td><td width="10">:</td><td align="right"><div id="airtoxicText">10000</div></td>
+                                    <td>azote</td><td width="10">:</td><td align="right"><div id="airazoteText">0</div></td>
+                            </tr>
+                            <tr>
+                                    <td>inert</td><td width="10">:</td><td align="right"><div id="airinertText">0</div></td>
                             </tr>
                             
+                            
                         </table>
-                    <h3 id="Ressources">Planet Composition</h3>
-                    <table width="50%">
+                    <h3 >Planet Composition</h3>
+                    <table width="80%">
+                            
                             <tr>
-                                    <td>water</td><td width="10">:</td><td align="right"><div id="groundwaterText">10000</div></td>
+                                    <td>metal</td><td width="10">:</td><td align="right"><div id="groundmetalText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>metal</td><td width="10">:</td><td align="right"><div id="groundmetalText">10000</div></td>
+                                    <td>carbonate</td><td width="10">:</td><td align="right"><div id="groundcarbonateText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>minerals</td><td width="10">:</td><td align="right"><div id="groundmineralsText">10000</div></td>
+                                    <td>nitrate</td><td width="10">:</td><td align="right"><div id="groundnitrateText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>organic</td><td width="10">:</td><td align="right"><div id="groundorganicText">10000</div></td>
+                                    <td>cyanide</td><td width="10">:</td><td align="right"><div id="groundcyanideText">0</div></td>
                             </tr>
                             <tr>
-                                    <td>toxic</td><td width="10">:</td><td align="right"><div id="groundtoxicText">10000</div></td>
+                                    <td>minerals</td><td width="10">:</td><td align="right"><div id="groundmineralsText">0</div></td>
+                            </tr>
+                    </table>
+
+                    <h3>Liquid Composition</h3>
+                            <table width="80%">
+                            <tr>
+                                    <td>oil</td><td width="10">:</td><td align="right"><div id="liquidoilText">0</div></td>
+                            </tr>
+                            <tr>
+                                    <td>ammoniac</td><td width="10">:</td><td align="right"><div id="liquidammoniacText">0</div></td>
+                            </tr>
+                            <tr>
+                                    <td>water</td><td width="10">:</td><td align="right"><div id="liquidwaterText">0</div></td>
                             </tr>
                             
                         </table>

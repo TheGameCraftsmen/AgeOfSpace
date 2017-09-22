@@ -19,6 +19,8 @@ aos.buildings = [
                 "type" : "metal",
                 "product" : "iron",
                 "quantity" : 100,
+                "from" : "iron",
+                "to" : "storage",
                 "require" : [{"name":"energy", "quantity":"50", "planetRessource" : false}]
             },
             "storage" : 10000
@@ -75,6 +77,22 @@ aos.buildings = [
                 "materials":[{"type" : "iron","quantity":50},{"type": "wood","quantity":20}]
             },
             "produce":{"people" : 300000}
+
+        },
+        {
+            "type" : "epurateur",
+            "name" : "CO2 epuration",
+            "require" : {
+                "space" :10,
+                "materials":[{"type" : "iron","quantity":50},{"type": "wood","quantity":20}]
+            },
+            "produce" : {
+                "type" : "air",
+                "product" : "oxygen",
+                "quantity" : 10000,
+                "from" : "carbon",
+                "to" : "planet"
+            }
 
         }
     ]
