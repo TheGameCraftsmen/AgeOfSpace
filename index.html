@@ -11,24 +11,27 @@
     <table class="mainTable">
         <tr>
             <td rowspan="2">
-                <div style="position: relative; overflow: auto; width: 100%; height: 100%;">
-                    <canvas id="ellipse" width="1200" height="900" style="z-index: 1;"></canvas>
-                    <canvas id="starOverlay" width="1200" height="900" style="z-index: 2;"></canvas>
+                <div id="galaxyBlock">
+                    <canvas id="galaxyStarsCanvas" width="1200" height="900"></canvas>
+                    <canvas id="galaxyOverlayCanvas" width="1200" height="900"></canvas>
+                </div>
+                <div id="starSystemBlock">
+                    X
                 </div>
             </td>
-            <td style="width: 320px;">
-                <div id="stats"></div>
-                <div id="starSystemBlock">
-                    <h3 id="starSystemName"></h3>
+            <td id="commandColumn">
+                <div id="debug"></div>
+                <div id="contextualBlock">
+                    <h3 id="contextualTitle"></h3>
                     <hr>
-                    <div id="starSystemTxt">
+                    <div id="contextualTxt">
                     </div>
                 </div>
             </td>
         </tr>
         <tr>
-            <td style="height: 70px; text-align: center; vertical-align: middle;">
-                <div style="transform: scale(0.5);">
+            <td id="timeBlock">
+                <div id="timeButtons">
                     <div id="speed0" class="speedButton">
                         <svg width="32" height="32">
                             <rect x="4" y="0" width="8" height="32" stroke-width="0" fill="#000" />
@@ -50,8 +53,15 @@
             </td>
         </tr>
     </table>
+    <script src="./src/js/classes/ressource.js"></script>
+    <script src="./src/js/classes/building.js"></script>
+    <script src="./src/js/classes/planet_.js"></script>
     <script src="./src/js/classes/star.js"></script>
     <script src="./src/js/classes/constellation.js"></script>
     <script src="./src/js/classes/galaxy.js"></script>
+    <script src="./data/reference/ressources.js"></script>
+    <script src="./data/reference/buildings.js"></script>
+
+    <script src="./src/js/classes/orchestrator.js"></script>
 </body>
 </html>
