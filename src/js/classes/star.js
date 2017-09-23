@@ -21,6 +21,7 @@ aos.Star = function () {
     this.y = 0;
     this.isNotable = false;
     this.greekLetter = {};
+    this.properName = {};
     this.constellation = {};
 
     // detail data for star (lore)
