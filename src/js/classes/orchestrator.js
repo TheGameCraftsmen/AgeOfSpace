@@ -179,7 +179,11 @@ aos.game = new aos.Orchestrator();
 window.onload = function () {
     aos.game.instanciate();
     window.requestAnimationFrame(function () {
-        document.getElementById('contextualBlock').style.display = 'none';
         document.getElementById('starSystemBlock').style.display = 'none';
+        document.getElementById('contextualBlock').style.display = 'block';
+        document.getElementById('contextualTxt').innerHTML = '';
+
+        const chart = new aos.PieChart();
+        chart.render(document.getElementById('contextualTxt'));
     });
 };
