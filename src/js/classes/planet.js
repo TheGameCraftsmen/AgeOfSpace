@@ -54,6 +54,12 @@ aos.Planet.prototype = {
         b.construct("iron Mine");
         this.buildings.push(b);
         b = new aos.Building();
+        b.construct("copper Mine");
+        this.buildings.push(b);
+        b = new aos.Building();
+        b.construct("solar plant");
+        this.buildings.push(b);
+        b = new aos.Building();
         b.construct("solar plant");
         this.buildings.push(b);
         b = new aos.Building();
@@ -316,7 +322,60 @@ aos.Planet.prototype = {
     },
 
     showBuildings : function(){
+        let buildingCount= {};
+        for ( var i = 0 ; i < this.buildings.length ; i++){
+            //console.log(this.buildings[i].type + "Buildings");
+            mineBuildings
+            
+            if (typeof buildingCount[this.buildings[i].name] === "undefined"){
+                buildingCount[this.buildings[i].name] = { "building" : this.buildings[i], "count" : 1};    
+            }else{
+                buildingCount[this.buildings[i].name].count += 1;
+            }
+        }
+        
+        //console.log(buildingCount);
 
+        for (let elt in buildingCount){
+            let table = document.getElementById(buildingCount[elt].building.type + "Buildings");
+            let nbRows = table.rows.length;
+            let found = null;
+            for (let i =0 ; i <nbRows ; i++){
+                if ( table.rows[i].cells[0].innerHTML == buildingCount[elt].building.name){
+                    found = table.rows[i];
+                    break;
+                }
+            }
+
+            if (found == null){
+                let row = table.insertRow(nbRows);
+                let cell1 = row.insertCell(0);
+                cell1.innerHTML = buildingCount[elt].building.name;
+                let cell2 = row.insertCell(1);
+                cell2.innerHTML = buildingCount[elt].count;
+                let cell3 = row.insertCell(2);
+                cell3.innerHTML = buildingCount[elt].building.functional;
+                let cell4 = row.insertCell(3);
+                cell4.innerHTML = buildingCount[elt].building.production.quantity;
+            }else{
+                found.cells[1].innerHTML = buildingCount[elt].count;
+            }
+
+        }
+        //console.log("*************");
+        //buildingCount.forEach(function(element) {
+
+                /*let row = table.insertRow(nbRows);
+                let cell1 = row.insertCell(0);
+                cell1.innerHTML = this.buildings[i].name;
+                let cell2 = row.insertCell(1);
+                cell2.innerHTML = 1;
+                let cell3 = row.insertCell(2);
+                cell3.innerHTML = this.buildings[i].functional;
+                let cell4 = row.insertCell(3);
+                cell4.innerHTML = this.buildings[i].production.quantity;*/
+          //      console.log(element);
+        //}, this);
     },
 
     showStats : function(){

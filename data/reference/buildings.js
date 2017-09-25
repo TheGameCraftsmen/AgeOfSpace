@@ -26,6 +26,32 @@ aos.buildings = [
             "storage" : 10000
         },
         {
+            "type" : "mine",
+            "name" : "copper Mine",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"iron",
+                        "quantity" : 100
+                    },
+                    {
+                        "type" : "wood",
+                        "quantity" : 30
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "metal",
+                "product" : "copper",
+                "quantity" : 100,
+                "from" : "copper",
+                "to" : "storage",
+                "require" : [{"name":"energy", "quantity":"50", "planetRessource" : false}]
+            },
+            "storage" : 10000
+        },
+        {
             "type" : "plant",
             "name" : "solar plant",
             "require" : {
