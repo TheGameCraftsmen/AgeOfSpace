@@ -45,7 +45,7 @@ aos.Planet = function () {
 aos.Planet.prototype = {
 
     generate: function () {
-        this.size = Math.floor(Math.random() * 5) * 150;
+        this.size = Math.floor(Math.random() * 5 + 1);
         this.landSize = Math.random * this.size;
         this.generateAir();
         this.generateGround();
@@ -110,9 +110,11 @@ aos.Planet.prototype = {
                 ressource.name = aos.ressources[i].name;
                 if ( i == ( aos.ressources.length-1 )){
                     ressource.quantity = (prcent - compositionPercent) ;
+                    ressource.percent = ressource.quantity;
                 }else{
                     let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
                     ressource.quantity = itPrcent ;
+                    ressource.percent = ressource.quantity;
                     compositionPercent += itPrcent;
                 }
                 this.ressources.push(ressource);
@@ -181,7 +183,7 @@ aos.Planet.prototype = {
     produce : function(typeProduct){
         for( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++){
             let building = this.buildings[itBuilding];  
-            if ( building.type == typeProduct ){
+            if ( building.type == typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null){
                 building.functional = true;
                 if (typeof building.production.require !== "undefined"){
                     for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
@@ -197,6 +199,7 @@ aos.Planet.prototype = {
                             this.ressources[itPlanetRes].percent = newPercent * 100;
                             let findRes = null;
                             let storage = null;
+
                             if ( building.production.to == "planet"){
                                 storage = this.ressources;
                             }else{
@@ -259,16 +262,17 @@ aos.Planet.prototype = {
         this.populationGrowing();
         this.produceEnergy();
         //this.produce("mine");
-        this.produce("epurateur");
+        //this.produce("epurateur");
+        this.produce();
         this.showStats();
     },
 
     showPlanetRessources: function(){
         for( let i = 0; i < this.ressources.length ; i++){
             if (this.ressources[i].type == "metal"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * aos.volumeRessources["metal"]);            
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this. size * aos.volumeRessources["metal"]);            
             }else if (this.ressources[i].name == "water"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].quantity * this. size * aos.volumeRessources["liquid"]);            
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this. size * aos.volumeRessources["liquid"]);            
             }
 
         }

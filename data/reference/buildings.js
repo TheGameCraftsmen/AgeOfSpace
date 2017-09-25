@@ -89,9 +89,10 @@ aos.buildings = [
             "produce" : {
                 "type" : "air",
                 "product" : "oxygen",
-                "quantity" : 10000,
+                "quantity" : 100,
                 "from" : "carbon",
-                "to" : "planet"
+                "to" : "planet",
+                "require" : [{"name":"energy", "quantity":"50", "planetRessource" : false}]
             }
 
         }
