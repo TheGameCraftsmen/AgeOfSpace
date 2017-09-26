@@ -13,11 +13,7 @@ aos.ressources =
         {"name":"carbonate", "category" : "ground"},
         {"name":"nitrate", "category" : "ground"},
         {"name":"cyanide", "category" : "ground"},
-        {"name":"iron", "category" : "metal"},
-        {"name":"copper", "category" : "metal"},
-        {"name":"uranium", "category" : "metal"},
-        {"name":"silver", "category" : "metal"},
-        {"name":"aluminium", "category" : "metal"}
+        {"name":"metal", "category" : "ground"}
     ];
 
 aos.volumeRessources = {"air" : 1000, "liquid" : 10000, "ground" : 10000, "metal" : 10000};

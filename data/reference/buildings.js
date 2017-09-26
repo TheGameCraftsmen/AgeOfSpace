@@ -1,12 +1,12 @@
 aos.buildings = [
         {
             "type" : "mine",
-            "name" : "iron Mine",
+            "name" : "metal Mine",
             "require" : {
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"iron",
+                        "type" :"metal",
                         "quantity" : 100
                     },
                     {
@@ -17,41 +17,13 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "metal",
-                "product" : "iron",
+                "product" : "metal",
                 "quantity" : 100,
                 "to" : "storage",
                 "require" : [
                     {"name" : "energy", "quantity" : 50, "planetRessource" : false},
-                    {"name" : "iron", "quantity" : 10000, "planetRessource" : true}
+                    {"name" : "metal", "quantity" : 100, "planetRessource" : true}
                 ]
-            },
-            "storage" : 10000
-        },
-        {
-            "type" : "mine",
-            "name" : "copper Mine",
-            "require" : {
-                "space" : 10,
-                "materials" : [
-                    {
-                        "type" :"iron",
-                        "quantity" : 100
-                    },
-                    {
-                        "type" : "wood",
-                        "quantity" : 30
-                    }
-                ]
-            },
-            "produce" : {
-                "type" : "metal",
-                "product" : "copper",
-                "quantity" : 100,
-                "to" : "storage",
-                "require" : [
-                                {"name" : "energy", "quantity" : 50, "planetRessource" : false},
-                                {"name" : "copper", "quantity" : 10000, "planetRessource" : true}
-                            ]
             },
             "storage" : 10000
         },

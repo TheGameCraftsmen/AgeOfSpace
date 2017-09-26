@@ -51,10 +51,7 @@ aos.Planet.prototype = {
         this.generateGround();
         this.generateLiquid();
         let b = new aos.Building();
-        b.construct("iron Mine");
-        this.buildings.push(b);
-        b = new aos.Building();
-        b.construct("copper Mine");
+        b.construct("metal Mine");
         this.buildings.push(b);
         b = new aos.Building();
         b.construct("solar plant");
@@ -142,13 +139,9 @@ aos.Planet.prototype = {
                     this.ressources.push(ressource);
                 }else{
                     let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
-                    if( aos.ressources[i].name == "metal" ){
-                        this.generateMetal(itPrcent);
-                    }else{
-                        ressource.percent = itPrcent;
-                        ressource.quantity = itPrcent * this.size * aos.volumeRessources[ressource.type];
-                        this.ressources.push(ressource);
-                    }
+                    ressource.percent = itPrcent;
+                    ressource.quantity = itPrcent * this.size * aos.volumeRessources[ressource.type];
+                    this.ressources.push(ressource);
                     compositionPercent += itPrcent;
                 }
             }
@@ -238,9 +231,6 @@ aos.Planet.prototype = {
     
 
     run : function(speedTick){
-
-        //this.calculateHealthIndicator();
-        //this.populationGrowing();
         this.produce("plant");
         this.produce("mine");
         this.produce("epurateur");
@@ -249,7 +239,7 @@ aos.Planet.prototype = {
 
     showPlanetRessources: function(){
         for( let i = 0; i < this.ressources.length ; i++){
-            if (this.ressources[i].type == "metal"){
+            if (this.ressources[i].name == "metal"){
                 document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this. size * aos.volumeRessources["metal"]);            
             }else if (this.ressources[i].name == "water"){
                 document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this. size * aos.volumeRessources["liquid"]);            
@@ -288,11 +278,10 @@ aos.Planet.prototype = {
     showStatsGround : function(){
         var metal=0;
         for( let i = 0; i < this.ressources.length ; i++){
-            if ( this.ressources[i].type == "ground"){
+            if(this.ressources[i].type == "ground"){
                 document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";            
-            }else if ( this.ressources[i].type == "metal") metal += this.ressources[i].percent;
+            }
         }
-        document.getElementById('groundmetalText').innerHTML = Math.floor(metal) + "%";            
     },
 
     showBuildings : function(){
