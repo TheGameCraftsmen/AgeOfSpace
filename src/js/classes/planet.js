@@ -55,14 +55,14 @@ aos.Planet.prototype = {
         this.buildings.push(b);
         b = new aos.Building();
         b.construct("copper Mine");
-        //this.buildings.push(b);
+        this.buildings.push(b);
         b = new aos.Building();
         b.construct("solar plant");
         this.buildings.push(b);
         
         b = new aos.Building();
         b.construct("CO2 epuration");
-        //this.buildings.push(b);
+        this.buildings.push(b);
         
     },
 
@@ -168,14 +168,13 @@ aos.Planet.prototype = {
         }
     },
 
-    removeRessource : function(name, quantity,planetRessource){
-        console.log("removeRessource " + name + "/" + quantity + ":" + planetRessource);
+    removeRessource : function(name, quantity,planetRessource,isChecking){
+        //console.log("removeRessource " + name + "/" + quantity + ":" + planetRessource);
         let qtyRemoved = 0;
         if (planetRessource){
             for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
                 if ( this.ressources[itPlanetRes].name == name && this.ressources[itPlanetRes].quantity>=quantity){
-//                    let newPercent = ((this.ressources[itPlanetRes].percent * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - quantity) / (100 * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]);
-                    this.ressources[itPlanetRes].quantity -= quantity;
+                    if ( !isChecking ) this.ressources[itPlanetRes].quantity -= quantity;
                     qtyRemoved = quantity;
                 }
             }
@@ -183,11 +182,11 @@ aos.Planet.prototype = {
             for (let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes++){
                 if (this.ressourcesStored[itRes].name == name && this.ressourcesStored[itRes].quantity >= quantity ){
                     qtyRemoved = quantity;
-                    this.ressourcesStored[itRes].quantity -= qtyRemoved;
+                    if ( !isChecking)  this.ressourcesStored[itRes].quantity -= qtyRemoved;
                 }
             }
         }
-        console.log("RemoveREssource " + qtyRemoved);
+        //console.log("RemoveREssource " + qtyRemoved);
 
         return qtyRemoved;
     },
@@ -199,43 +198,45 @@ aos.Planet.prototype = {
                 building.functional = true;
                 if (typeof building.production.require !== "undefined"){
                     for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
-                        let removeRes = this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource);
-                        if (removeRes != building.production.require[itProd].quantity) building.functional = false;
+                        let removeRes = this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource,true);
+                        if (removeRes != building.production.require[itProd].quantity){
+                            building.functional = false;
+                            break;
+                        }
+                    }
+                    if ( building.functional){
+                        for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
+                            this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource,false);
+                        }
                     }
                 }
                 if ( building.functional){
                     for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
-                        if ( this.ressources[itPlanetRes].name == building.production.from && this.ressources[itPlanetRes].quantity >= building.production.quantity){
-                            //let newPercent = ((this.ressources[itPlanetRes].percent * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]) - nbMined) / (100 * this. size * aos.volumeRessources[this.ressources[itPlanetRes].type]);
-                            this.ressources[itPlanetRes].quantity -= building.production.quantity;
-                            let findRes = null;
-                            let storage = null;
-                            
-                            if ( building.production.to == "planet"){
-                                storage = this.ressources;
-                            }else{
-                                storage = this.ressourcesStored;
-                            }
-                            for ( let itRes = 0 ; itRes < storage.length ; itRes ++){
-                                if ( storage[itRes].name == building.production.product ){
-                                    findRes = storage[itRes];
-                                    break;
-                                }
-                            }
-                            if ( findRes == null ){
-                                findRes = new aos.Ressource();
-                                findRes.name = building.production.product;
-                                findRes.type = building.production.type;
-                                findRes.quantity = building.production.quantity;
-                                //findRes.percent = (nbMined) / (100 * this. size * aos.volumeRessources[findRes.type]) * 100;
-                                storage.push(findRes);
-                            }else{
-                                findRes.quantity += building.production.quantity;
-                                //findRes.percent = ((findRes.percent * this. size * aos.volumeRessources[findRes.type]) + nbMined) / (100 * this. size * aos.volumeRessources[findRes.type]) * 100;
-                            }
-                            
-                            break;
+                        let findRes = null;
+                        let storage = null;
+                        if ( building.production.to == "planet"){
+                            storage = this.ressources;
+                        }else{
+                            storage = this.ressourcesStored;
                         }
+                        for ( let itRes = 0 ; itRes < storage.length ; itRes ++){
+                            if ( storage[itRes].name == building.production.product ){
+                                findRes = storage[itRes];
+                                break;
+                            }
+                        }
+                        if ( findRes == null ){
+                            findRes = new aos.Ressource();
+                            findRes.name = building.production.product;
+                            findRes.type = building.production.type;
+                            findRes.quantity = building.production.quantity;
+                            storage.push(findRes);
+                        }else{
+                            findRes.quantity += building.production.quantity;
+                        }                            
+                        break;
+
+                        
                     }
                 }
             }
@@ -273,8 +274,6 @@ aos.Planet.prototype = {
         this.calculateHealthIndicator();
         this.populationGrowing();
         this.produceEnergy();
-        //this.produce("mine");
-        //this.produce("epurateur");
         this.produce();
         this.showStats();
     },
@@ -366,7 +365,6 @@ aos.Planet.prototype = {
 
     recalculatePercent : function(){
         for ( let i = 0 ; i < this.ressources.length ; i++){
-            console.log(this.ressources[i].name + "//" + this.ressources[i].percent);
             this.ressources[i].percent = (  this.ressources[i].quantity) / ( 100* this. size * aos.volumeRessources[this.ressources[i].type]) * 100;
         }
         
