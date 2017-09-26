@@ -169,7 +169,6 @@ aos.Planet.prototype = {
     },
 
     removeRessource : function(name, quantity,planetRessource,isChecking){
-        //console.log("removeRessource " + name + "/" + quantity + ":" + planetRessource);
         let qtyRemoved = 0;
         if (planetRessource){
             for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
@@ -186,15 +185,13 @@ aos.Planet.prototype = {
                 }
             }
         }
-        //console.log("RemoveREssource " + qtyRemoved);
-
         return qtyRemoved;
     },
 
     produce : function(typeProduct){
         for( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++){
             let building = this.buildings[itBuilding];  
-            if ( building.type == typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null){
+            if ( building.type === typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null){
                 building.functional = true;
                 if (typeof building.production.require !== "undefined"){
                     for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
@@ -203,7 +200,7 @@ aos.Planet.prototype = {
                             building.functional = false;
                             break;
                         }
-                    }
+                    }                    
                     if ( building.functional){
                         for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
                             this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource,false);
@@ -211,70 +208,42 @@ aos.Planet.prototype = {
                     }
                 }
                 if ( building.functional){
-                    for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
-                        let findRes = null;
-                        let storage = null;
-                        if ( building.production.to == "planet"){
-                            storage = this.ressources;
-                        }else{
-                            storage = this.ressourcesStored;
-                        }
-                        for ( let itRes = 0 ; itRes < storage.length ; itRes ++){
-                            if ( storage[itRes].name == building.production.product ){
-                                findRes = storage[itRes];
-                                break;
-                            }
-                        }
-                        if ( findRes == null ){
-                            findRes = new aos.Ressource();
-                            findRes.name = building.production.product;
-                            findRes.type = building.production.type;
-                            findRes.quantity = building.production.quantity;
-                            storage.push(findRes);
-                        }else{
-                            findRes.quantity += building.production.quantity;
-                        }                            
-                        break;
-
-                        
+                    let findRes = null;
+                    let storage = null;
+                    if ( building.production.to == "planet"){
+                        storage = this.ressources;
+                    }else{
+                        storage = this.ressourcesStored;
                     }
+                    for ( let itRes = 0 ; itRes < storage.length ; itRes ++){
+                        if ( storage[itRes].name == building.production.product ){
+                            findRes = storage[itRes];
+                            break;
+                        }
+                    }
+                    if ( findRes == null ){
+                        findRes = new aos.Ressource();
+                        findRes.name = building.production.product;
+                        findRes.type = building.production.type;
+                        findRes.quantity = building.production.quantity;
+                        storage.push(findRes);
+                    }else{
+                        findRes.quantity += building.production.quantity;
+                    }                            
+                    
                 }
             }
         }
     },
-
-    produceEnergy : function(){
-      for ( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++ ){
-          let building = this.buildings[itBuilding];
-          if ( building.type == "plant" ){
-            let findRes = null;
-            for ( let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes ++){
-                if ( this.ressourcesStored[itRes].name == building.production.product ){
-                    findRes = this.ressourcesStored[itRes];
-                    break;
-                }
-            }
-            if ( findRes == null ){
-                findRes = new aos.Ressource();
-                findRes.name = building.production.product;
-                findRes.type = building.production.type;
-                findRes.quantity = building.production.quantity;
-                this.ressourcesStored.push(findRes);
-            }else{
-                findRes.quantity += building.production.quantity;
-            }
-          }
-      }  
-    },
-
     
 
     run : function(speedTick){
 
-        this.calculateHealthIndicator();
-        this.populationGrowing();
-        this.produceEnergy();
-        this.produce();
+        //this.calculateHealthIndicator();
+        //this.populationGrowing();
+        this.produce("plant");
+        this.produce("mine");
+        this.produce("epurateur");
         this.showStats();
     },
 
@@ -359,6 +328,7 @@ aos.Planet.prototype = {
                 cell4.innerHTML = buildingCount[elt].building.production.quantity;
             }else{
                 found.cells[1].innerHTML = buildingCount[elt].count;
+                found.cells[1].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
             }
         }
     },
@@ -390,6 +360,7 @@ var instance = null;
 window.onload = function () {
     instance = new aos.Planet();
     instance.generate();
+    instance.run(1);
 };
 
 window.setInterval(function(){

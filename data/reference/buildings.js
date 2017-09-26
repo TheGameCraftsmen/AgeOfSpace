@@ -88,7 +88,7 @@ aos.buildings = [
                 "to" : "planet",
                 "require" : [
                                 {"name" : "energy", "quantity" : 50, "planetRessource" : false},
-                                {"name" : "carbon", "quantity" : 50, "planetRessource" : false}
+                                {"name" : "carbon", "quantity" : 50, "planetRessource" : true}
                             ]
             }
 
