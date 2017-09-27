@@ -43,6 +43,48 @@ aos.Planet = function () {
 };
 
 aos.Planet.prototype = {
+    /**
+     * addressource : allow to add a ressource to a storage on a planet
+     * 
+     * This method allows :
+     *         -- to pass argument ressource an aos.ressource (type & quantity are optional in this case)
+     *         -- to pass argument ressource as a string, type & quantity are mandatory in this case
+     * 
+     * Argument to if passed define which store is concerned by the ressource :
+     *         -- "planet" : to add ressource to planet (water, oxygen, ...)
+     *         -- "local"  : to add ressource to stored ressource by the player (metal, food, ...)
+     */
+    addRessource : function(ressource,to,type,quantity){
+        let res = ressource;
+        let typ = type;
+        let quant = quantity;
+        if (typeof ressource == "object"){
+            res = ressource.name;
+            typ = ressource.type;
+            quant = ressource.quantity;
+        }
+        let storage = null;
+        if (to == "planet"){
+            storage = this.ressources;
+        }else{
+            storage = this.ressourcesStored;
+        }
+        let resFound = null;
+        for ( let i = 0 ; i < storage.length && resFound == null ; i++){
+            if ( storage[i].name == res ){
+                resFound = storage[i];
+            }
+        }
+        if ( resFound == null ){
+            resFound = new aos.Ressource();
+            resFound.name = res;
+            resFound.type = typ;
+            resFound.quantity = quant;
+            storage.push(resFound);
+        }else{
+            resFound.quantity += quant;
+        }
+    },
 
     generate: function () {
         this.size = Math.floor(Math.random() * 5 + 1);
@@ -60,6 +102,13 @@ aos.Planet.prototype = {
         b = new aos.Building();
         b.construct("CO2 epuration");
         this.buildings.push(b);
+        
+        let r = new aos.Ressource();
+        r.type = "ground";
+        r.name = "metal";
+        r.quantity = 1000;
+        this.addRessource(r);
+
         
     },
 
@@ -201,29 +250,7 @@ aos.Planet.prototype = {
                     }
                 }
                 if ( building.functional){
-                    let findRes = null;
-                    let storage = null;
-                    if ( building.production.to == "planet"){
-                        storage = this.ressources;
-                    }else{
-                        storage = this.ressourcesStored;
-                    }
-                    for ( let itRes = 0 ; itRes < storage.length ; itRes ++){
-                        if ( storage[itRes].name == building.production.product ){
-                            findRes = storage[itRes];
-                            break;
-                        }
-                    }
-                    if ( findRes == null ){
-                        findRes = new aos.Ressource();
-                        findRes.name = building.production.product;
-                        findRes.type = building.production.type;
-                        findRes.quantity = building.production.quantity;
-                        storage.push(findRes);
-                    }else{
-                        findRes.quantity += building.production.quantity;
-                    }                            
-                    
+                    this.addRessource(building.production.product,building.production.to,building.production.type,building.production.quantity);                     
                 }
             }
         }
