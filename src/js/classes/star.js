@@ -53,10 +53,17 @@ aos.Star.prototype = {
         let classRatio;
         if (this.isNotable) {
             classRatio = 6.0 * Math.random(); // not squared because we want the highest possible variation, for gameplay reason
-            // also blue stars are very unlikely to have an HZ but we keep them because they're awesome
+            // also blue stars are very unlikely to have planets but we keep them because they're awesome
         } else {
             classRatio = 7.0 * Math.random() * Math.random(); // squared because low energy stars are supposed to be more common in a real-world galaxy
         }
+        for (let nbPlanets = 1 + Math.floor((10 - classRatio) * Math.random()) ; nbPlanets > 0 ; nbPlanets--) {
+            this.planets.push(new aos.Planet());
+        }
+        this.planets.forEach(function (planet) {
+            planet.generate();
+        }, this);
+        //#region Lore
         if (classRatio < 1.0) {
             // source: https://en.wikipedia.org/wiki/Stellar_classification#Modern_classification
             this.luminosityClass = 'V'; // main sequence
@@ -175,7 +182,11 @@ aos.Star.prototype = {
             };
             this.subSpectral = Math.floor(10 * (1 - classRatio));
         }
-        const nbPlanets = Math.floor(Math.random() * 10);
+        //#endregion
+    },
+
+    render: function () {
+        ;
     },
 
 };

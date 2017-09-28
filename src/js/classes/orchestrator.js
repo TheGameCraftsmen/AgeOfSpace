@@ -18,6 +18,7 @@ var aos = aos || {};
  */
 aos.Orchestrator = function () {
     this.galaxy = {};
+    this.selectedStar = null;
 };
 
 aos.Orchestrator.prototype = {
@@ -26,6 +27,41 @@ aos.Orchestrator.prototype = {
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
         this.setupEvents();
+    },
+
+    setSelectedStar: function (star) {
+        this.selectedStar = star;
+        if (star === null) {
+            document.getElementById('galaxyBlock').style.display = 'block';
+            document.getElementById('starSystemBlock').style.display = 'none';
+        } else {
+            document.getElementById('galaxyBlock').style.display = 'none';
+            document.getElementById('starSystemBlock').style.display = 'block';
+            document.getElementById('miniatureTabs').innerHTML = '';
+
+            const planetImgs = [
+                "./data/img/Desert_planet_resource.png",
+                "./data/img/Planets7.png",
+                "./data/img/Planets9.png",
+                "./data/img/Planets13.png",
+                "./data/img/Desert_planet_resource.png",
+                "./data/img/Planets7.png",
+                "./data/img/Planets9.png",
+                "./data/img/Planets13.png",
+                "./data/img/Desert_planet_resource.png",
+                "./data/img/Planets7.png",
+                "./data/img/Planets9.png",
+                "./data/img/Planets13.png",
+                "./data/img/Desert_planet_resource.png",
+                "./data/img/Planets7.png",
+                "./data/img/Planets9.png",
+                "./data/img/Planets13.png",
+            ];
+            star.planets.forEach(function (planet, i) {
+                document.getElementById('miniatureTabs').innerHTML +=
+                    '<li style="display:inline-block;"><img src=' + planetImgs[i] + ' width="64" height="64"></li>';
+            }, this);
+        }
     },
 
     setupEvents: function () {
@@ -169,6 +205,28 @@ aos.Orchestrator.prototype = {
                 }
                 //document.getElementById('debug').innerHTML += dist + '<br/>';
             }, this);
+        }.bind(this), false);
+
+        document.getElementById('galaxyOverlayCanvas').addEventListener('mousedown', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            const galaxyCoordX = e.offsetX * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 600;
+            const galaxyCoordY = e.offsetY * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 450;
+
+            this.setSelectedStar(null);
+            this.galaxy.stars.forEach(function (star) {
+                const deltaX = star.x - galaxyCoordX;
+                const deltaY = star.y - galaxyCoordY;
+                const dist = deltaX * deltaX + deltaY * deltaY;
+                const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
+                if (dist < radius) {
+                    this.setSelectedStar(star);
+                }
+            }, this);
+        }.bind(this), false);
+
+        document.getElementById('closeStarSystem').addEventListener('mousedown', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            this.setSelectedStar(null);
         }.bind(this), false);
     },
 

@@ -16,7 +16,17 @@
                     <canvas id="galaxyOverlayCanvas" width="1200" height="900"></canvas>
                 </div>
                 <div id="starSystemBlock">
-                    X
+                    <div id="closeStarSystem" class="navigationButton">
+                        <svg width="16" height="16" viewBox="0 0 32 32">
+                            <path d="M 2 0 L 0 2 L 30 32 L 32 30 Z" stroke-width="0" fill="#000" />
+                            <path d="M 2 32 L 0 30 L 30 0 L 32 2 Z" stroke-width="0" fill="#000" />
+                        </svg>
+                    </div>
+                    <ol id="miniatureTabs" style="list-style-type:none;">
+                        <li style="display:inline-block;">123</li>
+                        <li style="display:inline-block;">456</li>
+                        <li style="display:inline-block;">789</li>
+                    </ol>
                 </div>
             </td>
             <td id="commandColumn">
@@ -32,19 +42,19 @@
         <tr>
             <td id="timeBlock">
                 <div id="timeButtons">
-                    <div id="speed0" class="speedButton">
-                        <svg width="32" height="32">
+                    <div id="speed0" class="navigationButton">
+                        <svg width="16" height="16" viewBox="0 0 32 32">
                             <rect x="4" y="0" width="8" height="32" stroke-width="0" fill="#000" />
                             <rect x="20" y="0" width="8" height="32" stroke-width="0" fill="#000" />
                         </svg>
                     </div>
-                    <div id="speed1" class="speedButton">
-                        <svg width="32" height="32">
+                    <div id="speed1" class="navigationButton">
+                        <svg width="16" height="16" viewBox="0 0 32 32">
                             <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#000" />
                         </svg>
                     </div>
-                    <div id="speed2" class="speedButton">
-                        <svg width="32" height="32">
+                    <div id="speed2" class="navigationButton">
+                        <svg width="16" height="16" viewBox="0 0 32 32">
                             <path d="M 0 0 L 0 32 L 16 16 Z" stroke-width="0" fill="#000" />
                             <path d="M 16 0 L 16 32 L 32 16 Z" stroke-width="0" fill="#000" />
                         </svg>
@@ -56,7 +66,7 @@
     <script src="./src/js/classes/piechart.js"></script>
     <script src="./src/js/classes/ressource.js"></script>
     <script src="./src/js/classes/building.js"></script>
-    <script src="./src/js/classes/planet_.js"></script>
+    <script src="./src/js/classes/planet.js"></script>
     <script src="./src/js/classes/star.js"></script>
     <script src="./src/js/classes/constellation.js"></script>
     <script src="./src/js/classes/galaxy.js"></script>
