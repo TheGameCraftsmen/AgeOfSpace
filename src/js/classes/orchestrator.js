@@ -34,33 +34,12 @@ aos.Orchestrator.prototype = {
         if (star === null) {
             document.getElementById('galaxyBlock').style.display = 'block';
             document.getElementById('starSystemBlock').style.display = 'none';
+            document.getElementById('contextualBlock').style.display = 'none';
         } else {
             document.getElementById('galaxyBlock').style.display = 'none';
             document.getElementById('starSystemBlock').style.display = 'block';
-            document.getElementById('miniatureTabs').innerHTML = '';
-
-            const planetImgs = [
-                "./data/img/Desert_planet_resource.png",
-                "./data/img/Planets7.png",
-                "./data/img/Planets9.png",
-                "./data/img/Planets13.png",
-                "./data/img/Desert_planet_resource.png",
-                "./data/img/Planets7.png",
-                "./data/img/Planets9.png",
-                "./data/img/Planets13.png",
-                "./data/img/Desert_planet_resource.png",
-                "./data/img/Planets7.png",
-                "./data/img/Planets9.png",
-                "./data/img/Planets13.png",
-                "./data/img/Desert_planet_resource.png",
-                "./data/img/Planets7.png",
-                "./data/img/Planets9.png",
-                "./data/img/Planets13.png",
-            ];
-            star.planets.forEach(function (planet, i) {
-                document.getElementById('miniatureTabs').innerHTML +=
-                    '<li style="display:inline-block;"><img src=' + planetImgs[i] + ' width="64" height="64"></li>';
-            }, this);
+            document.getElementById('contextualBlock').style.display = 'none';
+            star.render();
         }
     },
 

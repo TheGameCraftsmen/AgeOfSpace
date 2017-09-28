@@ -63,6 +63,9 @@ hr {
 #closeStarSystem {
     float: right;
     border-bottom-left-radius: 12px;
+    position: relative;
+    top: -1px;
+    right: -1px;
 }
 
 #speed0 {
@@ -118,3 +121,34 @@ hr {
         right: 0;
         margin: auto;
     }
+
+#miniatureTabs {
+    border-bottom: 1px solid #444;
+    margin-bottom: 0;
+    list-style-type: none;
+}
+
+    #miniatureTabs li {
+        display: inline-block;
+        position: relative;
+        top: 1px;
+        padding: 3px;
+    }
+
+    #miniatureTabs .active {
+        border: 1px solid #444;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-bottom-color: #000;
+    }
+
+    #miniatureTabs .inactive {
+        border-bottom: 1px solid #444;
+    }
+
+#planetBlock {
+    overflow-y: auto;
+    border: 1px solid #444;
+    border-top: 0;
+    height: calc(100vh - 115px);
+}

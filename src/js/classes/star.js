@@ -43,6 +43,7 @@ aos.Star = function () {
     //planet details
     /** @type {aos.Planet} */
     this.planets = [];
+    this.selectedPlanet = null;
 };
 
 aos.Star.prototype = {
@@ -185,8 +186,37 @@ aos.Star.prototype = {
         //#endregion
     },
 
+    setSelectedPlanet: function () {
+    },
+
     render: function () {
-        ;
+        document.getElementById('miniatureTabs').innerHTML = '';
+        const planetImgs = [
+            "./data/img/Desert_planet_resource.png",
+            "./data/img/Planets7.png",
+            "./data/img/Planets9.png",
+            "./data/img/Planets13.png",
+            "./data/img/Desert_planet_resource.png",
+            "./data/img/Planets7.png",
+            "./data/img/Planets9.png",
+            "./data/img/Planets13.png",
+            "./data/img/Desert_planet_resource.png",
+            "./data/img/Planets7.png",
+            "./data/img/Planets9.png",
+            "./data/img/Planets13.png",
+            "./data/img/Desert_planet_resource.png",
+            "./data/img/Planets7.png",
+            "./data/img/Planets9.png",
+            "./data/img/Planets13.png",
+        ];
+        this.planets.forEach(function (planet, i) {
+            document.getElementById('miniatureTabs').innerHTML +=
+                '<li ' +
+                'data-index="' + i + '" class="' + (i !== 0 ? 'in' : '') + 'active">' +
+                '<img src=' + planetImgs[i] + ' width="64" height="64"></li>';
+            // TODO: set specific css class for selected planet
+            // TODO: attach click event. onclick --> call setSelectedPlanet
+        }, this);
     },
 
 };

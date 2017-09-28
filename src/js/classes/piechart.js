@@ -38,12 +38,13 @@ aos.PieChart.prototype = {
             total += chartSlice.value;
         }, this);
         total /= 100.0;
-        let svgCode = '<svg width="300" height="300" viewBox="-20 -20 40 40" style="transform: rotate(-90deg)">';
+        let svgCode = '<svg width="300" height="300" viewBox="-20 -20 40 40""><g transform="rotate(-90)">';
         this.content.forEach(function (chartSlice) {
             svgCode += '<circle cx="0" cy="0" r="15.9154943092" fill="transparent" stroke="' + chartSlice.color
                 + '" stroke-width="3" stroke-dasharray="0 ' + (chartSlice.offset / total) + ' ' + (chartSlice.value / total) + ' 100"></circle>';
         }, this);
-        svgCode += '<text font-size="0.3em" text-anchor="middle" x="0" y="0" style="transform: rotate(90deg) translateY(0.25em);" fill="#ccc">Atmosphere</text>';
+        svgCode += '</g><text font-size="0.3em" text-anchor="middle" x="0" y="0" fill="#ccc" transform="translate(0 1)">Air</text>';
+        // TODO: Air, Oceans, Soil
         svgCode += '</svg>';
         htmlElement.innerHTML += svgCode;
     },
