@@ -217,6 +217,22 @@ aos.Star.prototype = {
             // TODO: set specific css class for selected planet
             // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
+
+        {
+            const chart = new aos.PieChart();
+            chart.innerText = 'Air';
+            chart.render(document.getElementById('airPie'));
+        }
+        {
+            const chart = new aos.PieChart();
+            chart.innerText = 'Ocean';
+            chart.render(document.getElementById('oceanPie'));
+        }
+        {
+            const chart = new aos.PieChart();
+            chart.innerText = 'Soil';
+            chart.render(document.getElementById('soilPie'));
+        }
     },
 
 };
