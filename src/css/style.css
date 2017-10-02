@@ -159,3 +159,29 @@ hr {
     border-top: 0;
     height: calc(100vh - 115px);
 }
+
+
+.blink1 {
+  animation: blinkanim1 1s linear infinite;
+}
+@keyframes blinkanim1 {  
+  10% { opacity: 1; }
+  30% { opacity: 0; }
+  50% { opacity: 1; }
+}
+.blink2 {
+  animation: blinkanim2 1s linear infinite;
+}
+@keyframes blinkanim2 {  
+  30% { opacity: 1; }
+  50% { opacity: 0; }
+  70% { opacity: 1; }
+}
+.blink3 {
+  animation: blinkanim3 1s linear infinite;
+}
+@keyframes blinkanim3 {  
+  50% { opacity: 1; }
+  70% { opacity: 0; }
+  90% { opacity: 1; }
+}
