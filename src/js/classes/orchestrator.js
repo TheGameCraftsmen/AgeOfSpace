@@ -103,9 +103,9 @@ aos.Orchestrator.prototype = {
                         '<dl><dt>' + 'habitable zone' + '</dt><dd>' + '</dd></dl>';
                 }
             }
-
+            
             //document.getElementById('debug').innerHTML = '' + constellationId + '/' + '<br/>';
-
+            
             this.galaxy.constellations[constellationId].stars.forEach(function (star) {
                 const deltaX = star.x - galaxyCoordX;
                 const deltaY = star.y - galaxyCoordY;

@@ -8,44 +8,19 @@
     <link href="data/img/planet.ico" rel="shortcut icon" type="image/x-icon" />
 </head>
 <body>
-    <table class="mainTable">
-        <tr>
-            <td rowspan="2">
-                <div id="galaxyBlock">
-                    <canvas id="galaxyStarsCanvas" width="1200" height="900"></canvas>
-                    <canvas id="galaxyOverlayCanvas" width="1200" height="900"></canvas>
-                </div>
-                <div id="starSystemBlock">
-                    <div id="closeStarSystem" class="navigationButton">
-                        <svg width="16" height="16" viewBox="0 0 32 32">
-                            <path d="M 2 0 L 0 2 L 30 32 L 32 30 Z" stroke-width="0" fill="#000"></path>
-                            <path d="M 2 32 L 0 30 L 30 0 L 32 2 Z" stroke-width="0" fill="#000"></path>
-                        </svg>
-                    </div>
-                    <div style="margin: 0 20px 0 100px">
-                        <ol id="miniatureTabs" style=""></ol>
-                        <div id="planetBlock" style="">
-                            <div id="airPie" style="float:right; clear:right;"></div>
-                            <div id="oceanPie" style="float:right; clear:right;"></div>
-                            <div id="soilPie" style="float:right; clear:right;"></div>
-                            azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td id="commandColumn">
+    <div class="mainLayout">
+        <div id="commandColumn">
+            <div id="helpSection">
                 <div id="contextualBlock">
+                    <div id="debug"></div>
                     <h3 id="contextualTitle"></h3>
                     <hr>
                     <div id="contextualTxt">
-                       &nbsp;
+                        &nbsp;
                     </div>
                 </div>
-                <div id="debug">&nbsp;</div>
-            </td>
-        </tr>
-        <tr>
-            <td id="timeBlock">
+            </div>
+            <div id="timeBlock">
                 <div id="timeButtons">
                     <div id="speed0" class="navigationButton">
                         <svg width="16" height="16" viewBox="0 0 32 32">
@@ -65,9 +40,32 @@
                         </svg>
                     </div>
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+        <div id="centerColumn" style="">
+            <div id="galaxyBlock">
+                <canvas id="galaxyStarsCanvas" width="1200" height="900"></canvas>
+                <canvas id="galaxyOverlayCanvas" width="1200" height="900"></canvas>
+            </div>
+            <div id="starSystemBlock">
+                <div id="closeStarSystem" class="navigationButton">
+                    <svg width="16" height="16" viewBox="0 0 32 32">
+                        <path d="M 2 0 L 0 2 L 30 32 L 32 30 Z" stroke-width="0" fill="#000"></path>
+                        <path d="M 2 32 L 0 30 L 30 0 L 32 2 Z" stroke-width="0" fill="#000"></path>
+                    </svg>
+                </div>
+                <div style="margin: 15px 20px 0 100px">
+                    <ol id="miniatureTabs" style=""></ol>
+                    <div id="planetBlock" style="">
+                        <div id="airPie" style="float:right; clear:right;"></div>
+                        <div id="oceanPie" style="float:right; clear:right;"></div>
+                        <div id="soilPie" style="float:right; clear:right;"></div>
+                        azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>azer<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./src/js/classes/piechart.js"></script>
     <script src="./src/js/classes/ressource.js"></script>
     <script src="./src/js/classes/building.js"></script>
