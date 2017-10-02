@@ -217,7 +217,9 @@ aos.Star.prototype = {
             // TODO: set specific css class for selected planet
             // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
-
+        document.getElementById('airPie').innerHTML = '';
+        document.getElementById('oceanPie').innerHTML = '';
+        document.getElementById('soilPie').innerHTML = '';
         {
             const chart = new aos.PieChart();
             chart.innerText = 'Air';

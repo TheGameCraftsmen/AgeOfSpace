@@ -88,24 +88,20 @@ aos.Orchestrator.prototype = {
                         '<dl><dt>' + 'Stars (total)' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup></dd></dl>';
                 }
                 const constellationStars = this.galaxy.constellations[constellationId].stars;
-                {
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Notable stars' + '</dt><dd>' + constellationStars.length + '</dd></dl>';
-                }
-                {
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Stars with at least' + '</dt><dd>' + '</dd></dl>';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'one planet in the' + '</dt><dd>' + constellationStars.filter(function (star) {
-                            return star.isNotable;
-                        }).length + '</dd></dl>';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'habitable zone' + '</dt><dd>' + '</dd></dl>';
-                }
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Notable stars' + '</dt><dd>' + constellationStars.length + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Stars with at least' + '</dt><dd>' + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'one planet in the' + '</dt><dd>' + constellationStars.filter(function (star) {
+                        return star.isNotable;
+                    }).length + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'habitable zone' + '</dt><dd>' + '</dd></dl>';
             }
-            
+
             //document.getElementById('debug').innerHTML = '' + constellationId + '/' + '<br/>';
-            
+
             this.galaxy.constellations[constellationId].stars.forEach(function (star) {
                 const deltaX = star.x - galaxyCoordX;
                 const deltaY = star.y - galaxyCoordY;
@@ -120,32 +116,22 @@ aos.Orchestrator.prototype = {
                         this.galaxy.constellations[constellationId].reference.gen +
                     '<br><em>' + label + '</em>';
                     document.getElementById('contextualTxt').innerHTML = '';
-                    {
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Proper name' + '</dt><dd>' + star.properName.name + '</dd></dl>';
-                    }
-                    {
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Type' + '</dt><dd>' +
-                            (star.spectralClass === 'M' ? 'Red dwarf' :
-                            star.spectralClass === 'K' ? 'Orange dwarf' :
-                            star.spectralClass === 'G' ? 'Yellow dwarf' :
-                            star.spectralClass === 'F' ? 'Yellow-white dwarf' :
-                            star.spectralClass === 'A' ? 'White main sequence' :
-                            star.spectralClass === 'B' ? 'Blue subgiant' : 'Blue giant') + '</dd></dl>';
-                    }
-                    {
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Spectral class' + '</dt><dd>' + star.spectralClass + star.subSpectral + '</dd></dl>';
-                    }
-                    {
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Luminosity class' + '</dt><dd>' + star.luminosityClass + '</dd></dl>';
-                    }
-                    {
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Surface temperature' + '</dt><dd>' + 100 * Math.floor(star.temperature / 100) + ' K</dd></dl>';
-                    }
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Proper name' + '</dt><dd>' + star.properName.name + '</dd></dl>';
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Type' + '</dt><dd>' +
+                        (star.spectralClass === 'M' ? 'Red dwarf' :
+                        star.spectralClass === 'K' ? 'Orange dwarf' :
+                        star.spectralClass === 'G' ? 'Yellow dwarf' :
+                        star.spectralClass === 'F' ? 'Yellow-white dwarf' :
+                        star.spectralClass === 'A' ? 'White main sequence' :
+                        star.spectralClass === 'B' ? 'Blue subgiant' : 'Blue giant') + '</dd></dl>';
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Spectral class' + '</dt><dd>' + star.spectralClass + star.subSpectral + '</dd></dl>';
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Luminosity class' + '</dt><dd>' + star.luminosityClass + '</dd></dl>';
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Surface temperature' + '</dt><dd>' + 100 * Math.floor(star.temperature / 100) + ' K</dd></dl>';
                     {
                         let radical = star.mass;
                         let power = 29;
