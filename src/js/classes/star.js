@@ -189,6 +189,20 @@ aos.Star.prototype = {
     setSelectedPlanet: function () {
     },
 
+    temp_renderPie: function (elem, txt) {
+        elem.innerHTML = '';
+        const chart = new aos.PieChart();
+        chart.innerText = txt;
+        chart.render(elem);
+    },
+
+    temp_renderBar: function (elem, txt) {
+        elem.innerHTML = '';
+        const bar = new aos.Ressource();
+        bar.name = txt;
+        bar.render(elem);
+    },
+
     render: function () {
         document.getElementById('miniatureTabs').innerHTML = '';
         const planetImgs = [
@@ -217,24 +231,14 @@ aos.Star.prototype = {
             // TODO: set specific css class for selected planet
             // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
-        document.getElementById('airPie').innerHTML = '';
-        document.getElementById('oceanPie').innerHTML = '';
-        document.getElementById('soilPie').innerHTML = '';
-        {
-            const chart = new aos.PieChart();
-            chart.innerText = 'Air';
-            chart.render(document.getElementById('airPie'));
-        }
-        {
-            const chart = new aos.PieChart();
-            chart.innerText = 'Ocean';
-            chart.render(document.getElementById('oceanPie'));
-        }
-        {
-            const chart = new aos.PieChart();
-            chart.innerText = 'Soil';
-            chart.render(document.getElementById('soilPie'));
-        }
+        this.temp_renderPie(document.getElementById('airPie'), 'Air');
+        this.temp_renderPie(document.getElementById('oceanPie'), 'Ocean');
+        this.temp_renderPie(document.getElementById('soilPie'), 'Soil');
+        this.temp_renderBar(document.getElementById('humansPop'), 'Humans');
+        this.temp_renderBar(document.getElementById('machinesPop'), 'Machines');
+        this.temp_renderBar(document.getElementById('bacteriaPop'), 'Bacteria');
+        this.temp_renderBar(document.getElementById('plantsPop'), 'Plants');
+        this.temp_renderBar(document.getElementById('animalsPop'), 'Animals');
     },
 
 };

@@ -9,6 +9,8 @@ body {
     color: #abb;
     font-family: Helvetica, arial, sans-serif;
     font-size: 0.9em;
+    min-width: 1200px;
+    /*min-height: 600px;*/
 }
 
 h3 {
@@ -27,23 +29,27 @@ hr {
 }
 
 .mainLayout {
-    height: calc(100vh - 6px);
-    width: calc(100vw - 6px);
+    height: calc(100vh - 25px);
+    width: 100%;
     border: 1px solid #444;
     padding: 0;
     vertical-align: top;
-    display: table;
+    /*display: table;*/
+    position: relative;
 }
 
 #commandColumn {
     width: 320px;
     border-left: 1px solid #444;
-    float: right;
+    /*float: right;*/
     height: 100%;
+    position: absolute;
+    right: 0;
+    /*display: table-cell;*/
 }
 
 #helpSection {
-    height: calc(100% - 70px);
+    height: calc(100% - 110px);
     width: 319px;
 }
 
@@ -52,6 +58,9 @@ hr {
     padding: 17px;
     text-align: center;
     border-top: 1px solid #444;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 #centerColumn {
@@ -87,6 +96,15 @@ hr {
 #speed2 {
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
+}
+
+#contextualBlock {
+    height: 100%;
+}
+
+#contextualTxt {
+    height: 100%;
+    overflow-y:auto;
 }
 
 #contextualTxt dl {
@@ -130,6 +148,11 @@ hr {
         margin: auto;
     }
 
+    #starSystemBlock > div:last-child {
+        padding: 15px 20px 0 100px;
+        height: 100%;
+    }
+
 #miniatureTabs {
     border-bottom: 1px solid #444;
     list-style-type: none;
@@ -157,31 +180,60 @@ hr {
     overflow-y: auto;
     border: 1px solid #444;
     border-top: 0;
-    height: calc(100vh - 115px);
+    height: calc(100% - 100px);
 }
 
+.resourceBar {
+    padding: 2px 5px;
+}
 
-.blink1 {
-  animation: blinkanim1 1s linear infinite;
+    /* Label */
+    .resourceBar > div:first-child {
+        width: 80px;
+        display: inline-block;
+        text-align: right;
+        padding-right: 5px;
+    }
+
+    .resourceBar > div:last-child {
+        width: 150px;
+        display: inline-block;
+        border: 1px solid #444;
+        position: relative;
+        top: 2px;
+        height: 12px;
+    }
+
+    .resourceBar > div > div {
+        height: 100%;
+        position: absolute;
+        top: -4px;
+    }
+
+        .resourceBar > div > div:first-child {
+            background-color: #004;
+            width: 50%;
+            top: 0;
+        }
+
+
+
+
+/* Animations */
+.blink {
+    animation: blinkanim 2.0s ease-in-out infinite;
 }
-@keyframes blinkanim1 {  
-  10% { opacity: 1; }
-  30% { opacity: 0; }
-  50% { opacity: 1; }
-}
-.blink2 {
-  animation: blinkanim2 1s linear infinite;
-}
-@keyframes blinkanim2 {  
-  30% { opacity: 1; }
-  50% { opacity: 0; }
-  70% { opacity: 1; }
-}
-.blink3 {
-  animation: blinkanim3 1s linear infinite;
-}
-@keyframes blinkanim3 {  
-  50% { opacity: 1; }
-  70% { opacity: 0; }
-  90% { opacity: 1; }
+
+@keyframes blinkanim {
+    30% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    70% {
+        opacity: 1;
+    }
 }

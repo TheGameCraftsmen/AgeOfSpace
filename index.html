@@ -12,7 +12,7 @@
         <div id="commandColumn">
             <div id="helpSection">
                 <div id="contextualBlock">
-                    <div id="debug"></div>
+                    <div id="debug" style="position:absolute;"></div>
                     <h3 id="contextualTitle"></h3>
                     <hr>
                     <div id="contextualTxt">
@@ -54,145 +54,22 @@
                         <path d="M 2 32 L 0 30 L 30 0 L 32 2 Z" stroke-width="0" fill="#000"></path>
                     </svg>
                 </div>
-                <div style="margin: 15px 20px 0 100px">
+                <div>
                     <ol id="miniatureTabs" style=""></ol>
                     <div id="planetBlock" style="">
+                        <div id="populations" style="float:left;">
+                            <h3>Populations</h3>
+                            <div id="humansPop"></div>
+                            <div id="machinesPop"></div>
+                            <div id="bacteriaPop"></div>
+                            <div id="plantsPop"></div>
+                            <div id="animalsPop"></div>
+                            <h3>Storage</h3>
+                            <h3>Buildings</h3>
+                        </div>
                         <div id="airPie" style="float:right; clear:right;"></div>
                         <div id="oceanPie" style="float:right; clear:right;"></div>
                         <div id="soilPie" style="float:right; clear:right;"></div>
-                        <h3>Populations</h3>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Humans</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:5px;">
-                                    <div style="background-color: darkblue; height:5px; width:75%;"></div>
-                                </div>
-                                <hr>
-                                <div style="height:5px;position: relative;">
-                                    <div style="background-color: darkred; height:5px; width:25%; position: absolute; right:50%;"></div>
-                                    <div style="background-color: #444; height:5px; width:2px; position: absolute; left:calc(50% - 1px);"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Bacteria</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:5px;">
-                                    <div style="background-color: darkblue; height:5px; width:60%;"></div>
-                                </div>
-                                <hr>
-                                <div style="height:5px;position: relative;">
-                                    <div style="background-color: darkorange; height:5px; width:5%; position: absolute; right:50%;"></div>
-                                    <div style="background-color: #444; height:5px; width:2px; position: absolute; left:calc(50% - 1px);"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Flora</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:5px;">
-                                    <div style="background-color: darkblue; height:5px; width:20%;"></div>
-                                </div>
-                                <hr>
-                                <div style="height:5px;position: relative;">
-                                    <div style="background-color: darkgoldenrod; height:5px; width:15%; position: absolute; left:50%;"></div>
-                                    <div style="background-color: #444; height:5px; width:2px; position: absolute; left:calc(50% - 1px);"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Fauna</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:5px;">
-                                    <div style="background-color: darkblue; height:5px; width:40%;"></div>
-                                </div>
-                                <hr>
-                                <div style="height:5px;position: relative;">
-                                    <div style="background-color: darkgreen; height:5px; width:45%; position: absolute; left:50%;"></div>
-                                    <div style="background-color: #444; height:5px; width:2px; position: absolute; left:calc(50% - 1px);"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <h3>Storage</h3>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Oxygen</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:10px;">
-                                    <div style="background-color: darkgreen; height:10px; width:40%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Nitrogen</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:10px;">
-                                    <div style="background-color: darkred; height:10px; width:70%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Hydrogen</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:10px;">
-                                    <div style="background-color: darkgoldenrod; height:10px; width:80%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <h3>Buildings</h3>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Metal</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:10px;position: relative;">
-                                    <div style="background-color: darkblue; height:10px; width:75%; position: absolute;"></div>
-                                    <div style="height:10px; position: absolute; left:calc(50% - 4px); top:-4px;" class="blink2">
-                                        <svg width="8" height="8" viewBox="0 0 32 32">
-                                            <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#fff"></path>
-                                        </svg>
-                                    </div>
-                                    <div style="height:10px; position: absolute; left:calc(50% - 14px); top:-4px;" class="blink1">
-                                        <svg width="8" height="8" viewBox="0 0 32 32">
-                                            <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#fff"></path>
-                                        </svg>
-                                    </div>
-                                    <div style="height:10px; position: absolute; left:calc(50% + 6px); top:-4px;" class="blink3">
-                                        <svg width="8" height="8" viewBox="0 0 32 32">
-                                            <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#fff"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Mineral</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:10px;position: relative;">
-                                    <div style="background-color: darkblue; height:10px; width:35%; position: absolute;"></div>
-                                    <div style="height:10px; position: absolute; left:calc(50% - 4px); top:-4px;">
-                                        <svg width="8" height="8" viewBox="0 0 32 32">
-                                            <path d="M 2 0 L 2 32 L 30 16 Z" stroke-width="0" fill="#fff"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding:5px;">
-                            <div style="margin: 0;width:100px;display:inline-block; text-align:right;">Water</div>
-                            <div style="border: 1px solid #444; margin: 0 15px;width:202px; display:inline-block;">
-                                <div style="height:10px;position: relative;">
-                                    <div style="background-color: darkblue; height:10px; width:60%; position: absolute;"></div>
-                                    <div style="height:10px; position: absolute; left:calc(50% - 9px); top:-4px;">
-                                        <svg width="8" height="8" viewBox="0 0 32 32">
-                                            <path d="M 30 0 L 30 32 L 2 16 Z" stroke-width="0" fill="#fff"></path>
-                                        </svg>
-                                    </div>
-                                    <div style="height:10px; position: absolute; left:calc(50% + 1px); top:-4px;">
-                                        <svg width="8" height="8" viewBox="0 0 32 32">
-                                            <path d="M 30 0 L 30 32 L 2 16 Z" stroke-width="0" fill="#fff"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

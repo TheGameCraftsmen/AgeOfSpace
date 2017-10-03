@@ -19,6 +19,8 @@ var aos = aos || {};
 aos.Orchestrator = function () {
     this.galaxy = {};
     this.selectedStar = null;
+    this.time = 0;
+    this.tick = 0;
 };
 
 aos.Orchestrator.prototype = {
@@ -27,6 +29,7 @@ aos.Orchestrator.prototype = {
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
         this.setupEvents();
+        this.animationTick(0);
     },
 
     setSelectedStar: function (star) {
@@ -189,10 +192,33 @@ aos.Orchestrator.prototype = {
             }, this);
         }.bind(this), false);
 
+        document.getElementById('galaxyOverlayCanvas').addEventListener('mouseleave', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+
         document.getElementById('closeStarSystem').addEventListener('mousedown', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setSelectedStar(null);
         }.bind(this), false);
+
+        //window.addEventListener('resize', function (e) {
+        //    document.getElementById('debug').innerHTML = 'x';
+        //    document.getElementById('debug').innerHTML += window.getComputedStyle(document.body, null).width + '/';
+        //    document.getElementById('debug').innerHTML += window.getComputedStyle(document.body, null).height
+        //}.bind(this), false);
+    },
+
+    emitEvent: function (type, payload) {
+        const event = document.createEvent('CustomEvent');
+        event.initCustomEvent(type, false, false, payload);
+        window.dispatchEvent(event);
+    },
+
+    animationTick: function (timestamp) {
+        this.emitEvent('animationTick', { ts: timestamp });
+        window.requestAnimationFrame(this.animationTick.bind(this));
     },
 
 };
