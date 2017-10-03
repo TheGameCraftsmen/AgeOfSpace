@@ -63,6 +63,19 @@ hr {
     width: 100%;
 }
 
+    #timeBlock > div {
+        display: inline-block;
+    }
+
+#gameTime {
+    border: 1px solid #444;
+    width: 100px;
+    text-align: right;
+    position: relative;
+    top: -3px;
+    margin-left: 15px;
+}
+
 #centerColumn {
     height: 100%;
     width: calc(100% - 320px);
@@ -90,7 +103,6 @@ hr {
 #speed0 {
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
-    border: 4px solid #f00;
 }
 
 #speed2 {
@@ -104,33 +116,33 @@ hr {
 
 #contextualTxt {
     height: 100%;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
-#contextualTxt dl {
-    position: relative;
-    height: 30px;
-}
+    #contextualTxt dl {
+        position: relative;
+        height: 30px;
+    }
 
-#contextualTxt dt {
-    position: absolute;
-    bottom: 0;
-    display: inline-block;
-    width: 10em;
-    text-align: right;
-}
+    #contextualTxt dt {
+        position: absolute;
+        bottom: 0;
+        display: inline-block;
+        width: 10em;
+        text-align: right;
+    }
 
-#contextualTxt dd {
-    position: absolute;
-    bottom: 0;
-    left: 10.5em;
-    padding-left: 0.5em;
-    border-left: 1px solid #444;
-}
+    #contextualTxt dd {
+        position: absolute;
+        bottom: 0;
+        left: 10.5em;
+        padding-left: 0.5em;
+        border-left: 1px solid #444;
+    }
 
-#contextualTxt div {
-    text-align: center;
-}
+    #contextualTxt div {
+        text-align: center;
+    }
 
 #galaxyBlock, #starSystemBlock {
     position: relative;

@@ -19,8 +19,10 @@ var aos = aos || {};
 aos.Orchestrator = function () {
     this.galaxy = {};
     this.selectedStar = null;
-    this.time = 0;
-    this.tick = 0;
+    this.gameSpeed = 0; // can be 0, 1, or 5. Set by the controls in the bottom right corner of the screen
+    this.gameTime = 0; // elapsed milliseconds since the start of the game. Grows faster if the gameSpeed is 5x
+    this.lastGameplayTick = 0;
+    this.lastAnimationFrame = 0;
 };
 
 aos.Orchestrator.prototype = {
@@ -28,8 +30,20 @@ aos.Orchestrator.prototype = {
     instanciate: function () {
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
+        document.getElementById('starSystemBlock').style.display = 'none';
+        document.getElementById('contextualBlock').style.display = 'none';
+        document.getElementById('contextualTxt').innerHTML = '';
         this.setupEvents();
         this.animationTick(0);
+        this.setGameSpeed(1);
+    },
+
+    setGameSpeed: function (newSpeed) {
+        this.gameSpeed = newSpeed === 2 ? 5 : newSpeed;
+        document.getElementById('speed0').style.border = '';
+        document.getElementById('speed1').style.border = '';
+        document.getElementById('speed2').style.border = '';
+        document.getElementById('speed' + newSpeed).style.border = '4px solid #f00';
     },
 
     setSelectedStar: function (star) {
@@ -202,12 +216,39 @@ aos.Orchestrator.prototype = {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setSelectedStar(null);
         }.bind(this), false);
+        document.getElementById('speed0').addEventListener('mousedown', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            this.setGameSpeed(0);
+        }.bind(this), false);
+        document.getElementById('speed1').addEventListener('mousedown', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            this.setGameSpeed(1);
+        }.bind(this), false);
+        document.getElementById('speed2').addEventListener('mousedown', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            this.setGameSpeed(2);
+        }.bind(this), false);
 
         //window.addEventListener('resize', function (e) {
         //    document.getElementById('debug').innerHTML = 'x';
         //    document.getElementById('debug').innerHTML += window.getComputedStyle(document.body, null).width + '/';
         //    document.getElementById('debug').innerHTML += window.getComputedStyle(document.body, null).height
         //}.bind(this), false);
+
+        window.setInterval(function () {
+            this.emitEvent('requestUiFastRefresh', {});
+        }.bind(this), 130);
+        window.setInterval(function () {
+            this.emitEvent('requestUiSlowRefresh', {});
+        }.bind(this), 1100);
+
+        window.addEventListener('requestUiFastRefresh', function (e) {
+            document.getElementById('gameTime').innerHTML = (this.gameTime / 1000.0).toFixed(1);
+        }.bind(this), false);
+        window.addEventListener('requestUiSlowRefresh', function (e) {
+            // TODO
+        }.bind(this), false);
+
     },
 
     emitEvent: function (type, payload) {
@@ -218,6 +259,8 @@ aos.Orchestrator.prototype = {
 
     animationTick: function (timestamp) {
         this.emitEvent('animationTick', { ts: timestamp });
+        this.gameTime += (timestamp - this.lastAnimationFrame) * this.gameSpeed;
+        this.lastAnimationFrame = timestamp;
         window.requestAnimationFrame(this.animationTick.bind(this));
     },
 
@@ -227,9 +270,4 @@ aos.game = new aos.Orchestrator();
 
 window.onload = function () {
     aos.game.instanciate();
-    window.requestAnimationFrame(function () {
-        document.getElementById('starSystemBlock').style.display = 'none';
-        document.getElementById('contextualBlock').style.display = 'none';
-        document.getElementById('contextualTxt').innerHTML = '';
-    });
 };
