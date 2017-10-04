@@ -43,7 +43,7 @@ aos.Star = function () {
     //planet details
     /** @type {aos.Planet} */
     this.planets = [];
-    this.selectedPlanet = null;
+    this.selectedPlanet = 0;
 };
 
 aos.Star.prototype = {
@@ -186,7 +186,15 @@ aos.Star.prototype = {
         //#endregion
     },
 
-    setSelectedPlanet: function () {
+    setSelectedPlanet: function (planetId) {
+        this.selectedPlanet = planetId;
+        [].forEach.call(document.getElementById('miniatureTabs').childNodes, function (li) {
+            if (+li.dataset.index === planetId) {
+                li.className = 'active';
+            } else {
+                li.className = 'inactive';
+            }
+        });
     },
 
     temp_renderPie: function (elem, txt) {
@@ -226,11 +234,12 @@ aos.Star.prototype = {
         this.planets.forEach(function (planet, i) {
             document.getElementById('miniatureTabs').innerHTML +=
                 '<li ' +
-                'data-index="' + i + '" class="' + (i !== 0 ? 'in' : '') + 'active">' +
+                'data-index="' + i + '" class="' + 'inactive">' +
                 '<img src=' + planetImgs[i] + ' width="64" height="64"></li>';
             // TODO: set specific css class for selected planet
             // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
+        this.setSelectedPlanet(0);
         this.temp_renderPie(document.getElementById('airPie'), 'Air');
         this.temp_renderPie(document.getElementById('oceanPie'), 'Ocean');
         this.temp_renderPie(document.getElementById('soilPie'), 'Soil');

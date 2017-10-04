@@ -189,7 +189,7 @@ aos.Orchestrator.prototype = {
             }, this);
         }.bind(this), false);
 
-        document.getElementById('galaxyOverlayCanvas').addEventListener('mousedown', function (e) {
+        document.getElementById('galaxyOverlayCanvas').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             const galaxyCoordX = e.offsetX * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 600;
             const galaxyCoordY = e.offsetY * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 450;
@@ -212,21 +212,32 @@ aos.Orchestrator.prototype = {
             document.getElementById('contextualTxt').innerHTML = '';
         }.bind(this), false);
 
-        document.getElementById('closeStarSystem').addEventListener('mousedown', function (e) {
+        document.getElementById('closeStarSystem').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setSelectedStar(null);
         }.bind(this), false);
-        document.getElementById('speed0').addEventListener('mousedown', function (e) {
+        document.getElementById('speed0').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setGameSpeed(0);
         }.bind(this), false);
-        document.getElementById('speed1').addEventListener('mousedown', function (e) {
+        document.getElementById('speed1').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setGameSpeed(1);
         }.bind(this), false);
-        document.getElementById('speed2').addEventListener('mousedown', function (e) {
+        document.getElementById('speed2').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setGameSpeed(2);
+        }.bind(this), false);
+
+        document.getElementById('miniatureTabs').addEventListener('click', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            let clickedElem = e.target;
+            while (clickedElem.tagName.toUpperCase() !== 'LI' && clickedElem.tagName.toUpperCase() !== 'BODY') {
+                clickedElem = clickedElem.parentElement;
+            }
+            if (clickedElem.tagName.toUpperCase() === 'LI') {
+                this.selectedStar.setSelectedPlanet(+clickedElem.dataset.index);
+            }
         }.bind(this), false);
 
         //window.addEventListener('resize', function (e) {
