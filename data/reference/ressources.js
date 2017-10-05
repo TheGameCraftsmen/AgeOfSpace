@@ -1,19 +1,24 @@
-aos.ressources = 
+aos.ressources =
     [
-        {"name":"oxygen", "category" : "air"},
-        {"name":"carbon", "category" : "air"},
-        {"name":"hydrogen", "category" : "air"},
-        {"name":"azote", "category" : "air"},
-        {"name":"inert", "category" : "air"},
-        {"name":"water", "category" : "liquid"},
-        {"name":"oil", "category" : "liquid"},
-        {"name":"ammoniac", "category" : "liquid"},
-        {"name":"metal", "category" : "ground"},
-        {"name":"minerals", "category" : "ground"},
-        {"name":"carbonate", "category" : "ground"},
-        {"name":"nitrate", "category" : "ground"},
-        {"name":"cyanide", "category" : "ground"},
-        {"name":"metal", "category" : "ground"}
+        { "name": "Oxygen", "category": "air" },
+        { "name": "Inert gases", "category": "air" },
+        { "name": "Nitrogen", "category": "air" },
+        { "name": "Hydrogen", "category": "air" },
+        { "name": "Ammonia", "category": "air" },
+        { "name": "Oxocarbon", "category": "air" },
+        { "name": "Nitrous", "category": "air" },
+        { "name": "Water", "category": "liquid" },
+        { "name": "Oil", "category": "liquid" },
+        { "name": "Alcohol", "category": "liquid" },
+        { "name": "Nitric acid", "category": "liquid" },
+        { "name": "Prussic acid", "category": "liquid" },
+        { "name": "D.N.A.", "category": "liquid" },
+        { "name": "Mineral", "category": "ground" },
+        { "name": "Salt", "category": "ground" },
+        { "name": "Metal", "category": "ground" },
+        { "name": "Fissile material", "category": "ground" },
+        { "name": "Carbon", "category": "ground" },
+        { "name": "Cyanide", "category": "ground" },
     ];
 
-aos.volumeRessources = {"air" : 1000, "liquid" : 10000, "ground" : 10000, "metal" : 10000};
+aos.volumeRessources = { "air": 1000, "liquid": 10000, "ground": 10000, "metal": 10000 };

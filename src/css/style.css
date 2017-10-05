@@ -22,6 +22,10 @@ hr {
     border-bottom: 1px solid #444;
 }
 
+img {
+    -ms-interpolation-mode: bicubic;
+}
+
 @media screen and (max-width: 1650px) {
     /*canvas {
         width: 100%;
@@ -194,15 +198,16 @@ hr {
     border: 1px solid #444;
     border-top: 0;
     height: calc(100% - 100px);
+    position: relative;
 }
 
 .resourceBar {
-    padding: 2px 5px;
+    padding: 2px;
 }
 
     /* Label */
     .resourceBar > div:first-child {
-        width: 80px;
+        width: 105px;
         display: inline-block;
         text-align: right;
         padding-right: 5px;
@@ -233,7 +238,10 @@ hr {
 
 
 /* Animations */
-.blink {
+.blink_ {
+    /* https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way */
+    /*will-change: opacity, transform;
+    transform: translate3d(0, 0, 0);*/ 
     animation: blinkanim 2.0s ease-in-out infinite;
 }
 

@@ -269,9 +269,13 @@ aos.Orchestrator.prototype = {
     },
 
     animationTick: function (timestamp) {
-        this.emitEvent('animationTick', { ts: timestamp });
+        this.emitEvent('animationTick', { ts: timestamp, speed: this.gameSpeed });
         this.gameTime += (timestamp - this.lastAnimationFrame) * this.gameSpeed;
         this.lastAnimationFrame = timestamp;
+        if (this.gameTime / 1000.0 > this.lastGameplayTick) {
+            this.lastGameplayTick += 1;
+            this.emitEvent('gameplayTick', { tick: this.lastGameplayTick });
+        }
         window.requestAnimationFrame(this.animationTick.bind(this));
     },
 

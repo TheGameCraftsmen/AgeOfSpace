@@ -195,6 +195,7 @@ aos.Star.prototype = {
                 li.className = 'inactive';
             }
         });
+        aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
     temp_renderPie: function (elem, txt) {
@@ -239,7 +240,6 @@ aos.Star.prototype = {
             // TODO: set specific css class for selected planet
             // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
-        this.setSelectedPlanet(0);
         this.temp_renderPie(document.getElementById('airPie'), 'Air');
         this.temp_renderPie(document.getElementById('oceanPie'), 'Ocean');
         this.temp_renderPie(document.getElementById('soilPie'), 'Soil');
@@ -248,6 +248,11 @@ aos.Star.prototype = {
         this.temp_renderBar(document.getElementById('bacteriaPop'), 'Bacteria');
         this.temp_renderBar(document.getElementById('plantsPop'), 'Plants');
         this.temp_renderBar(document.getElementById('animalsPop'), 'Animals');
+
+        aos.ressources.forEach(function (resource, i) {
+            this.temp_renderBar(document.getElementById('res'+i+'Storage'), resource.name);
+        }, this);
+        this.setSelectedPlanet(0);
     },
 
 };
