@@ -249,8 +249,13 @@ aos.Star.prototype = {
         this.temp_renderBar(document.getElementById('plantsPop'), 'Plants');
         this.temp_renderBar(document.getElementById('animalsPop'), 'Animals');
 
+        let resourceGroup = 'air';
         aos.ressources.forEach(function (resource, i) {
-            this.temp_renderBar(document.getElementById('res'+i+'Storage'), resource.name);
+            this.temp_renderBar(document.getElementById('res' + i + 'Storage'), resource.name);
+            if (resource.category !== resourceGroup) {
+                document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
+                resourceGroup = resource.category;
+            }
         }, this);
         this.setSelectedPlanet(0);
     },
