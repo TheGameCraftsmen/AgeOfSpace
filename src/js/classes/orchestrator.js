@@ -19,27 +19,65 @@ var aos = aos || {};
 aos.Orchestrator = function () {
     this.galaxy = {};
     this.selectedStar = null;
-    this.gameSpeed = 0; // can be 0, 1, or 5. Set by the controls in the bottom right corner of the screen
-    this.gameTime = 0; // elapsed milliseconds since the start of the game. Grows faster if the gameSpeed is 5x
-    this.lastGameplayTick = 0;
-    this.lastAnimationFrame = 0;
+    this.gameSpeedMultiplier = 0; // can be 0 (pause), 1, or 5. Set by the controls in the bottom right corner of the screen
+    this.gameTime = 0; // elapsed milliseconds since the start of the game. Grows faster if the speed is 5x
+    this.lastGameplayTick = 0; // dispatches an update event every x milliseconds in game time (x = 1000?)
+    this.lastAnimationFrame = 0; // time interval counter
 };
 
 aos.Orchestrator.prototype = {
 
-    instanciate: function () {
+    start: function () {
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
         document.getElementById('starSystemBlock').style.display = 'none';
         document.getElementById('contextualBlock').style.display = 'none';
         document.getElementById('contextualTxt').innerHTML = '';
+        this.buildPlanetUi();
         this.setupEvents();
         this.animationTick(0);
         this.setGameSpeed(1);
     },
 
-    setGameSpeed: function (newSpeed) {
-        this.gameSpeed = newSpeed === 2 ? 5 : newSpeed;
+    //#region Planet UI
+    buildPlanetUi: function () {
+        this.renderPie(document.getElementById('airPie'), 'Air');
+        this.renderPie(document.getElementById('oceanPie'), 'Ocean');
+        this.renderPie(document.getElementById('soilPie'), 'Soil');
+
+        this.renderBar(document.getElementById('humansPop'), 'Humans');
+        this.renderBar(document.getElementById('machinesPop'), 'Machines');
+        this.renderBar(document.getElementById('bacteriaPop'), 'Bacteria');
+        this.renderBar(document.getElementById('plantsPop'), 'Plants');
+        this.renderBar(document.getElementById('animalsPop'), 'Animals');
+
+        let resourceGroup = 'air';
+        aos.ressources.forEach(function (resource, i) {
+            this.renderBar(document.getElementById('res' + i + 'Storage'), resource.name);
+            if (resource.category !== resourceGroup) {
+                document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
+                resourceGroup = resource.category;
+            }
+        }, this);
+    },
+
+    renderPie: function (elem, txt) {
+        elem.innerHTML = '';
+        const chart = new aos.PieChart();
+        chart.innerText = txt;
+        chart.render(elem);
+    },
+
+    renderBar: function (elem, txt) {
+        elem.innerHTML = '';
+        const bar = new aos.Ressource();
+        bar.name = txt;
+        bar.render(elem);
+    },
+    //#endregion
+
+    setGameSpeed: function (newSpeed) { // expects newSpeed = 0, 1 or 2
+        this.gameSpeedMultiplier = newSpeed === 2 ? 5 : newSpeed;
         document.getElementById('speed0').style.border = '';
         document.getElementById('speed1').style.border = '';
         document.getElementById('speed2').style.border = '';
@@ -56,7 +94,7 @@ aos.Orchestrator.prototype = {
             document.getElementById('galaxyBlock').style.display = 'none';
             document.getElementById('starSystemBlock').style.display = 'block';
             document.getElementById('contextualBlock').style.display = 'none';
-            star.render();
+            star.buildUi();
         }
     },
 
@@ -269,8 +307,8 @@ aos.Orchestrator.prototype = {
     },
 
     animationTick: function (timestamp) {
-        this.emitEvent('animationTick', { ts: timestamp, speed: this.gameSpeed });
-        this.gameTime += (timestamp - this.lastAnimationFrame) * this.gameSpeed;
+        this.emitEvent('animationTick', { ts: timestamp, speed: this.gameSpeedMultiplier });
+        this.gameTime += (timestamp - this.lastAnimationFrame) * this.gameSpeedMultiplier;
         this.lastAnimationFrame = timestamp;
         if (this.gameTime / 1000.0 > this.lastGameplayTick) {
             this.lastGameplayTick += 1;
@@ -282,7 +320,6 @@ aos.Orchestrator.prototype = {
 };
 
 aos.game = new aos.Orchestrator();
-
 window.onload = function () {
-    aos.game.instanciate();
+    aos.game.start();
 };

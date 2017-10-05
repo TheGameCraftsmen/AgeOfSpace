@@ -198,21 +198,7 @@ aos.Star.prototype = {
         aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
-    temp_renderPie: function (elem, txt) {
-        elem.innerHTML = '';
-        const chart = new aos.PieChart();
-        chart.innerText = txt;
-        chart.render(elem);
-    },
-
-    temp_renderBar: function (elem, txt) {
-        elem.innerHTML = '';
-        const bar = new aos.Ressource();
-        bar.name = txt;
-        bar.render(elem);
-    },
-
-    render: function () {
+    buildUi: function () {
         document.getElementById('miniatureTabs').innerHTML = '';
         const planetImgs = [
             "./data/img/Desert_planet_resource.png",
@@ -240,24 +226,8 @@ aos.Star.prototype = {
             // TODO: set specific css class for selected planet
             // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
-        this.temp_renderPie(document.getElementById('airPie'), 'Air');
-        this.temp_renderPie(document.getElementById('oceanPie'), 'Ocean');
-        this.temp_renderPie(document.getElementById('soilPie'), 'Soil');
-        this.temp_renderBar(document.getElementById('humansPop'), 'Humans');
-        this.temp_renderBar(document.getElementById('machinesPop'), 'Machines');
-        this.temp_renderBar(document.getElementById('bacteriaPop'), 'Bacteria');
-        this.temp_renderBar(document.getElementById('plantsPop'), 'Plants');
-        this.temp_renderBar(document.getElementById('animalsPop'), 'Animals');
 
-        let resourceGroup = 'air';
-        aos.ressources.forEach(function (resource, i) {
-            this.temp_renderBar(document.getElementById('res' + i + 'Storage'), resource.name);
-            if (resource.category !== resourceGroup) {
-                document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
-                resourceGroup = resource.category;
-            }
-        }, this);
-        this.setSelectedPlanet(0);
+        this.setSelectedPlanet(this.selectedPlanet);
     },
 
 };

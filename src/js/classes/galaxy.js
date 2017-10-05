@@ -43,7 +43,7 @@ aos.Galaxy.prototype = {
         }
         this.computeConstellationBoundaries();
         //this.drawConstellationBoundaries();
-        this.createConstellations();
+        this.createConstellations(); // This function calls star.generate recursively
     },
 
     generateE0: function () {
