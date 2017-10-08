@@ -26,11 +26,13 @@ aos.Ressource = function () {
     this.quantity = 0;
     /** @type {number} */
     this.percent = 0;
+
+    this.htmlElement = null;
 };
 
 aos.Ressource.prototype = {
 
-    render: function (htmlElement) {
+    render: function () {
         let code = '<div class="resourceBar"><div>' + this.name + '</div><div><div></div>';
         let i = 0;
         for (i = 0; i < 5; i++) {
@@ -40,7 +42,10 @@ aos.Ressource.prototype = {
             code += '<div style="right:calc(50% + ' + (5 + i * 10) + 'px); animation-delay:' + (i * 0.25) + 's" class="blink"><svg width="8" height="8" viewBox="0 0 32 32"><path d="M 30 0 L 30 32 L 2 16 Z" stroke-width="2" stroke="#fff" fill="rgba(255,255,255,0.2)"></path></svg></div>';
         }
         code += '</div></div>';
-        htmlElement.innerHTML += code;
+        this.htmlElement.innerHTML = code;
+    },
+
+    update: function () {
     },
 
 };

@@ -23,17 +23,20 @@ aos.Orchestrator = function () {
     this.gameTime = 0; // elapsed milliseconds since the start of the game. Grows faster if the speed is 5x
     this.lastGameplayTick = 0; // dispatches an update event every x milliseconds in game time (x = 1000?)
     this.lastAnimationFrame = 0; // time interval counter
+
+    this.pies = [];
+    this.resourceBars = [];
 };
 
 aos.Orchestrator.prototype = {
 
     start: function () {
+        this.buildPlanetUi();
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
         document.getElementById('starSystemBlock').style.display = 'none';
         document.getElementById('contextualBlock').style.display = 'none';
         document.getElementById('contextualTxt').innerHTML = '';
-        this.buildPlanetUi();
         this.setupEvents();
         this.animationTick(0);
         this.setGameSpeed(1);
@@ -41,9 +44,9 @@ aos.Orchestrator.prototype = {
 
     //#region Planet UI
     buildPlanetUi: function () {
-        this.renderPie(document.getElementById('airPie'), 'Air');
-        this.renderPie(document.getElementById('oceanPie'), 'Ocean');
-        this.renderPie(document.getElementById('soilPie'), 'Soil');
+        this.renderPie(document.getElementById('airPie'), 'Air', 'air');
+        this.renderPie(document.getElementById('liquidPie'), 'Ocean', 'liquid');
+        this.renderPie(document.getElementById('groundPie'), 'Soil', 'ground');
 
         this.renderBar(document.getElementById('humansPop'), 'Humans');
         this.renderBar(document.getElementById('machinesPop'), 'Machines');
@@ -61,18 +64,27 @@ aos.Orchestrator.prototype = {
         }, this);
     },
 
-    renderPie: function (elem, txt) {
-        elem.innerHTML = '';
+    renderPie: function (elem, txt, category) {
         const chart = new aos.PieChart();
+        chart.htmlElement = elem;
         chart.innerText = txt;
-        chart.render(elem);
+        chart.content = [];
+        const colors = ['#800', '#880', '#080', '#088', '#008', '#808', '#800', '#880', '#080', '#088', '#008', '#808', '#800', '#880', '#080', '#088', '#008', '#808'];
+        aos.ressources.forEach(function (resource, i) {
+            if (resource.category === category) {
+                chart.content.push({ label: resource.name, value: i+1, color: colors[i] });
+            }
+        }, this);
+        chart.render();
+        this.pies.push(chart);
     },
 
     renderBar: function (elem, txt) {
-        elem.innerHTML = '';
         const bar = new aos.Ressource();
+        bar.htmlElement = elem;
         bar.name = txt;
-        bar.render(elem);
+        bar.render();
+        this.resourceBars.push(bar);
     },
     //#endregion
 
@@ -274,7 +286,7 @@ aos.Orchestrator.prototype = {
                 clickedElem = clickedElem.parentElement;
             }
             if (clickedElem.tagName.toUpperCase() === 'LI') {
-                this.selectedStar.setSelectedPlanet(+clickedElem.dataset.index);
+                this.selectedStar.setSelectedPlanetIndex(+clickedElem.dataset.index);
             }
         }.bind(this), false);
 
@@ -295,7 +307,9 @@ aos.Orchestrator.prototype = {
             document.getElementById('gameTime').innerHTML = (this.gameTime / 1000.0).toFixed(1);
         }.bind(this), false);
         window.addEventListener('requestUiSlowRefresh', function (e) {
-            // TODO
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.showStats();
+            }
         }.bind(this), false);
 
     },

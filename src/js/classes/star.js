@@ -43,7 +43,8 @@ aos.Star = function () {
     //planet details
     /** @type {aos.Planet} */
     this.planets = [];
-    this.selectedPlanet = 0;
+    this.selectedPlanetIndex = 0;
+    this.selectedPlanet = null;
 };
 
 aos.Star.prototype = {
@@ -184,10 +185,13 @@ aos.Star.prototype = {
             this.subSpectral = Math.floor(10 * (1 - classRatio));
         }
         //#endregion
+        this.selectedPlanetIndex = 0;
+        this.selectedPlanet = this.planets[0];
     },
 
-    setSelectedPlanet: function (planetId) {
-        this.selectedPlanet = planetId;
+    setSelectedPlanetIndex: function (planetId) {
+        this.selectedPlanetIndex = planetId;
+        this.selectedPlanet = this.planets[planetId];
         [].forEach.call(document.getElementById('miniatureTabs').childNodes, function (li) {
             if (+li.dataset.index === planetId) {
                 li.className = 'active';
@@ -223,11 +227,9 @@ aos.Star.prototype = {
                 '<li ' +
                 'data-index="' + i + '" class="' + 'inactive">' +
                 '<img src=' + planetImgs[i] + ' width="64" height="64"></li>';
-            // TODO: set specific css class for selected planet
-            // TODO: attach click event. onclick --> call setSelectedPlanet
         }, this);
 
-        this.setSelectedPlanet(this.selectedPlanet);
+        this.setSelectedPlanetIndex(this.selectedPlanetIndex);
     },
 
 };

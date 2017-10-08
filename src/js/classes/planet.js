@@ -35,7 +35,7 @@ aos.Planet = function () {
     */
     this.healtingIndicator = 0;
     /** @type {aos.building} */
-    this.buildings=[];
+    this.buildings = [];
     /** @type {boolean} 
      * Planet must be scanned to show planet properties to Player
     */
@@ -54,34 +54,34 @@ aos.Planet.prototype = {
      *         -- "planet" : to add ressource to planet (water, oxygen, ...)
      *         -- "local"  : to add ressource to stored ressource by the player (metal, food, ...)
      */
-    addRessource : function(ressource,to,type,quantity){
+    addRessource: function (ressource, to, type, quantity) {
         let res = ressource;
         let typ = type;
         let quant = quantity;
-        if (typeof ressource == "object"){
+        if (typeof ressource == "object") {
             res = ressource.name;
             typ = ressource.type;
             quant = ressource.quantity;
         }
         let storage = null;
-        if (to == "planet"){
+        if (to == "planet") {
             storage = this.ressources;
-        }else{
+        } else {
             storage = this.ressourcesStored;
         }
         let resFound = null;
-        for ( let i = 0 ; i < storage.length && resFound == null ; i++){
-            if ( storage[i].name == res ){
+        for (let i = 0 ; i < storage.length && resFound == null ; i++) {
+            if (storage[i].name == res) {
                 resFound = storage[i];
             }
         }
-        if ( resFound == null ){
+        if (resFound == null) {
             resFound = new aos.Ressource();
             resFound.name = res;
             resFound.type = typ;
             resFound.quantity = quant;
             storage.push(resFound);
-        }else{
+        } else {
             resFound.quantity += quant;
         }
     },
@@ -98,34 +98,34 @@ aos.Planet.prototype = {
         b = new aos.Building();
         b.construct("solar plant");
         this.buildings.push(b);
-        
+
         b = new aos.Building();
         b.construct("CO2 epuration");
         this.buildings.push(b);
-        
+
         let r = new aos.Ressource();
         r.type = "ground";
         r.name = "metal";
         r.quantity = 1000;
         this.addRessource(r);
 
-        
+
     },
 
-    generateAir : function(){
+    generateAir: function () {
         var compositionPercent = 0;
-        for(let i = 0 ; i < aos.ressources.length ; i++){   
-            if( aos.ressources[i].category == "air"){
+        for (let i = 0 ; i < aos.ressources.length ; i++) {
+            if (aos.ressources[i].category == "air") {
                 let ressource = new aos.Ressource();
                 ressource.type = "air";
                 ressource.name = aos.ressources[i].name;
-                if ( i == ( aos.ressources.length-1 )){
-                    ressource.percent = 100-compositionPercent;
-                    ressource.quantity = (100-compositionPercent) * this.size * aos.volumeRessources[ressource.type];
-                }else{
-                    let itAirPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                if (i == (aos.ressources.length - 1)) {
+                    ressource.percent = 100 - compositionPercent;
+                    ressource.quantity = (100 - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
+                } else {
+                    let itAirPrcent = Math.floor(Math.random() * (100 - compositionPercent))
                     ressource.quantity = itAirPrcent * this.size * aos.volumeRessources[ressource.type];
-                    ressource.percent = itAirPrcent;    
+                    ressource.percent = itAirPrcent;
                     compositionPercent += itAirPrcent;
                 }
                 this.ressources.push(ressource);
@@ -133,18 +133,18 @@ aos.Planet.prototype = {
         }
     },
 
-    generateLiquid : function(){
+    generateLiquid: function () {
         var compositionPercent = 0;
-        for(let i = 0 ; i < aos.ressources.length ; i++){   
-            if( aos.ressources[i].category == "liquid"){
+        for (let i = 0 ; i < aos.ressources.length ; i++) {
+            if (aos.ressources[i].category == "liquid") {
                 let ressource = new aos.Ressource();
                 ressource.type = "liquid";
                 ressource.name = aos.ressources[i].name;
-                if ( i == ( aos.ressources.length-1 )){
-                    ressource.quantity = (100-compositionPercent) * this.size * aos.volumeRessources[ressource.type];
-                    ressource.percent = (100-compositionPercent) * this.size * aos.volumeRessources[ressource.type];
-                }else{
-                    let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                if (i == (aos.ressources.length - 1)) {
+                    ressource.quantity = (100 - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
+                    ressource.percent = (100 - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
+                } else {
+                    let itPrcent = Math.floor(Math.random() * (100 - compositionPercent))
                     ressource.quantity = itPrcent * this.size * aos.volumeRessources[ressource.type];
                     ressource.percent = itPrcent;
                     compositionPercent += itPrcent;
@@ -154,185 +154,182 @@ aos.Planet.prototype = {
         }
     },
 
-    generateMetal : function(prcent){
+    generateMetal: function (prcent) {
         var compositionPercent = 0;
-        for( let i = 0 ; i < aos.ressources.length ; i++){   
-            if( aos.ressources[i].category == "metal"){
+        for (let i = 0 ; i < aos.ressources.length ; i++) {
+            if (aos.ressources[i].category == "metal") {
                 let ressource = new aos.Ressource();
                 ressource.type = "metal";
                 ressource.name = aos.ressources[i].name;
-                if ( i == ( aos.ressources.length-1 )){
+                if (i == (aos.ressources.length - 1)) {
                     ressource.quantity = (prcent - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
                     ressource.percent = prcent - compositionPercent;
-                }else{
-                    let itPrcent = Math.floor(Math.random() * (prcent-compositionPercent))
-                    ressource.percent = itPrcent ;
+                } else {
+                    let itPrcent = Math.floor(Math.random() * (prcent - compositionPercent))
+                    ressource.percent = itPrcent;
                     ressource.quantity = ressource.percent * this.size * aos.volumeRessources[ressource.type];
                     compositionPercent += itPrcent;
                 }
                 this.ressources.push(ressource);
-            }   
+            }
         }
     },
 
-    generateGround : function(){
+    generateGround: function () {
         var compositionPercent = 0;
-        for( let i = 0 ; i < aos.ressources.length ; i++){   
-            if( aos.ressources[i].category == "ground"){
+        for (let i = 0 ; i < aos.ressources.length ; i++) {
+            if (aos.ressources[i].category == "ground") {
                 let ressource = new aos.Ressource();
                 ressource.type = "ground";
                 ressource.name = aos.ressources[i].name;
-                if ( i == ( aos.ressources.length-1 )){
+                if (i == (aos.ressources.length - 1)) {
                     ressource.percent = 100 - compositionPercent;
                     ressource.quantity = ressource.percent * this.size * aos.volumeRessources[ressource.type];
                     this.ressources.push(ressource);
-                }else{
-                    let itPrcent = Math.floor(Math.random() * (100-compositionPercent))
+                } else {
+                    let itPrcent = Math.floor(Math.random() * (100 - compositionPercent))
                     ressource.percent = itPrcent;
                     ressource.quantity = itPrcent * this.size * aos.volumeRessources[ressource.type];
                     this.ressources.push(ressource);
                     compositionPercent += itPrcent;
                 }
             }
-            
+
         }
     },
 
-    calculateHealthIndicator: function(){
+    calculateHealthIndicator: function () {
         this.healtingIndicator = 70;
     },
 
-    populationGrowing : function(){
-        if(this.healtingIndicator > 50){
+    populationGrowing: function () {
+        if (this.healtingIndicator > 50) {
             this.population += 100000;
-        }else{
+        } else {
             this.population -= 100000;
         }
     },
 
-    removeRessource : function(name, quantity,planetRessource,isChecking){
+    removeRessource: function (name, quantity, planetRessource, isChecking) {
         let qtyRemoved = 0;
-        if (planetRessource){
-            for ( let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++ ){
-                if ( this.ressources[itPlanetRes].name == name && this.ressources[itPlanetRes].quantity>=quantity){
-                    if ( !isChecking ) this.ressources[itPlanetRes].quantity -= quantity;
+        if (planetRessource) {
+            for (let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++) {
+                if (this.ressources[itPlanetRes].name == name && this.ressources[itPlanetRes].quantity >= quantity) {
+                    if (!isChecking) this.ressources[itPlanetRes].quantity -= quantity;
                     qtyRemoved = quantity;
                 }
             }
-        }else{
-            for (let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes++){
-                if (this.ressourcesStored[itRes].name == name && this.ressourcesStored[itRes].quantity >= quantity ){
+        } else {
+            for (let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes++) {
+                if (this.ressourcesStored[itRes].name == name && this.ressourcesStored[itRes].quantity >= quantity) {
                     qtyRemoved = quantity;
-                    if ( !isChecking)  this.ressourcesStored[itRes].quantity -= qtyRemoved;
+                    if (!isChecking) this.ressourcesStored[itRes].quantity -= qtyRemoved;
                 }
             }
         }
         return qtyRemoved;
     },
 
-    produce : function(typeProduct){
-        for( let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++){
-            let building = this.buildings[itBuilding];  
-            if ( building.type === typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null){
+    produce: function (typeProduct) {
+        for (let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++) {
+            let building = this.buildings[itBuilding];
+            if (building.type === typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null) {
                 building.functional = true;
-                if (typeof building.production.require !== "undefined"){
-                    for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
-                        let removeRes = this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource,true);
-                        if (removeRes != building.production.require[itProd].quantity){
+                if (typeof building.production.require !== "undefined") {
+                    for (let itProd = 0 ; itProd < building.production.require.length ; itProd++) {
+                        let removeRes = this.removeRessource(building.production.require[itProd].name, building.production.require[itProd].quantity, building.production.require[itProd].planetRessource, true);
+                        if (removeRes != building.production.require[itProd].quantity) {
                             building.functional = false;
                             break;
                         }
-                    }                    
-                    if ( building.functional){
-                        for ( let itProd = 0 ; itProd < building.production.require.length ; itProd++ ){
-                            this.removeRessource(building.production.require[itProd].name,building.production.require[itProd].quantity,building.production.require[itProd].planetRessource,false);
+                    }
+                    if (building.functional) {
+                        for (let itProd = 0 ; itProd < building.production.require.length ; itProd++) {
+                            this.removeRessource(building.production.require[itProd].name, building.production.require[itProd].quantity, building.production.require[itProd].planetRessource, false);
                         }
                     }
                 }
-                if ( building.functional){
-                    this.addRessource(building.production.product,building.production.to,building.production.type,building.production.quantity);                     
+                if (building.functional) {
+                    this.addRessource(building.production.product, building.production.to, building.production.type, building.production.quantity);
                 }
             }
         }
     },
-    
 
-    run : function(speedTick){
+    run: function (speedTick) {
         this.produce("plant");
         this.produce("mine");
         this.produce("epurateur");
         this.showStats();
     },
 
-    showPlanetRessources: function(){
-        for( let i = 0; i < this.ressources.length ; i++){
-            if (this.ressources[i].name == "metal"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this. size * aos.volumeRessources["metal"]);            
-            }else if (this.ressources[i].name == "water"){
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this. size * aos.volumeRessources["liquid"]);            
+    showPlanetRessources: function () {
+        for (let i = 0; i < this.ressources.length ; i++) {
+            if (this.ressources[i].name == "metal") {
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this.size * aos.volumeRessources["metal"]);
+            } else if (this.ressources[i].name == "water") {
+                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this.size * aos.volumeRessources["liquid"]);
             }
 
         }
     },
 
-    showStoredRessources : function(){
-        for ( let i = 0 ; i < this.ressourcesStored.length ; i++){
-            let htmlVar = document.getElementById( this.ressourcesStored[i].name + 'Text');
-            if ( htmlVar != null && typeof htmlVar !== "undefined"){
+    showStoredRessources: function () {
+        for (let i = 0 ; i < this.ressourcesStored.length ; i++) {
+            let htmlVar = document.getElementById(this.ressourcesStored[i].name + 'Text');
+            if (htmlVar != null && typeof htmlVar !== "undefined") {
                 htmlVar.innerHTML = this.ressourcesStored[i].quantity;
             }
         }
     },
 
-    showStatsAir : function(){
-        for( let i = 0; i < this.ressources.length ; i++){
-            if ( this.ressources[i].type == "air"){
-                document.getElementById('air' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";            
+    showStatsAir: function () {
+        for (let i = 0; i < this.ressources.length ; i++) {
+            if (this.ressources[i].type == "air") {
+                document.getElementById('air' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";
             }
         }
     },
 
-
-    showStatsLiquid : function(){
-        for( let i = 0; i < this.ressources.length ; i++){
-            if ( this.ressources[i].type == "liquid"){
-                document.getElementById('liquid' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";            
+    showStatsLiquid: function () {
+        for (let i = 0; i < this.ressources.length ; i++) {
+            if (this.ressources[i].type == "liquid") {
+                document.getElementById('liquid' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";
             }
         }
     },
 
-
-    showStatsGround : function(){
-        var metal=0;
-        for( let i = 0; i < this.ressources.length ; i++){
-            if(this.ressources[i].type == "ground"){
-                document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";            
+    showStatsGround: function () {
+        var metal = 0;
+        for (let i = 0; i < this.ressources.length ; i++) {
+            if (this.ressources[i].type == "ground") {
+                document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";
             }
         }
     },
 
-    showBuildings : function(){
-        let buildingCount= {};
-        for ( var i = 0 ; i < this.buildings.length ; i++){
-            if (typeof buildingCount[this.buildings[i].name] === "undefined"){
-                buildingCount[this.buildings[i].name] = { "building" : this.buildings[i], "count" : 1};    
-            }else{
+    showBuildings: function () {
+        let buildingCount = {};
+        for (var i = 0 ; i < this.buildings.length ; i++) {
+            if (typeof buildingCount[this.buildings[i].name] === "undefined") {
+                buildingCount[this.buildings[i].name] = { "building": this.buildings[i], "count": 1 };
+            } else {
                 buildingCount[this.buildings[i].name].count += 1;
             }
         }
 
-        for (let elt in buildingCount){
+        for (let elt in buildingCount) {
             let table = document.getElementById(buildingCount[elt].building.type + "Buildings");
             let nbRows = table.rows.length;
             let found = null;
-            for (let i =0 ; i <nbRows ; i++){
-                if ( table.rows[i].cells[0].innerHTML == buildingCount[elt].building.name){
+            for (let i = 0 ; i < nbRows ; i++) {
+                if (table.rows[i].cells[0].innerHTML == buildingCount[elt].building.name) {
                     found = table.rows[i];
                     break;
                 }
             }
 
-            if (found == null){
+            if (found == null) {
                 let row = table.insertRow(nbRows);
                 let cell1 = row.insertCell(0);
                 cell1.innerHTML = buildingCount[elt].building.name;
@@ -342,25 +339,36 @@ aos.Planet.prototype = {
                 cell3.innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
                 let cell4 = row.insertCell(3);
                 cell4.innerHTML = buildingCount[elt].building.production.quantity;
-            }else{
+            } else {
                 found.cells[1].innerHTML = buildingCount[elt].count;
                 found.cells[1].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
             }
         }
     },
 
-    recalculatePercent : function(){
-        for ( let i = 0 ; i < this.ressources.length ; i++){
-            this.ressources[i].percent = (  this.ressources[i].quantity) / ( 100* this. size * aos.volumeRessources[this.ressources[i].type]) * 100;
+    recalculatePercent: function () {
+        for (let i = 0 ; i < this.ressources.length ; i++) {
+            this.ressources[i].percent = (this.ressources[i].quantity) / (100 * this.size * aos.volumeRessources[this.ressources[i].type]) * 100;
         }
-        
-
     },
 
+    updatePies: function () {
+        aos.game.pies.forEach(function (pie, i) {
+            pie.content.forEach(function (res, j) {
+                const label = res.label;
+                this.ressources.forEach(function (resource, i) {
+                    if (resource.name === label) {
+                        res.value = resource.quantity;
+                    }
+                }, this);
+            }, this);
+            pie.update();
+        }, this);
+    },
 
-    showStats : function(){
-        document.getElementById('populationTxt').innerHTML = this.population + " colons";    
-        document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";    
+    showStats: function () {
+        document.getElementById('populationTxt').innerHTML = this.population + " colons";
+        document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";
         this.recalculatePercent();
         this.showPlanetRessources();
         this.showStoredRessources();
@@ -368,10 +376,11 @@ aos.Planet.prototype = {
         this.showStatsGround();
         this.showStatsLiquid();
         this.showBuildings();
-    }
+        //this.updatePies();
+    },
 
-    
 };
+
 var instance = null;
 window.onload = function () {
     instance = new aos.Planet();
