@@ -8,10 +8,6 @@ aos.buildings = [
                     {
                         "type" :"metal",
                         "quantity" : 100
-                    },
-                    {
-                        "type" : "wood",
-                        "quantity" : 30
                     }
                 ]
             },
@@ -34,7 +30,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"iron",
+                        "type" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -51,7 +47,7 @@ aos.buildings = [
             "name" : "CO2 epuration",
             "require" : {
                 "space" :10,
-                "materials":[{"type" : "iron","quantity":50},{"type": "wood","quantity":20}]
+                "materials":[{"type" : "metal","quantity":50}]
             },
             "produce" : {
                 "type" : "air",
