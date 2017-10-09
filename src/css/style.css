@@ -13,6 +13,15 @@ body {
     /*min-height: 600px;*/
 }
 
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #444;
+    padding: 5px;
+}
+
 h3 {
     text-align: center;
 }
@@ -149,6 +158,26 @@ img {
         text-align: center;
     }
 
+    #contextualTxt table {
+        margin: auto;
+        margin-top: 10px;
+        color: #ccc;
+        text-shadow: #000 1px 0, #000 -1px 0, #000 0 1px, #000 0 -1px;
+        /*width: 250px;*/
+    }
+
+        #contextualTxt tr > td:first-child {
+            width: 120px;
+        }
+
+        #contextualTxt tr > td:nth-child(2) {
+            width: 75px;
+        }
+
+        #contextualTxt tr > td:nth-child(3) {
+            width: 75px;
+        }
+
 #galaxyBlock, #starSystemBlock {
     position: relative;
     overflow-y: auto;
@@ -240,7 +269,7 @@ img {
 .blink_ {
     /* https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way */
     /*will-change: opacity, transform;
-    transform: translate3d(0, 0, 0);*/ 
+    transform: translate3d(0, 0, 0);*/
     animation: blinkanim 2.0s ease-in-out infinite;
 }
 
