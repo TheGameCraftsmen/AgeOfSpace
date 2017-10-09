@@ -257,7 +257,6 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
 
         document.getElementById('galaxyOverlayCanvas').addEventListener('mouseleave', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             document.getElementById('contextualBlock').style.display = 'none';
             document.getElementById('contextualTxt').innerHTML = '';
         }.bind(this), false);
@@ -277,6 +276,33 @@ aos.Orchestrator.prototype = {
         document.getElementById('speed2').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setGameSpeed(2);
+        }.bind(this), false);
+        document.getElementById('speed0').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Speed control' + '<br><em>Pause</em>';
+            document.getElementById('contextualTxt').innerHTML = '<div>Pauses the game</div>';
+        }.bind(this), false);
+        document.getElementById('speed0').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+        document.getElementById('speed1').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Speed control' + '<br><em>Normal speed</em>';
+            document.getElementById('contextualTxt').innerHTML = '<div>Runs the game at normal speed<br><br>1 second in real life = 1 tick in game</div>';
+        }.bind(this), false);
+        document.getElementById('speed1').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+        document.getElementById('speed2').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Speed control' + '<br><em>Fast speed</em>';
+            document.getElementById('contextualTxt').innerHTML = '<div>Runs the game at fast speed<br>(5 times the normal speed)<br><br>1 second in real life = 5 ticks in game</div>';
+        }.bind(this), false);
+        document.getElementById('speed2').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
         }.bind(this), false);
 
         document.getElementById('miniatureTabs').addEventListener('click', function (e) {
