@@ -260,7 +260,7 @@ aos.Planet.prototype = {
         this.produce("plant");
         this.produce("mine");
         this.produce("epurateur");
-        this.showStats();
+        //this.showStats();
     },
 
     showPlanetRessources: function () {
@@ -367,27 +367,33 @@ aos.Planet.prototype = {
     },
 
     showStats: function () {
-        document.getElementById('populationTxt').innerHTML = this.population + " colons";
-        document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";
-        this.recalculatePercent();
-        this.showPlanetRessources();
-        this.showStoredRessources();
-        this.showStatsAir();
-        this.showStatsGround();
-        this.showStatsLiquid();
-        this.showBuildings();
-        //this.updatePies();
+        //document.getElementById('populationTxt').innerHTML = this.population + " colons";
+        //document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";
+        //this.recalculatePercent();
+        //this.showPlanetRessources();
+        //this.showStoredRessources();
+        //this.showStatsAir();
+        //this.showStatsGround();
+        //this.showStatsLiquid();
+        //this.showBuildings();
+        this.updatePies();
+    },
+
+    setupEvents: function () {
+        window.addEventListener('gameplayTick', function (e) {
+            this.run(1);
+        }.bind(this), false);
     },
 
 };
 
-var instance = null;
-window.onload = function () {
-    instance = new aos.Planet();
-    instance.generate();
-    instance.run(1);
-};
+//var instance = null;
+//window.onload = function () {
+//    instance = new aos.Planet();
+//    instance.generate();
+//    instance.run(1);
+//};
 
-window.setInterval(function(){
-    instance.run(1);
-},500);
+//window.setInterval(function(){
+//    instance.run(1);
+//},500);

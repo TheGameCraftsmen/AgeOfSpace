@@ -305,6 +305,7 @@ aos.Orchestrator.prototype = {
 
         window.addEventListener('requestUiFastRefresh', function (e) {
             document.getElementById('gameTime').innerHTML = (this.gameTime / 1000.0).toFixed(1);
+            //document.getElementById('debug').innerHTML = JSON.stringify(this.pies[0].content);
         }.bind(this), false);
         window.addEventListener('requestUiSlowRefresh', function (e) {
             if (this.selectedStar !== null) {

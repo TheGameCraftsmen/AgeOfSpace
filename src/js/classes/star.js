@@ -64,6 +64,7 @@ aos.Star.prototype = {
         }
         this.planets.forEach(function (planet) {
             planet.generate();
+            planet.setupEvents();
         }, this);
         //#region Lore
         if (classRatio < 1.0) {

@@ -1,17 +1,17 @@
 aos.ressources =
     [
-        { "name": "Oxygen", "category": "air" },
-        { "name": "Inert gases", "category": "air" },
-        { "name": "Hydrogen", "category": "air" },
-        { "name": "Oxocarbon", "category": "air" },
-        { "name": "Water", "category": "liquid" },
-        { "name": "Oil", "category": "liquid" },
-        { "name": "Alcohol", "category": "liquid" },
-        { "name": "Mineral", "category": "ground" },
-        { "name": "Metal", "category": "ground" },
-        { "name": "Salt", "category": "ground" },
-        { "name": "Fissile material", "category": "ground" },
-        { "name": "Carbon", "category": "ground" },
+        { "name": "oxygen", "category": "air" },
+        { "name": "inert gases", "category": "air" },
+        { "name": "hydrogen", "category": "air" },
+        { "name": "oxocarbon", "category": "air" },
+        { "name": "water", "category": "liquid" },
+        { "name": "oil", "category": "liquid" },
+        { "name": "alcohol", "category": "liquid" },
+        { "name": "mineral", "category": "ground" },
+        { "name": "metal", "category": "ground" },
+        { "name": "salt", "category": "ground" },
+        { "name": "fissile material", "category": "ground" },
+        { "name": "carbon", "category": "ground" },
     ];
 
 aos.volumeRessources = { "air": 1000, "liquid": 10000, "ground": 10000, "metal": 10000 };
