@@ -12,6 +12,11 @@ aos.ressources =
         { "name": "salt", "category": "ground" },
         { "name": "fissile material", "category": "ground" },
         { "name": "carbon", "category": "ground" },
+        { "name": "humans", "category": "population" },
+        { "name": "machines", "category": "population" },
+        { "name": "bacteria", "category": "population" },
+        { "name": "plants", "category": "population" },
+        { "name": "animals", "category": "population" },
     ];
 
 aos.volumeRessources = { "air": 1000, "liquid": 10000, "ground": 10000, "metal": 10000 };

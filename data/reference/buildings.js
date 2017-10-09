@@ -19,6 +19,36 @@ aos.buildings = [
                 "require" : [
                     {"name" : "energy", "quantity" : 50, "planetRessource" : false},
                     {"name" : "metal", "quantity" : 10000, "planetRessource" : true}
+                ],
+                "conditions" : [
+                    {"name" : "metal", "percent" : 20, "planetRessource" : true}
+                ]
+            },
+            "storage" : 10000
+        },
+        {
+            "type" : "habitation",
+            "name" : "house",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"metal",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "population",
+                "product" : "humans",
+                "quantity" : 100,
+                "to" : "storage",
+                "require" : [
+                    {"name" : "energy", "quantity" : 50, "planetRessource" : false},
+                    {"name" : "metal", "quantity" : 100, "planetRessource" : true}
+                ],
+                "conditions" : [
+                    {"name" : "oxygen", "percent" : 70, "planetRessource" : true}
                 ]
             },
             "storage" : 10000

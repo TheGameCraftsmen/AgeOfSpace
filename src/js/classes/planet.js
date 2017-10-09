@@ -92,7 +92,7 @@ aos.Planet.prototype = {
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
-        let b = new aos.Building();
+        /*let b = new aos.Building();
         b.construct("metal Mine");
         this.buildings.push(b);
         b = new aos.Building();
@@ -103,13 +103,8 @@ aos.Planet.prototype = {
         b.construct("CO2 epuration");
         this.buildings.push(b);
 
-        let r = new aos.Ressource();
-        r.type = "ground";
-        r.name = "metal";
-        r.quantity = 1000;
-        this.addRessource(r);
-
-
+        console.log(this.ressources);
+        */
     },
 
     generateAir: function () {
@@ -209,12 +204,36 @@ aos.Planet.prototype = {
         return qtyRemoved;
     },
 
+    checkCondition : function(condition){
+        var result = true;  
+        if (condition.planetRessource) {
+            for (let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++) {
+                if ( this.ressources[itPlanetRes].name == condition.name){
+                    if (typeof condition.quantity === "undefined"){
+                        //console.log(this.ressources[itPlanetRes]);
+                        result = this.ressources[itPlanetRes].percent >= condition.percent;
+                    }else{
+                        result = this.ressources[itPlanetRes].quantity >= condition.quantity;
+                    }
+                }
+            }
+        }
+
+        return result;
+    },
+
     produce: function (typeProduct) {
         for (let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++) {
             let building = this.buildings[itBuilding];
             if (building.type === typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null) {
                 building.functional = true;
-                if (typeof building.production.require !== "undefined") {
+                if (typeof building.production.conditions !== "undefined"){
+                    for ( let itCondition = 0 ; itCondition < building.production.conditions.length ; itCondition++){
+                        building.functional = building.functional && this.checkCondition(building.production.conditions[itCondition]);
+                    }
+                }
+
+                if (typeof building.production.require !== "undefined" && building.functional) {
                     for (let itProd = 0 ; itProd < building.production.require.length ; itProd++) {
                         let removeRes = this.removeRessource(building.production.require[itProd].name, building.production.require[itProd].quantity, building.production.require[itProd].planetRessource, true);
                         if (removeRes != building.production.require[itProd].quantity) {
@@ -236,10 +255,11 @@ aos.Planet.prototype = {
     },
 
     run: function (speedTick) {
-        this.produce("plant");
+        /*this.produce("plant");
         this.produce("mine");
-        this.produce("epurateur");
+        this.produce("epurateur");*/
         //this.showStats();
+        this.produce();
     },
 
     showPlanetRessources: function () {
@@ -354,7 +374,7 @@ aos.Planet.prototype = {
         //this.showStatsAir();
         //this.showStatsGround();
         //this.showStatsLiquid();
-        //this.showBuildings();
+        this.showBuildings();
         this.updatePies();
     },
 
