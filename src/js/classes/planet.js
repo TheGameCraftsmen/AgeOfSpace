@@ -154,27 +154,6 @@ aos.Planet.prototype = {
         }
     },
 
-    generateMetal: function (prcent) {
-        var compositionPercent = 0;
-        for (let i = 0 ; i < aos.ressources.length ; i++) {
-            if (aos.ressources[i].category == "metal") {
-                let ressource = new aos.Ressource();
-                ressource.type = "metal";
-                ressource.name = aos.ressources[i].name;
-                if (i == (aos.ressources.length - 1)) {
-                    ressource.quantity = (prcent - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
-                    ressource.percent = prcent - compositionPercent;
-                } else {
-                    let itPrcent = Math.floor(Math.random() * (prcent - compositionPercent))
-                    ressource.percent = itPrcent;
-                    ressource.quantity = ressource.percent * this.size * aos.volumeRessources[ressource.type];
-                    compositionPercent += itPrcent;
-                }
-                this.ressources.push(ressource);
-            }
-        }
-    },
-
     generateGround: function () {
         var compositionPercent = 0;
         for (let i = 0 ; i < aos.ressources.length ; i++) {
