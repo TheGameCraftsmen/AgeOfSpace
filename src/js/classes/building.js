@@ -41,6 +41,10 @@ aos.Building.prototype = {
                 this.storage = aos.buildings[i].storage;
             }
         }
+    },
+
+    renderContextual : function(){
+        
     }
 
 

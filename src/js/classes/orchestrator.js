@@ -96,6 +96,29 @@ aos.Orchestrator.prototype = {
         document.getElementById('speed' + newSpeed).style.border = '4px solid #f00';
     },
 
+    renderContextualResssource : function(res){
+        
+        document.getElementById('contextualBlock').style.display = 'block';
+        document.getElementById('contextualTitle').innerHTML = res.name + '<br><em>' + res.type + '</em>';
+        var Ctxt = document.getElementById('contextualTxt') ;
+        var ctext = "<h3>Requirements</h3>"
+        ctext += "<table>";
+        
+        ctext += "<tr><td>space</Td><td width='10px'>:</Td><td>" + res.require.space + "</td></tr>";
+        ctext += "<tr><td colspan='3' align='center'>Materials</Td></tr>";
+        for(let i=0 ; i < res.require.materials.length ; i++){
+            ctext += "<tr><td>" + res.require.materials[i].type + "</Td><td width='10px'>:</Td><td>" + res.require.materials[i].quantity + "</td></tr>";
+        }
+        ctext += "</table><br>";
+
+        ctext += "<h3><b>Production</h3>";
+        ctext += "<table>";
+        ctext += "<tr><td>" + res.produce.product + "</Td><td width='10px'>:</Td><td>" + res.produce.quantity + "</td></tr>";
+        ctext += "</table>";
+        Ctxt.innerHTML = ctext;
+
+    },
+
     renderPlanet : function(){
         
         for (let itBu = 0 ; itBu < aos.buildings.length ; itBu++){
@@ -112,6 +135,13 @@ aos.Orchestrator.prototype = {
                 let row = table.insertRow(nbRows);
                 let cell1 = row.insertCell(0);
                 cell1.innerHTML = aos.buildings[itBu].name;
+                cell1.addEventListener('mouseover', function (e) {
+                    this.renderContextualResssource(aos.buildings[itBu]);
+                }.bind(this), false);
+                cell1.addEventListener('mouseout', function (e) {
+                    document.getElementById('contextualTxt').innerHTML = "";
+                    document.getElementById('contextualBlock').style.display = 'None';
+                }.bind(this), false);
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
