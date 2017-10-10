@@ -299,6 +299,7 @@ aos.Planet.prototype = {
             } else {
                 found.cells[1].innerHTML = buildingCount[elt].count;
                 found.cells[2].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
+                found.cells[3].innerHTML = buildingCount[elt].building.production.quantity
             }
         }
     },
