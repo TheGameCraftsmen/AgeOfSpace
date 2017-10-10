@@ -115,6 +115,14 @@ aos.Orchestrator.prototype = {
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
+                cell5.innerHTML = "+";
+                cell5.addEventListener('click', function (e) {
+                    if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
+                        let planet = this.selectedStar.selectedPlanet;
+                        planet.addBuilding(aos.buildings[itBu].name);
+                    }        
+                }.bind(this), false);
             }else{
                 found.cells[1].innerHTML = "";
                 found.cells[2].innerHTML = "";
@@ -378,42 +386,6 @@ aos.Orchestrator.prototype = {
             this.renderPlanet();
         }.bind(this), false);
         
-
-        /**
-         * Manage add Buildings
-         */
-
-        document.getElementById('addHabitation').addEventListener('click', function (e) {
-            
-            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
-                let planet = this.selectedStar.selectedPlanet;
-                planet.addBuilding("house");
-            }
-        }.bind(this), false);
-
-        document.getElementById('addPlant').addEventListener('click', function (e) {
-            
-            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
-                let planet = this.selectedStar.selectedPlanet;
-                planet.addBuilding("solar plant");
-            }
-        }.bind(this), false);
-
-        document.getElementById('addMine').addEventListener('click', function (e) {
-            
-            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
-                let planet = this.selectedStar.selectedPlanet;
-                planet.addBuilding("metal Mine");
-            }
-        }.bind(this), false);
-
-        document.getElementById('addTerra').addEventListener('click', function (e) {
-            
-            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
-                let planet = this.selectedStar.selectedPlanet;
-                planet.addBuilding("CO2 epuration");
-            }
-        }.bind(this), false);
 
         //window.addEventListener('resize', function (e) {
         //    document.getElementById('debug').innerHTML = 'x';
