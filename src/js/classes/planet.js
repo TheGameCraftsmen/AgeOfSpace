@@ -365,6 +365,19 @@ aos.Planet.prototype = {
         }, this);
     },
 
+    updateBars: function () {
+        aos.game.resourceBars.forEach(function (bar, i) {
+            const label = bar.name;
+            bar.quantity = 0;
+            this.ressourcesStored.forEach(function (resource, i) {
+                if (resource.name === label) {
+                    bar.quantity = resource.quantity;
+                }
+            }, this);
+            bar.update();
+        }, this);
+    },
+
     showStats: function () {
         //document.getElementById('populationTxt').innerHTML = this.population + " colons";
         //document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";
@@ -376,6 +389,7 @@ aos.Planet.prototype = {
         //this.showStatsLiquid();
         this.showBuildings();
         this.updatePies();
+        this.updateBars();
     },
 
     setupEvents: function () {

@@ -19,16 +19,10 @@ var aos = aos || {};
 aos.PieChart = function () {
     // expected elements inside this array:
     // {label:'xx', value:123.0, color:'#fff'}
-    this.content = [
-        { label: 'xx', value: 123.0, color: '#800' },
-        { label: 'yy', value: 50.0, color: '#880' },
-        { label: 'zz', value: 20.0, color: '#080' },
-        { label: 'aa', value: 70.0, color: '#088' },
-        { label: 'bb', value: 0.0, color: '#008' },
-        { label: 'cc', value: 100.0, color: '#808' },
-    ];
+    this.content = [];
     this.innerText = '';
     this.htmlElement = null;
+    this.wantContextual = false;
 };
 
 aos.PieChart.prototype = {
@@ -50,6 +44,9 @@ aos.PieChart.prototype = {
         this.content.forEach(function (chartSlice, i) {
             this.htmlElement.firstChild.firstChild.childNodes[i].setAttribute('stroke-dasharray', '0 ' + (chartSlice.offset / total) + ' ' + (chartSlice.value / total) + ' 100');
         }, this);
+        if (this.wantContextual) {
+            this.renderContextual();
+        }
     },
 
     calcRatio: function () {
@@ -63,6 +60,25 @@ aos.PieChart.prototype = {
         }
         total /= 100.0;
         return total;
+    },
+
+    setWantContextual: function (want) {
+        this.wantContextual = want;
+        this.renderContextual();
+    },
+
+    renderContextual: function () {
+        if (this.wantContextual) {
+            const total = this.calcRatio();
+            let contextualTxt = '<div><table><tr><th>Resource</th><th>Quantity</th><th>Percent</th></tr>';
+            this.content.forEach(function (res, i) {
+                contextualTxt += '<tr><td style="background-color:' + res.color + '">' + res.label + '</td><td>' + res.value + '</td><td>' + (res.value / total).toFixed(1) + '%</td></tr>';
+            }, this);
+            contextualTxt += '</table></div>';
+            document.getElementById('contextualTxt').innerHTML = contextualTxt;
+        } else {
+        }
+
     },
 
 };

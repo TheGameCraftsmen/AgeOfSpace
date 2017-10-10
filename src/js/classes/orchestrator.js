@@ -69,7 +69,7 @@ aos.Orchestrator.prototype = {
         chart.htmlElement = elem;
         chart.innerText = txt;
         chart.content = [];
-        const colors = ['#800', '#880', '#080', '#088', '#008', '#808', '#800', '#880', '#080', '#088', '#008', '#808', '#800', '#880', '#080', '#088', '#008', '#808'];
+        const colors = ['#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606'];
         aos.ressources.forEach(function (resource, i) {
             if (resource.category === category) {
                 chart.content.push({ label: resource.name, value: i+1, color: colors[i] });
@@ -257,7 +257,6 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
 
         document.getElementById('galaxyOverlayCanvas').addEventListener('mouseleave', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             document.getElementById('contextualBlock').style.display = 'none';
             document.getElementById('contextualTxt').innerHTML = '';
         }.bind(this), false);
@@ -278,6 +277,66 @@ aos.Orchestrator.prototype = {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setGameSpeed(2);
         }.bind(this), false);
+
+        //#region Speed buttons help
+        document.getElementById('speed0').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Speed control' + '<br><em>Pause</em>';
+            document.getElementById('contextualTxt').innerHTML = '<div>Pauses the game</div>';
+        }.bind(this), false);
+        document.getElementById('speed0').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+        document.getElementById('speed1').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Speed control' + '<br><em>Normal speed</em>';
+            document.getElementById('contextualTxt').innerHTML = '<div>Runs the game at normal speed<br><br>1 second in real life = 1 tick in game</div>';
+        }.bind(this), false);
+        document.getElementById('speed1').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+        document.getElementById('speed2').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Speed control' + '<br><em>Fast speed</em>';
+            document.getElementById('contextualTxt').innerHTML = '<div>Runs the game at fast speed<br>(5 times the normal speed)<br><br>1 second in real life = 5 ticks in game</div>';
+        }.bind(this), false);
+        document.getElementById('speed2').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+        //#endregion
+
+        //#region Pies help
+        document.getElementById('airPie').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Air composition' + '<br><em>&nbsp;</em>';
+            this.pies[0].setWantContextual(true);
+        }.bind(this), false);
+        document.getElementById('airPie').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            this.pies[0].setWantContextual(false);
+        }.bind(this), false);
+        document.getElementById('liquidPie').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Ocean composition' + '<br><em>&nbsp;</em>';
+            this.pies[1].setWantContextual(true);
+        }.bind(this), false);
+        document.getElementById('liquidPie').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            this.pies[1].setWantContextual(false);
+        }.bind(this), false);
+        document.getElementById('groundPie').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Soil composition' + '<br><em>&nbsp;</em>';
+            this.pies[2].setWantContextual(true);
+        }.bind(this), false);
+        document.getElementById('groundPie').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            this.pies[2].setWantContextual(false);
+        }.bind(this), false);
+        //#endregion
 
         document.getElementById('miniatureTabs').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
