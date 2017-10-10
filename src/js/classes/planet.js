@@ -182,10 +182,6 @@ aos.Planet.prototype = {
         }
     },
 
-    calculateHealthIndicator: function () {
-        this.healtingIndicator = 70;
-    },
-
     populationGrowing: function () {
         if (this.healtingIndicator > 50) {
             this.population += 100000;
@@ -265,57 +261,8 @@ aos.Planet.prototype = {
     },
 
     run: function (speedTick) {
-        /*this.produce("plant");
-        this.produce("mine");
-        this.produce("epurateur");*/
-        //this.showStats();
         this.produce();
         
-    },
-
-    showPlanetRessources: function () {
-        for (let i = 0; i < this.ressources.length ; i++) {
-            if (this.ressources[i].name == "metal") {
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this.size * aos.volumeRessources["metal"]);
-            } else if (this.ressources[i].name == "water") {
-                document.getElementById('p' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent * this.size * aos.volumeRessources["liquid"]);
-            }
-
-        }
-    },
-
-    showStoredRessources: function () {
-        for (let i = 0 ; i < this.ressourcesStored.length ; i++) {
-            let htmlVar = document.getElementById(this.ressourcesStored[i].name + 'Text');
-            if (htmlVar != null && typeof htmlVar !== "undefined") {
-                htmlVar.innerHTML = this.ressourcesStored[i].quantity;
-            }
-        }
-    },
-
-    showStatsAir: function () {
-        for (let i = 0; i < this.ressources.length ; i++) {
-            if (this.ressources[i].type == "air") {
-                document.getElementById('air' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";
-            }
-        }
-    },
-
-    showStatsLiquid: function () {
-        for (let i = 0; i < this.ressources.length ; i++) {
-            if (this.ressources[i].type == "liquid") {
-                document.getElementById('liquid' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";
-            }
-        }
-    },
-
-    showStatsGround: function () {
-        var metal = 0;
-        for (let i = 0; i < this.ressources.length ; i++) {
-            if (this.ressources[i].type == "ground") {
-                document.getElementById('ground' + this.ressources[i].name + 'Text').innerHTML = Math.floor(this.ressources[i].percent) + "%";
-            }
-        }
     },
 
     showBuildings: function () {
@@ -351,7 +298,7 @@ aos.Planet.prototype = {
                 cell4.innerHTML = buildingCount[elt].building.production.quantity;
             } else {
                 found.cells[1].innerHTML = buildingCount[elt].count;
-                found.cells[1].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
+                found.cells[2].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
             }
         }
     },
@@ -390,14 +337,6 @@ aos.Planet.prototype = {
     },
 
     showStats: function () {
-        //document.getElementById('populationTxt').innerHTML = this.population + " colons";
-        //document.getElementById('healthingTxt').innerHTML = this.healtingIndicator + " %";
-        //this.recalculatePercent();
-        //this.showPlanetRessources();
-        //this.showStoredRessources();
-        //this.showStatsAir();
-        //this.showStatsGround();
-        //this.showStatsLiquid();
         this.showBuildings();
         this.updatePies();
         this.updateBars();
@@ -410,14 +349,3 @@ aos.Planet.prototype = {
     },
 
 };
-
-//var instance = null;
-//window.onload = function () {
-//    instance = new aos.Planet();
-//    instance.generate();
-//    instance.run(1);
-//};
-
-//window.setInterval(function(){
-//    instance.run(1);
-//},500);
