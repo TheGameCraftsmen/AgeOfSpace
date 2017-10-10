@@ -96,6 +96,22 @@ aos.Orchestrator.prototype = {
         document.getElementById('speed' + newSpeed).style.border = '4px solid #f00';
     },
 
+    renderPlanet : function(){
+        
+        for (let itBu = 0 ; itBu < aos.buildings.length ; itBu++){
+            let table = document.getElementById(aos.buildings[itBu].type + "Buildings");
+            let nbRows = table.rows.length;
+            if (nbRows==1){
+                let row = table.insertRow(nbRows);
+                let cell1 = row.insertCell(0);
+                cell1.innerHTML =aos.buildings[itBu].name;
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+            }
+        }
+    },
+
     setSelectedStar: function (star) {
         this.selectedStar = star;
         if (star === null) {
@@ -107,6 +123,7 @@ aos.Orchestrator.prototype = {
             document.getElementById('starSystemBlock').style.display = 'block';
             document.getElementById('contextualBlock').style.display = 'none';
             star.buildUi();
+            this.renderPlanet();
         }
     },
 
