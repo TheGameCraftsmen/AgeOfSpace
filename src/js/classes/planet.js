@@ -8,6 +8,8 @@
 
 'use strict';
 var aos = aos || {};
+
+
 //debugger;
 
 /**
@@ -17,6 +19,8 @@ var aos = aos || {};
  * @class
  */
 aos.Planet = function () {
+    /** @type {String} */
+    this.id = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
     /** @type {number} 
      * in Million km2
     */
@@ -105,6 +109,12 @@ aos.Planet.prototype = {
 
         console.log(this.ressources);
         */
+    },
+
+    addBuilding : function(name){
+        let b = new aos.Building();
+        b.construct(name);
+        this.buildings.push(b);
     },
 
     generateAir: function () {
@@ -260,6 +270,7 @@ aos.Planet.prototype = {
         this.produce("epurateur");*/
         //this.showStats();
         this.produce();
+        
     },
 
     showPlanetRessources: function () {

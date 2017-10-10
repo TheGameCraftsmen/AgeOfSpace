@@ -348,6 +348,43 @@ aos.Orchestrator.prototype = {
                 this.selectedStar.setSelectedPlanetIndex(+clickedElem.dataset.index);
             }
         }.bind(this), false);
+        
+
+        /**
+         * Manage add Buildings
+         */
+
+        document.getElementById('addHabitation').addEventListener('click', function (e) {
+            
+            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
+                let planet = this.selectedStar.selectedPlanet;
+                planet.addBuilding("house");
+            }
+        }.bind(this), false);
+
+        document.getElementById('addPlant').addEventListener('click', function (e) {
+            
+            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
+                let planet = this.selectedStar.selectedPlanet;
+                planet.addBuilding("solar plant");
+            }
+        }.bind(this), false);
+
+        document.getElementById('addMine').addEventListener('click', function (e) {
+            
+            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
+                let planet = this.selectedStar.selectedPlanet;
+                planet.addBuilding("metal Mine");
+            }
+        }.bind(this), false);
+
+        document.getElementById('addTerra').addEventListener('click', function (e) {
+            
+            if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
+                let planet = this.selectedStar.selectedPlanet;
+                planet.addBuilding("CO2 epuration");
+            }
+        }.bind(this), false);
 
         //window.addEventListener('resize', function (e) {
         //    document.getElementById('debug').innerHTML = 'x';
