@@ -101,13 +101,24 @@ aos.Orchestrator.prototype = {
         for (let itBu = 0 ; itBu < aos.buildings.length ; itBu++){
             let table = document.getElementById(aos.buildings[itBu].type + "Buildings");
             let nbRows = table.rows.length;
-            if (nbRows==1){
+            let found = null;
+            for (let i = 0 ; i < nbRows ; i++) {
+                if (table.rows[i].cells[0].innerHTML == aos.buildings[itBu].name) {
+                    found = table.rows[i];
+                    break;
+                }
+            }
+            if (found == null){
                 let row = table.insertRow(nbRows);
                 let cell1 = row.insertCell(0);
-                cell1.innerHTML =aos.buildings[itBu].name;
+                cell1.innerHTML = aos.buildings[itBu].name;
                 let cell2 = row.insertCell(1);
                 let cell3 = row.insertCell(2);
                 let cell4 = row.insertCell(3);
+            }else{
+                found.cells[1].innerHTML = "";
+                found.cells[2].innerHTML = "";
+                found.cells[3].innerHTML = "";""
             }
         }
     },
@@ -364,6 +375,7 @@ aos.Orchestrator.prototype = {
             if (clickedElem.tagName.toUpperCase() === 'LI') {
                 this.selectedStar.setSelectedPlanetIndex(+clickedElem.dataset.index);
             }
+            this.renderPlanet();
         }.bind(this), false);
         
 
