@@ -41,8 +41,8 @@ aos.buildings = [
                 "quantity" : 100,
                 "to" : "storage",
                 "require" : [
-                    {"name" : "energy", "quantity" : 50, "planetRessource" : false},
-                    {"name" : "metal", "quantity" : 100, "planetRessource" : true}
+                    {"name" : "energy", "quantity" : 50, "planetRessource" : false, "remove" : true},
+                    {"name" : "metal", "quantity" : 100, "planetRessource" : true , "remove" : true}
                 ],
                 "conditions" : [
                     {"name" : "oxygen", "percent" : 70, "planetRessource" : true}

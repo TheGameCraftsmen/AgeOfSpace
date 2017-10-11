@@ -114,6 +114,24 @@ aos.Orchestrator.prototype = {
         ctext += "<h3><b>Production</h3>";
         ctext += "<table>";
         ctext += "<tr><td>" + res.produce.product + "</Td><td width='10px'>:</Td><td>" + res.produce.quantity + "</td></tr>";
+        ctext += "</table><br>";
+        ctext += "<h3><b>Running Condition</h3>";
+        ctext += "<table>";
+        if (typeof res.produce.require !== "undefined"){
+            for (let i = 0 ; i < res.produce.require.length ; i++){
+                ctext += "<tr><td>" + res.produce.require[i].name + "</Td><td width='10px'>:</Td><td>" + res.produce.require[i].quantity + "</td></tr>";
+            }
+        }
+        if (typeof res.produce.conditions !== "undefined"){
+            for(let i=0 ; i < res.produce.conditions.length ; i++){
+                if (typeof res.produce.conditions[i].quantity !== "undefined"){
+                    ctext += "<tr><td>" + res.produce.conditions[i].name + "</Td><td width='10px'>:</Td><td>" + res.produce.conditions[i].quantity + "</td></tr>";
+                }else{
+                    ctext += "<tr><td>" + res.produce.conditions[i].name + "</Td><td width='10px'>:</Td><td>" + res.produce.conditions[i].percent + " %</td></tr>";
+                }
+            }
+            
+        }
         ctext += "</table>";
         Ctxt.innerHTML = ctext;
 
