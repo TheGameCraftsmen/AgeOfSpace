@@ -115,11 +115,11 @@ aos.Orchestrator.prototype = {
         ctext += "<table>";
         ctext += "<tr><td>" + res.produce.product + "</Td><td width='10px'>:</Td><td>" + res.produce.quantity + "</td></tr>";
         ctext += "</table><br>";
-        ctext += "<h3><b>Running Condition</h3>";
+        ctext += "<h3>Running Condition</h3>";
         ctext += "<table>";
         if (typeof res.produce.require !== "undefined"){
             for (let i = 0 ; i < res.produce.require.length ; i++){
-                ctext += "<tr><td>" + res.produce.require[i].name + "</Td><td width='10px'>:</Td><td>" + res.produce.require[i].quantity + "</td></tr>";
+                ctext += "<tr><td>" + res.produce.require[i].name + "</td><td width='10px'>:</Td><td>" + res.produce.require[i].quantity + "</td></tr>";
             }
         }
         if (typeof res.produce.conditions !== "undefined"){

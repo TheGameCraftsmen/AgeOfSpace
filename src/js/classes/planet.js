@@ -109,6 +109,11 @@ aos.Planet.prototype = {
 
         console.log(this.ressources);
         */
+        let r = new aos.Ressource();
+        r.type = "metal";
+        r.name = "metal"
+        r.quantity = 200;
+        this.ressourcesStored.push(r);
     },
 
     addBuilding : function(name){

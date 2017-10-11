@@ -24,6 +24,54 @@ aos.buildings = [
             "storage" : 10000
         },
         {
+            "type" : "mine",
+            "name" : "coal Mine",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"metal",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "material",
+                "product" : "carbon",
+                "quantity" : 1000,
+                "to" : "storage",
+                "require" : [
+                    {"name" : "energy", "quantity" : 50, "planetRessource" : false},
+                    {"name" : "carbon", "quantity" : 500, "planetRessource" : true}
+                ]
+            },
+            "storage" : 10000
+        },
+        {
+            "type" : "mine",
+            "name" : "fissile material Mine",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"metal",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "material",
+                "product" : "fissile material",
+                "quantity" : 1000,
+                "to" : "storage",
+                "require" : [
+                    {"name" : "energy", "quantity" : 50, "planetRessource" : false},
+                    {"name" : "fissile material", "quantity" : 50, "planetRessource" : true}
+                ]
+            },
+            "storage" : 10000
+        },
+        {
             "type" : "habitation",
             "name" : "house",
             "require" : {
@@ -70,6 +118,50 @@ aos.buildings = [
             "storage" : 10000
         },
         {
+            "type" : "plant",
+            "name" : "coal plant",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"metal",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "energy",
+                "product" : "energy",
+                "quantity" : 100,
+                "require" : [
+                    { "name" : "carbon", "quantity" : "500"}
+                ]
+            },
+            "storage" : 10000
+        },
+        {
+            "type" : "plant",
+            "name" : "nuclear plant",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "type" :"metal",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "energy",
+                "product" : "energy",
+                "quantity" : 200,
+                "require" : [
+                    { "name" : "fissile material", "quantity" : "300"}
+                ]
+            },
+            "storage" : 10000
+        },
+        {
             "type" : "epurateur",
             "name" : "CO2 epuration",
             "require" : {
@@ -83,10 +175,28 @@ aos.buildings = [
                 "to" : "planet",
                 "require" : [
                                 {"name" : "energy", "quantity" : 50, "planetRessource" : false},
-                                {"name" : "carbon", "quantity" : 50, "planetRessource" : true}
+                                {"name" : "oxocarbon", "quantity" : 50, "planetRessource" : true}
                             ]
             }
-
+        },
+        {
+            "type" : "epurateur",
+            "name" : "inert gaz epuration",
+            "require" : {
+                "space" :10,
+                "materials":[{"type" : "metal","quantity":50}]
+            },
+            "produce" : {
+                "type" : "air",
+                "product" : "oxygen",
+                "quantity" : 100,
+                "to" : "planet",
+                "require" : [
+                                {"name" : "energy", "quantity" : 50, "planetRessource" : false},
+                                {"name" : "inert gases", "quantity" : 50, "planetRessource" : true},
+                                {"name" : "fissile material", "quantity" : 50, "planetRessource" : false}
+                            ]
+            }
         }
     ]
 ;
