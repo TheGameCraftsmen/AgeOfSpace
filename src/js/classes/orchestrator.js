@@ -154,6 +154,7 @@ aos.Orchestrator.prototype = {
                 if (found !== null){
                     var requireOk = true;
                     for(let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++){
+                        
                         var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name,aos.buildings[i].require.materials[itRequire].quantity,false,true);    
                         if (qty != aos.buildings[i].require.materials[itRequire].quantity){
                             requireOk = false; 
@@ -504,9 +505,10 @@ aos.Orchestrator.prototype = {
         if (this.gameTime / 1000.0 > this.lastGameplayTick) {
             this.lastGameplayTick += 1;
             this.emitEvent('gameplayTick', { tick: this.lastGameplayTick });
+            this.updateBuildingsAdd();
         }
         window.requestAnimationFrame(this.animationTick.bind(this));
-        this.updateBuildingsAdd();
+        
     },
 
 };

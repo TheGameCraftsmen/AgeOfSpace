@@ -55,7 +55,7 @@ aos.buildings = [
                 "materials" : [
                     {
                         "name" :"metal",
-                        "quantity" : 100
+                        "quantity" : 500
                     }
                 ]
             },
@@ -113,7 +113,7 @@ aos.buildings = [
             "produce" : {
                 "type" : "energy",
                 "product" : "energy",
-                "quantity" : 100
+                "quantity" : 50
             },
             "storage" : 10000
         },
@@ -124,8 +124,8 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
-                        "quantity" : 100
+                        "name" :"metal",
+                        "quantity" : 300
                     }
                 ]
             },
@@ -147,7 +147,7 @@ aos.buildings = [
                 "materials" : [
                     {
                         "name" :"metal",
-                        "quantity" : 100
+                        "quantity" : 500
                     }
                 ]
             },
