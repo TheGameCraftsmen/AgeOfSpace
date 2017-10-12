@@ -119,7 +119,17 @@ aos.Planet.prototype = {
     addBuilding : function(name){
         let b = new aos.Building();
         b.construct(name);
-        this.buildings.push(b);
+        var constructOk = true;
+        for (let i = 0; i < b.requirements.materials.length; i++){
+            var qty = this.removeRessource(b.requirements.materials[i].name,b.requirements.materials[i].quantity,false,true);
+            if (qty != b.requirements.materials[i].quantity) constructOk = false;
+        }
+        if (constructOk){
+            for (let i = 0; i < b.requirements.materials.length; i++){
+                var qty = this.removeRessource(b.requirements.materials[i].name,b.requirements.materials[i].quantity,false,false);
+            }   
+            this.buildings.push(b);
+        }
     },
 
     generateAir: function () {
@@ -270,6 +280,8 @@ aos.Planet.prototype = {
         
     },
 
+    
+
     showBuildings: function () {
         let buildingCount = {};
         for (var i = 0 ; i < this.buildings.length ; i++) {
@@ -290,18 +302,7 @@ aos.Planet.prototype = {
                     break;
                 }
             }
-
-            if (found == null) {
-                let row = table.insertRow(nbRows);
-                let cell1 = row.insertCell(0);
-                cell1.innerHTML = buildingCount[elt].building.name;
-                let cell2 = row.insertCell(1);
-                cell2.innerHTML = buildingCount[elt].count;
-                let cell3 = row.insertCell(2);
-                cell3.innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
-                let cell4 = row.insertCell(3);
-                cell4.innerHTML = buildingCount[elt].building.production.quantity;
-            } else {
+            if (found) {
                 found.cells[1].innerHTML = buildingCount[elt].count;
                 found.cells[2].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
                 found.cells[3].innerHTML = buildingCount[elt].building.production.quantity

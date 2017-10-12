@@ -6,7 +6,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
+                        "name" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -30,7 +30,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
+                        "name" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -54,7 +54,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
+                        "name" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -78,7 +78,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
+                        "name" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -105,7 +105,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
+                        "name" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -146,7 +146,7 @@ aos.buildings = [
                 "space" : 10,
                 "materials" : [
                     {
-                        "type" :"metal",
+                        "name" :"metal",
                         "quantity" : 100
                     }
                 ]
@@ -166,7 +166,7 @@ aos.buildings = [
             "name" : "CO2 epuration",
             "require" : {
                 "space" :10,
-                "materials":[{"type" : "metal","quantity":50}]
+                "materials":[{"name" : "metal","quantity":50}]
             },
             "produce" : {
                 "type" : "air",
@@ -184,7 +184,7 @@ aos.buildings = [
             "name" : "inert gaz epuration",
             "require" : {
                 "space" :10,
-                "materials":[{"type" : "metal","quantity":50}]
+                "materials":[{"name" : "metal","quantity":50}]
             },
             "produce" : {
                 "type" : "air",

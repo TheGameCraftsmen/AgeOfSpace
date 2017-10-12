@@ -136,9 +136,40 @@ aos.Orchestrator.prototype = {
         Ctxt.innerHTML = ctext;
 
     },
+    
+    updateBuildingsAdd: function (){
+        if (this.selectedStar !== null && this.selectedStar.selectedPlanet != null)
+        {
+            for (let i = 0 ; i < aos.buildings.length ; i++){
+                let table = document.getElementById(aos.buildings[i].type + "Buildings");
+                
+                let nbRows = table.rows.length;
+                let found = null;
+                for (let itRow = 0 ; itRow < nbRows ; itRow++) {
+                    if (table.rows[itRow].cells[0].innerHTML == aos.buildings[i].name) {
+                        found = table.rows[itRow];
+                        break;
+                    }
+                }
+                if (found !== null){
+                    var requireOk = true;
+                    for(let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++){
+                        var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name,aos.buildings[i].require.materials[itRequire].quantity,false,true);    
+                        if (qty != aos.buildings[i].require.materials[itRequire].quantity){
+                            requireOk = false; 
+                        }
+                    }
+                    if (requireOk){
+                        found.cells[4].innerHTML = "build";
+                    }else{
+                        found.cells[4].innerHTML = "<font color='red'>No</font>";
+                    }
+                }
+            }
+        }
+    },
 
-    renderPlanet : function(){
-        
+    renderPlanet : function(){    
         for (let itBu = 0 ; itBu < aos.buildings.length ; itBu++){
             let table = document.getElementById(aos.buildings[itBu].type + "Buildings");
             let nbRows = table.rows.length;
@@ -475,6 +506,7 @@ aos.Orchestrator.prototype = {
             this.emitEvent('gameplayTick', { tick: this.lastGameplayTick });
         }
         window.requestAnimationFrame(this.animationTick.bind(this));
+        this.updateBuildingsAdd();
     },
 
 };
