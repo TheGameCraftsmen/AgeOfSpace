@@ -62,6 +62,34 @@ aos.Orchestrator.prototype = {
                 resourceGroup = resource.category;
             }
         }, this);
+
+        aos.buildings.forEach(function (b, i) {
+            const building = new aos.Building();
+            building.construct(b.name);
+
+            const table = document.getElementById(building.type + "Buildings");
+            const row = table.insertRow();
+            const cell1 = row.insertCell();
+            cell1.innerHTML = building.name;
+            cell1.addEventListener('mouseover', function (e) {
+                building.renderContextual();
+            }.bind(this), false);
+            cell1.addEventListener('mouseout', function (e) {
+                document.getElementById('contextualTxt').innerHTML = "";
+                document.getElementById('contextualBlock').style.display = 'None';
+            }.bind(this), false);
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            const cell4 = row.insertCell();
+            const cell5 = row.insertCell();
+            cell5.innerHTML = "+";
+            cell5.addEventListener('click', function (e) {
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
+                    let planet = this.selectedStar.selectedPlanet;
+                    planet.addBuilding(building.name);
+                }
+            }.bind(this), false);
+        }, this);
     },
 
     renderPie: function (elem, txt, category) {
@@ -72,7 +100,7 @@ aos.Orchestrator.prototype = {
         const colors = ['#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606'];
         aos.ressources.forEach(function (resource, i) {
             if (resource.category === category) {
-                chart.content.push({ label: resource.name, value: i+1, color: colors[i] });
+                chart.content.push({ label: resource.name, value: i + 1, color: colors[i] });
             }
         }, this);
         chart.render();
@@ -96,53 +124,11 @@ aos.Orchestrator.prototype = {
         document.getElementById('speed' + newSpeed).style.border = '4px solid #f00';
     },
 
-    renderContextualResssource : function(res){
-        
-        document.getElementById('contextualBlock').style.display = 'block';
-        document.getElementById('contextualTitle').innerHTML = res.name + '<br><em>' + res.type + '</em>';
-        var Ctxt = document.getElementById('contextualTxt') ;
-        var ctext = "<h3>Requirements</h3>"
-        ctext += "<table>";
-        
-        ctext += "<tr><td>space</Td><td width='10px'>:</Td><td>" + res.require.space + "</td></tr>";
-        ctext += "<tr><td colspan='3' align='center'>Materials</Td></tr>";
-        for(let i=0 ; i < res.require.materials.length ; i++){
-            ctext += "<tr><td>" + res.require.materials[i].type + "</Td><td width='10px'>:</Td><td>" + res.require.materials[i].quantity + "</td></tr>";
-        }
-        ctext += "</table><br>";
-
-        ctext += "<h3><b>Production</h3>";
-        ctext += "<table>";
-        ctext += "<tr><td>" + res.produce.product + "</Td><td width='10px'>:</Td><td>" + res.produce.quantity + "</td></tr>";
-        ctext += "</table><br>";
-        ctext += "<h3>Running Condition</h3>";
-        ctext += "<table>";
-        if (typeof res.produce.require !== "undefined"){
-            for (let i = 0 ; i < res.produce.require.length ; i++){
-                ctext += "<tr><td>" + res.produce.require[i].name + "</td><td width='10px'>:</Td><td>" + res.produce.require[i].quantity + "</td></tr>";
-            }
-        }
-        if (typeof res.produce.conditions !== "undefined"){
-            for(let i=0 ; i < res.produce.conditions.length ; i++){
-                if (typeof res.produce.conditions[i].quantity !== "undefined"){
-                    ctext += "<tr><td>" + res.produce.conditions[i].name + "</Td><td width='10px'>:</Td><td>" + res.produce.conditions[i].quantity + "</td></tr>";
-                }else{
-                    ctext += "<tr><td>" + res.produce.conditions[i].name + "</Td><td width='10px'>:</Td><td>" + res.produce.conditions[i].percent + " %</td></tr>";
-                }
-            }
-            
-        }
-        ctext += "</table>";
-        Ctxt.innerHTML = ctext;
-
-    },
-    
-    updateBuildingsAdd: function (){
-        if (this.selectedStar !== null && this.selectedStar.selectedPlanet != null)
-        {
-            for (let i = 0 ; i < aos.buildings.length ; i++){
+    updateBuildingsAdd: function () {
+        if (this.selectedStar !== null && this.selectedStar.selectedPlanet != null) {
+            for (let i = 0 ; i < aos.buildings.length ; i++) {
                 let table = document.getElementById(aos.buildings[i].type + "Buildings");
-                
+
                 let nbRows = table.rows.length;
                 let found = null;
                 for (let itRow = 0 ; itRow < nbRows ; itRow++) {
@@ -151,62 +137,21 @@ aos.Orchestrator.prototype = {
                         break;
                     }
                 }
-                if (found !== null){
+                if (found !== null) {
                     var requireOk = true;
-                    for(let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++){
-                        
-                        var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name,aos.buildings[i].require.materials[itRequire].quantity,false,true);    
-                        if (qty != aos.buildings[i].require.materials[itRequire].quantity){
-                            requireOk = false; 
+                    for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
+
+                        var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name, aos.buildings[i].require.materials[itRequire].quantity, false, true);
+                        if (qty != aos.buildings[i].require.materials[itRequire].quantity) {
+                            requireOk = false;
                         }
                     }
-                    if (requireOk){
+                    if (requireOk) {
                         found.cells[4].innerHTML = "build";
-                    }else{
+                    } else {
                         found.cells[4].innerHTML = "<font color='red'>No</font>";
                     }
                 }
-            }
-        }
-    },
-
-    renderPlanet : function(){    
-        for (let itBu = 0 ; itBu < aos.buildings.length ; itBu++){
-            let table = document.getElementById(aos.buildings[itBu].type + "Buildings");
-            let nbRows = table.rows.length;
-            let found = null;
-            for (let i = 0 ; i < nbRows ; i++) {
-                if (table.rows[i].cells[0].innerHTML == aos.buildings[itBu].name) {
-                    found = table.rows[i];
-                    break;
-                }
-            }
-            if (found == null){
-                let row = table.insertRow(nbRows);
-                let cell1 = row.insertCell(0);
-                cell1.innerHTML = aos.buildings[itBu].name;
-                cell1.addEventListener('mouseover', function (e) {
-                    this.renderContextualResssource(aos.buildings[itBu]);
-                }.bind(this), false);
-                cell1.addEventListener('mouseout', function (e) {
-                    document.getElementById('contextualTxt').innerHTML = "";
-                    document.getElementById('contextualBlock').style.display = 'None';
-                }.bind(this), false);
-                let cell2 = row.insertCell(1);
-                let cell3 = row.insertCell(2);
-                let cell4 = row.insertCell(3);
-                let cell5 = row.insertCell(4);
-                cell5.innerHTML = "+";
-                cell5.addEventListener('click', function (e) {
-                    if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null){
-                        let planet = this.selectedStar.selectedPlanet;
-                        planet.addBuilding(aos.buildings[itBu].name);
-                    }        
-                }.bind(this), false);
-            }else{
-                found.cells[1].innerHTML = "";
-                found.cells[2].innerHTML = "";
-                found.cells[3].innerHTML = "";""
             }
         }
     },
@@ -222,7 +167,6 @@ aos.Orchestrator.prototype = {
             document.getElementById('starSystemBlock').style.display = 'block';
             document.getElementById('contextualBlock').style.display = 'none';
             star.buildUi();
-            this.renderPlanet();
         }
     },
 
@@ -463,9 +407,8 @@ aos.Orchestrator.prototype = {
             if (clickedElem.tagName.toUpperCase() === 'LI') {
                 this.selectedStar.setSelectedPlanetIndex(+clickedElem.dataset.index);
             }
-            this.renderPlanet();
         }.bind(this), false);
-        
+
 
         //window.addEventListener('resize', function (e) {
         //    document.getElementById('debug').innerHTML = 'x';
@@ -508,7 +451,7 @@ aos.Orchestrator.prototype = {
             this.updateBuildingsAdd();
         }
         window.requestAnimationFrame(this.animationTick.bind(this));
-        
+
     },
 
 };

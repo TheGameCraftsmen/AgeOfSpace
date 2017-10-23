@@ -96,19 +96,7 @@ aos.Planet.prototype = {
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
-        /*let b = new aos.Building();
-        b.construct("metal Mine");
-        this.buildings.push(b);
-        b = new aos.Building();
-        b.construct("solar plant");
-        this.buildings.push(b);
 
-        b = new aos.Building();
-        b.construct("CO2 epuration");
-        this.buildings.push(b);
-
-        console.log(this.ressources);
-        */
         let r = new aos.Ressource();
         r.type = "metal";
         r.name = "metal"
@@ -116,18 +104,18 @@ aos.Planet.prototype = {
         this.ressourcesStored.push(r);
     },
 
-    addBuilding : function(name){
+    addBuilding: function (name) {
         let b = new aos.Building();
         b.construct(name);
         var constructOk = true;
-        for (let i = 0; i < b.requirements.materials.length; i++){
-            var qty = this.removeRessource(b.requirements.materials[i].name,b.requirements.materials[i].quantity,false,true);
-            if (qty != b.requirements.materials[i].quantity) constructOk = false;
+        for (let i = 0; i < b.require.materials.length; i++) {
+            var qty = this.removeRessource(b.require.materials[i].name, b.require.materials[i].quantity, false, true);
+            if (qty != b.require.materials[i].quantity) constructOk = false;
         }
-        if (constructOk){
-            for (let i = 0; i < b.requirements.materials.length; i++){
-                var qty = this.removeRessource(b.requirements.materials[i].name,b.requirements.materials[i].quantity,false,false);
-            }   
+        if (constructOk) {
+            for (let i = 0; i < b.require.materials.length; i++) {
+                var qty = this.removeRessource(b.require.materials[i].name, b.require.materials[i].quantity, false, false);
+            }
             this.buildings.push(b);
         }
     },
@@ -225,15 +213,15 @@ aos.Planet.prototype = {
         return qtyRemoved;
     },
 
-    checkCondition : function(condition){
-        var result = true;  
+    checkCondition: function (condition) {
+        var result = true;
         if (condition.planetRessource) {
             for (let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++) {
-                if ( this.ressources[itPlanetRes].name == condition.name){
-                    if (typeof condition.quantity === "undefined"){
+                if (this.ressources[itPlanetRes].name == condition.name) {
+                    if (typeof condition.quantity === "undefined") {
                         //console.log(this.ressources[itPlanetRes]);
                         result = this.ressources[itPlanetRes].percent >= condition.percent;
-                    }else{
+                    } else {
                         result = this.ressources[itPlanetRes].quantity >= condition.quantity;
                     }
                 }
@@ -248,28 +236,28 @@ aos.Planet.prototype = {
             let building = this.buildings[itBuilding];
             if (building.type === typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null) {
                 building.functional = true;
-                if (typeof building.production.conditions !== "undefined"){
-                    for ( let itCondition = 0 ; itCondition < building.production.conditions.length ; itCondition++){
-                        building.functional = building.functional && this.checkCondition(building.production.conditions[itCondition]);
+                if (typeof building.produce.conditions !== "undefined") {
+                    for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
+                        building.functional = building.functional && this.checkCondition(building.produce.conditions[itCondition]);
                     }
                 }
 
-                if (typeof building.production.require !== "undefined" && building.functional) {
-                    for (let itProd = 0 ; itProd < building.production.require.length ; itProd++) {
-                        let removeRes = this.removeRessource(building.production.require[itProd].name, building.production.require[itProd].quantity, building.production.require[itProd].planetRessource, true);
-                        if (removeRes != building.production.require[itProd].quantity) {
+                if (typeof building.produce.require !== "undefined" && building.functional) {
+                    for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
+                        let removeRes = this.removeRessource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetRessource, true);
+                        if (removeRes != building.produce.require[itProd].quantity) {
                             building.functional = false;
                             break;
                         }
                     }
                     if (building.functional) {
-                        for (let itProd = 0 ; itProd < building.production.require.length ; itProd++) {
-                            this.removeRessource(building.production.require[itProd].name, building.production.require[itProd].quantity, building.production.require[itProd].planetRessource, false);
+                        for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
+                            this.removeRessource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetRessource, false);
                         }
                     }
                 }
                 if (building.functional) {
-                    this.addRessource(building.production.product, building.production.to, building.production.type, building.production.quantity);
+                    this.addRessource(building.produce.product, building.produce.to, building.produce.type, building.produce.quantity);
                 }
             }
         }
@@ -277,10 +265,10 @@ aos.Planet.prototype = {
 
     run: function (speedTick) {
         this.produce();
-        
+
     },
 
-    
+
 
     showBuildings: function () {
         let buildingCount = {};
@@ -291,6 +279,17 @@ aos.Planet.prototype = {
                 buildingCount[this.buildings[i].name].count += 1;
             }
         }
+
+        aos.buildings.forEach(function (building, i) {
+            const table = document.getElementById(building.type + "Buildings");
+            [].forEach.call(table.rows, function (row, i) {
+                if (i > 0) {
+                    row.cells[1].innerHTML = "";
+                    row.cells[2].innerHTML = "";
+                    row.cells[3].innerHTML = "";
+                }
+            });
+        }, this);
 
         for (let elt in buildingCount) {
             let table = document.getElementById(buildingCount[elt].building.type + "Buildings");
@@ -305,7 +304,7 @@ aos.Planet.prototype = {
             if (found) {
                 found.cells[1].innerHTML = buildingCount[elt].count;
                 found.cells[2].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
-                found.cells[3].innerHTML = buildingCount[elt].building.production.quantity
+                found.cells[3].innerHTML = buildingCount[elt].building.produce.quantity
             }
         }
     },
