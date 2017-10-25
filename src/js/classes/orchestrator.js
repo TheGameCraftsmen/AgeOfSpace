@@ -125,7 +125,9 @@ aos.Orchestrator.prototype = {
     },
 
     updateBuildingsAdd: function () {
-        if (this.selectedStar !== null && this.selectedStar.selectedPlanet != null) {
+
+        if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
+            var maxBuildingReached = ((this.selectedStar.selectedPlanet.size +2) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
             for (let i = 0 ; i < aos.buildings.length ; i++) {
                 let table = document.getElementById(aos.buildings[i].type + "Buildings");
 
@@ -138,17 +140,21 @@ aos.Orchestrator.prototype = {
                     }
                 }
                 if (found !== null) {
-                    var requireOk = true;
-                    for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
+                    if (!maxBuildingReached){
+                      var requireOk = true;
+                      for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
 
-                        var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name, aos.buildings[i].require.materials[itRequire].quantity, false, true);
-                        if (qty != aos.buildings[i].require.materials[itRequire].quantity) {
-                            requireOk = false;
-                        }
-                    }
-                    if (requireOk) {
-                        found.cells[4].innerHTML = "build";
-                    } else {
+                          var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name, aos.buildings[i].require.materials[itRequire].quantity, false, true);
+                          if (qty != aos.buildings[i].require.materials[itRequire].quantity) {
+                              requireOk = false;
+                          }
+                      }
+                      if (requireOk) {
+                          found.cells[4].innerHTML = "build";
+                      } else {
+                          found.cells[4].innerHTML = "<font color='red'>No</font>";
+                      }
+                    }else {
                         found.cells[4].innerHTML = "<font color='red'>No</font>";
                     }
                 }
