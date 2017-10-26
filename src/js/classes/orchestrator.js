@@ -66,29 +66,30 @@ aos.Orchestrator.prototype = {
         aos.buildings.forEach(function (b, i) {
             const building = new aos.Building();
             building.construct(b.name);
-
-            const table = document.getElementById(building.type + "Buildings");
-            const row = table.insertRow();
-            const cell1 = row.insertCell();
-            cell1.innerHTML = building.name;
-            cell1.addEventListener('mouseover', function (e) {
-                building.renderContextual();
-            }.bind(this), false);
-            cell1.addEventListener('mouseout', function (e) {
-                document.getElementById('contextualTxt').innerHTML = "";
-                document.getElementById('contextualBlock').style.display = 'None';
-            }.bind(this), false);
-            const cell2 = row.insertCell();
-            const cell3 = row.insertCell();
-            const cell4 = row.insertCell();
-            const cell5 = row.insertCell();
-            cell5.innerHTML = "+";
-            cell5.addEventListener('click', function (e) {
-                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-                    let planet = this.selectedStar.selectedPlanet;
-                    planet.addBuilding(building.name);
-                }
-            }.bind(this), false);
+            for (let itLocation = 0 ; itLocation < b.location.length; itLocation++){
+              const table = document.getElementById(building.location[itLocation].name + "Buildings");
+              const row = table.insertRow();
+              const cell1 = row.insertCell();
+              cell1.innerHTML = building.name;
+              cell1.addEventListener('mouseover', function (e) {
+                  building.renderContextual();
+              }.bind(this), false);
+              cell1.addEventListener('mouseout', function (e) {
+                  document.getElementById('contextualTxt').innerHTML = "";
+                  document.getElementById('contextualBlock').style.display = 'None';
+              }.bind(this), false);
+              const cell2 = row.insertCell();
+              const cell3 = row.insertCell();
+              const cell4 = row.insertCell();
+              const cell5 = row.insertCell();
+              cell5.innerHTML = "+";
+              cell5.addEventListener('click', function (e) {
+                  if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
+                      let planet = this.selectedStar.selectedPlanet;
+                      planet.addBuilding(building.name,building.location[itLocation].name);
+                  }
+              }.bind(this), false);
+            }
         }, this);
     },
 
@@ -127,36 +128,38 @@ aos.Orchestrator.prototype = {
     updateBuildingsAdd: function () {
 
         if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-            var maxBuildingReached = ((this.selectedStar.selectedPlanet.size +2) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
+            var maxBuildingReached = ((this.selectedStar.selectedPlanet.size +6) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
             for (let i = 0 ; i < aos.buildings.length ; i++) {
-                let table = document.getElementById(aos.buildings[i].type + "Buildings");
+                for(let itLocation =0 ; itLocation < aos.buildings[i].location.length ; itLocation ++){
+                  let table = document.getElementById(aos.buildings[i].location[itLocation].name + "Buildings");
 
-                let nbRows = table.rows.length;
-                let found = null;
-                for (let itRow = 0 ; itRow < nbRows ; itRow++) {
-                    if (table.rows[itRow].cells[0].innerHTML == aos.buildings[i].name) {
-                        found = table.rows[itRow];
-                        break;
-                    }
-                }
-                if (found !== null) {
-                    if (!maxBuildingReached){
-                      var requireOk = true;
-                      for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
-
-                          var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name, aos.buildings[i].require.materials[itRequire].quantity, false, true);
-                          if (qty != aos.buildings[i].require.materials[itRequire].quantity) {
-                              requireOk = false;
-                          }
+                  let nbRows = table.rows.length;
+                  let found = null;
+                  for (let itRow = 0 ; itRow < nbRows ; itRow++) {
+                      if (table.rows[itRow].cells[0].innerHTML == aos.buildings[i].name) {
+                          found = table.rows[itRow];
+                          break;
                       }
-                      if (requireOk) {
-                          found.cells[4].innerHTML = "build";
-                      } else {
+                  }
+                  if (found !== null) {
+                      if (!maxBuildingReached){
+                        var requireOk = true;
+                        for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
+
+                            var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name, aos.buildings[i].require.materials[itRequire].quantity, false, true);
+                            if (qty != aos.buildings[i].require.materials[itRequire].quantity) {
+                                requireOk = false;
+                            }
+                        }
+                        if (requireOk) {
+                            found.cells[4].innerHTML = "build";
+                        } else {
+                            found.cells[4].innerHTML = "<font color='red'>No</font>";
+                        }
+                      }else {
                           found.cells[4].innerHTML = "<font color='red'>No</font>";
                       }
-                    }else {
-                        found.cells[4].innerHTML = "<font color='red'>No</font>";
-                    }
+                   }
                 }
             }
         }

@@ -28,6 +28,8 @@ aos.Building = function () {
     this.storage = 0;
     /** @type {boolean} */
     this.functional = true;
+    /** @type {string} */
+    this.builtOn = "";
 };
 
 aos.Building.prototype = {
@@ -39,6 +41,7 @@ aos.Building.prototype = {
                 this.require = aos.buildings[i].require;
                 this.produce = aos.buildings[i].produce;
                 this.storage = aos.buildings[i].storage;
+                this.location = aos.buildings[i].location;
             }
         }
     },

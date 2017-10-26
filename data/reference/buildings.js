@@ -21,7 +21,8 @@ aos.buildings = [
                     {"name" : "metal", "quantity" : 1000, "planetRessource" : true}
                 ]
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" : [{"name":"ground"}]
         },
         {
             "type" : "mine",
@@ -45,7 +46,33 @@ aos.buildings = [
                     {"name" : "carbon", "quantity" : 500, "planetRessource" : true}
                 ]
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" : [{"name":"ground"}]
+        },
+        {
+            "type" : "mine",
+            "name" : "oil Mine",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "name" :"metal",
+                        "quantity" : 100
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "material",
+                "product" : "oil",
+                "quantity" : 1000,
+                "to" : "storage",
+                "require" : [
+                    {"name" : "energy", "quantity" : 50, "planetRessource" : false},
+                    {"name" : "oil", "quantity" : 500, "planetRessource" : true}
+                ]
+            },
+            "storage" : 10000,
+            "location" : [{"name":"water"}]
         },
         {
             "type" : "mine",
@@ -69,7 +96,8 @@ aos.buildings = [
                     {"name" : "fissile material", "quantity" : 50, "planetRessource" : true}
                 ]
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" : [{"name":"ground"}]
         },
         {
             "type" : "habitation",
@@ -96,7 +124,8 @@ aos.buildings = [
                     {"name" : "oxygen", "percent" : 70, "planetRessource" : true}
                 ]
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" : [{"name":"ground"}]
         },
         {
             "type" : "plant",
@@ -115,7 +144,8 @@ aos.buildings = [
                 "product" : "energy",
                 "quantity" : 50
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" : [{"name":"ground"},{"name":"water"}]
         },
         {
             "type" : "plant",
@@ -137,7 +167,8 @@ aos.buildings = [
                     { "name" : "carbon", "quantity" : "500"}
                 ]
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" :[{"name":"ground"}]
         },
         {
             "type" : "plant",
@@ -159,7 +190,8 @@ aos.buildings = [
                     { "name" : "fissile material", "quantity" : "300"}
                 ]
             },
-            "storage" : 10000
+            "storage" : 10000,
+            "location" :[{"name":"ground"}]
         },
         {
             "type" : "epurateur",
@@ -177,7 +209,8 @@ aos.buildings = [
                                 {"name" : "energy", "quantity" : 50, "planetRessource" : false},
                                 {"name" : "oxocarbon", "quantity" : 50, "planetRessource" : true}
                             ]
-            }
+            },
+            "location" :[{"name":"ground"}]
         },
         {
             "type" : "epurateur",
@@ -196,7 +229,8 @@ aos.buildings = [
                                 {"name" : "inert gases", "quantity" : 50, "planetRessource" : true},
                                 {"name" : "fissile material", "quantity" : 50, "planetRessource" : false}
                             ]
-            }
+            },
+            "location" :[{"name":"ground"}]
         }
     ]
 ;
