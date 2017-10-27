@@ -62,7 +62,9 @@ aos.Building.prototype = {
 
         ctext += "<h3><b>Yield</h3>";
         ctext += "<table>";
-        ctext += "<tr><td>" + this.produce.product + "</Td><td width='10px'>:</Td><td>" + this.produce.quantity + "</td></tr>";
+        for(let itProd=0 ; itProd < this.produce.product.length ; itProd ++){
+            ctext += "<tr><td>" + this.produce.product[itProd].name + "</Td><td width='10px'>:</Td><td>" + this.produce.product[itProd].quantity + "</td></tr>";
+        }
         ctext += "</table><br>";
         ctext += "<h3>Running Condition</h3>";
         ctext += "<table>";

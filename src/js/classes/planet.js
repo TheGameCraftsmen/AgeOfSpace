@@ -54,13 +54,11 @@ aos.Planet.prototype = {
      *         -- "planet" : to add ressource to planet (water, oxygen, ...)
      *         -- "local"  : to add ressource to stored ressource by the player (metal, food, ...)
      */
-    addRessource: function (ressource, to, type, quantity) {
+    addRessource: function (ressource, to, quantity) {
         let res = ressource;
-        let typ = type;
         let quant = quantity;
         if (typeof ressource == "object") {
             res = ressource.name;
-            typ = ressource.type;
             quant = ressource.quantity;
         }
         let storage = null;
@@ -70,6 +68,7 @@ aos.Planet.prototype = {
             storage = this.ressourcesStored;
         }
         let resFound = null;
+        
         for (let i = 0 ; i < storage.length && resFound == null ; i++) {
             if (storage[i].name == res) {
                 resFound = storage[i];
@@ -78,7 +77,6 @@ aos.Planet.prototype = {
         if (resFound == null) {
             resFound = new aos.Ressource();
             resFound.name = res;
-            resFound.type = typ;
             resFound.quantity = quant;
             storage.push(resFound);
         } else {
@@ -254,7 +252,9 @@ aos.Planet.prototype = {
                     }
                 }
                 if (building.functional) {
-                    this.addRessource(building.produce.product, building.produce.to, building.produce.type, building.produce.quantity);
+                    for(let itProd = 0 ; itProd < building.produce.product.length ; itProd ++ ){
+                        this.addRessource(building.produce.product[itProd].name, building.produce.product[itProd].to, building.produce.product[itProd].quantity);
+                    }
                 }
             }
         }
@@ -307,7 +307,8 @@ aos.Planet.prototype = {
                   { found.cells[1].innerHTML = parseInt(found.cells[1].innerHTML)+1 }
                   
                   found.cells[2].innerHTML = this.buildings[elt].functional ? "Enable" : "Disable";
-                  found.cells[3].innerHTML = this.buildings[elt].produce.quantity
+                  found.cells[3].innerHTML = this.buildings[elt].produce.product[0].quantity;
+                  
               }
          
         }
