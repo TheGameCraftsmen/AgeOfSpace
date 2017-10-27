@@ -128,6 +128,34 @@ aos.buildings = [
             "location" : [{"name":"ground"}]
         },
         {
+            "type" : "habitation",
+            "name" : "floating house",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "name" :"metal",
+                        "quantity" : 500
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "population",
+                "product" : "humans",
+                "quantity" : 50,
+                "to" : "storage",
+                "require" : [
+                    {"name" : "energy", "quantity" : 200, "planetRessource" : false, "remove" : true},
+                    {"name" : "metal", "quantity" : 100, "planetRessource" : true , "remove" : true}
+                ],
+                "conditions" : [
+                    {"name" : "oxygen", "percent" : 70, "planetRessource" : true}
+                ]
+            },
+            "storage" : 10000,
+            "location" : [{"name":"water"}]
+        },
+        {
             "type" : "plant",
             "name" : "solar plant",
             "require" : {
@@ -165,6 +193,29 @@ aos.buildings = [
                 "quantity" : 100,
                 "require" : [
                     { "name" : "carbon", "quantity" : "500"}
+                ]
+            },
+            "storage" : 10000,
+            "location" :[{"name":"ground"}]
+        },
+        {
+            "type" : "plant",
+            "name" : "oil plant",
+            "require" : {
+                "space" : 10,
+                "materials" : [
+                    {
+                        "name" :"metal",
+                        "quantity" : 500
+                    }
+                ]
+            },
+            "produce" : {
+                "type" : "energy",
+                "product" : "energy",
+                "quantity" : 100,
+                "require" : [
+                    { "name" : "oil", "quantity" : "400"}
                 ]
             },
             "storage" : 10000,
@@ -210,7 +261,7 @@ aos.buildings = [
                                 {"name" : "oxocarbon", "quantity" : 50, "planetRessource" : true}
                             ]
             },
-            "location" :[{"name":"ground"}]
+            "location" :[{"name":"ground"},{"name":"water"}]
         },
         {
             "type" : "epurateur",
@@ -230,7 +281,7 @@ aos.buildings = [
                                 {"name" : "fissile material", "quantity" : 50, "planetRessource" : false}
                             ]
             },
-            "location" :[{"name":"ground"}]
+            "location" :[{"name":"water"}]
         }
     ]
 ;

@@ -33,11 +33,7 @@ aos.Planet = function () {
     this.landSize = 0;
     /** @type {number} */
     this.population = 0;
-    /** @type {number}
-     * Indicator calculated to estimate the viability of the planet. Population will grow or not depending of it.
-     * 0 : population decreases deadly, 50 : population stagnation, 100 : population grows highly
-    */
-    this.healtingIndicator = 0;
+        
     /** @type {aos.building} */
     this.buildings = [];
     /** @type {boolean}
@@ -92,7 +88,7 @@ aos.Planet.prototype = {
 
     generate: function () {
         this.size = Math.floor(Math.random() * 5 + 1);
-        this.landSize = Math.random * this.size;
+        this.landSize = Math.floor(Math.random()*100);
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
@@ -354,6 +350,8 @@ aos.Planet.prototype = {
         this.showBuildings();
         this.updatePies();
         this.updateBars();
+        let rep = document.getElementById("repartition");
+        rep.innerHTML = "Land / Ocean : " + this.landSize + " / " + (100 - this.landSize);
     },
 
     setupEvents: function () {
