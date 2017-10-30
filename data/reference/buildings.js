@@ -13,7 +13,8 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "metal",
-                "product" : [{"name":"metal","quantity" : 1000,"to" : "storage"}],
+                "product" : [{"name":"metal","quantity" : 1000,"to" : "storage"},
+                             {"name":"oxocarbon","quantity" : 100,"to" : "storage"}],
                 "require" : [
                     {"name" : "energy", "quantity" : 50, "planetRessource" : false},
                     {"name" : "metal", "quantity" : 1000, "planetRessource" : true}
@@ -106,7 +107,8 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "population",
-                "product" : [{"name" : "humans","quantity" : 100,"to" : "storage"}],
+                "product" : [{"name" : "humans","quantity" : 100,"to" : "storage"},
+                            {"name":"oxocarbon","quantity" : 500,"to" : "planet"}],
                 "require" : [
                     {"name" : "energy", "quantity" : 50, "planetRessource" : false, "remove" : true},
                     {"name" : "metal", "quantity" : 100, "planetRessource" : true , "remove" : true}
@@ -132,7 +134,8 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "population",
-                "product" : [{"name":"humans","quantity" : 50,"to" : "storage"}],
+                "product" : [{"name":"humans","quantity" : 50,"to" : "storage"},
+                             {"name":"oxocarbon","quantity" : 300,"to" : "storage"}],
                 "require" : [
                     {"name" : "energy", "quantity" : 200, "planetRessource" : false, "remove" : true},
                     {"name" : "metal", "quantity" : 100, "planetRessource" : true , "remove" : true}
@@ -199,7 +202,8 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "energy",
-                "product" : [{"name" : "energy","quantity" : 100}],
+                "product" : [{"name" : "energy","quantity" : 100},
+                            {"name":"oxocarbon","quantity" : 500,"to" : "storage"}],
                 "require" : [
                     { "name" : "oil", "quantity" : "400"}
                 ]
@@ -238,7 +242,7 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "air",
-                "product" : [{"name":"oxygen","quantity" : 100,"to" : "planet"}],
+                "product" : [{"name":"oxygen","quantity" : 300,"to" : "planet"}],
                 "require" : [
                                 {"name" : "energy", "quantity" : 50, "planetRessource" : false},
                                 {"name" : "oxocarbon", "quantity" : 50, "planetRessource" : true}
@@ -255,10 +259,11 @@ aos.buildings = [
             },
             "produce" : {
                 "type" : "air",
-                "product" : [{"name":"plants","quantity" : 100,"to" : "planet"}],
+                "product" : [{"name":"plants","quantity" : 100,"to" : "planet"},
+                            {"name":"oxygen","quantity" : 300,"to" : "planet"}],
                 "require" : [
                                 {"name" : "energy", "quantity" : 50, "planetRessource" : false},
-                                {"name" : "oxocarbon", "quantity" : 50, "planetRessource" : true}
+                                {"name" : "oxocarbon", "quantity" : 10, "planetRessource" : true}
                             ]
             },
             "location" :[{"name":"ground"}]

@@ -128,7 +128,7 @@ aos.Orchestrator.prototype = {
     updateBuildingsAdd: function () {
 
         if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-            var maxBuildingReached = ((this.selectedStar.selectedPlanet.size +6) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
+            var maxBuildingReached = ((this.selectedStar.selectedPlanet.size +10) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
             for (let i = 0 ; i < aos.buildings.length ; i++) {
                 for(let itLocation =0 ; itLocation < aos.buildings[i].location.length ; itLocation ++){
                   let table = document.getElementById(aos.buildings[i].location[itLocation].name + "Buildings");
