@@ -50,10 +50,8 @@ aos.Building.prototype = {
         var ctext = "<h3>Construction cost</h3>"
         ctext += "<table>";
 
-        ctext += "<tr><td>space</Td><td width='10px'>:</Td><td>" + this.require.space + "</td></tr>";
-        ctext += "<tr><td colspan='3' align='center'>Materials</Td></tr>";
         for (let i = 0; i < this.require.materials.length; i++) {
-            ctext += "<tr><td>" + this.require.materials[i].type + "</Td><td width='10px'>:</Td><td>" + this.require.materials[i].quantity + "</td></tr>";
+            ctext += "<tr><td>" + this.require.materials[i].name + "</Td><td width='10px'>:</Td><td>" + this.require.materials[i].quantity + "</td></tr>";
         }
         ctext += "</table><br>";
 

@@ -1,3 +1,5 @@
+var aos = aos || {};
+
 aos.buildings = [
         {
             "type" : "mine",

@@ -118,6 +118,7 @@ aos.Planet.prototype = {
             }
             this.buildings.push(b);
         }
+        aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
     generateAir: function () {
@@ -306,12 +307,6 @@ aos.Planet.prototype = {
                 found.cells[2].innerHTML = buildingCount[elt].building.functional ? "Enable" : "Disable";
                 found.cells[3].innerHTML = buildingCount[elt].building.produce.quantity
             }
-        }
-    },
-
-    recalculatePercent: function () {
-        for (let i = 0 ; i < this.ressources.length ; i++) {
-            this.ressources[i].percent = (this.ressources[i].quantity) / (100 * this.size * aos.volumeRessources[this.ressources[i].type]) * 100;
         }
     },
 

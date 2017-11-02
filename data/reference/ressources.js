@@ -1,3 +1,5 @@
+var aos = aos || {};
+
 aos.ressources =
     [
         { "name": "oxygen", "category": "air" },
@@ -19,4 +21,4 @@ aos.ressources =
         { "name": "animals", "category": "population" },
     ];
 
-aos.volumeRessources = { "air": 1000, "liquid": 10000, "ground": 10000, "metal": 10000 };
+aos.volumeRessources = { "air": 1000, "liquid": 10000, "ground": 10000 };
