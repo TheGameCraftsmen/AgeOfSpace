@@ -33,7 +33,7 @@ aos.Planet = function () {
     this.landSize = 0;
     /** @type {number} */
     this.population = 0;
-        
+    
     /** @type {aos.building} */
     this.buildings = [];
     /** @type {boolean}

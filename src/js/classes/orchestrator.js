@@ -128,7 +128,13 @@ aos.Orchestrator.prototype = {
     updateBuildingsAdd: function () {
 
         if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-            var maxBuildingReached = ((this.selectedStar.selectedPlanet.size +10) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
+            var buildingTypeCount = {'ground' : 0, 'water' : 0};
+            for (let itBuilding = 0 ; itBuilding < this.selectedStar.selectedPlanet.buildings.length ; itBuilding ++){
+                buildingTypeCount[this.selectedStar.selectedPlanet.buildings[itBuilding].builtOn] += 1;
+            }
+            var buildingMaxBuilding = {'ground' : Math.floor((this.selectedStar.selectedPlanet.size +10) * this.selectedStar.selectedPlanet.landSize/100), 'water' : Math.floor((this.selectedStar.selectedPlanet.size +10) * ((100-this.selectedStar.selectedPlanet.landSize)/100))}
+            console.log(this.selectedStar.selectedPlanet.landSize/100);
+            //var maxBuildingGroundReached = ((this.selectedStar.selectedPlanet.size +10) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
             for (let i = 0 ; i < aos.buildings.length ; i++) {
                 for(let itLocation =0 ; itLocation < aos.buildings[i].location.length ; itLocation ++){
                   let table = document.getElementById(aos.buildings[i].location[itLocation].name + "Buildings");
@@ -142,7 +148,9 @@ aos.Orchestrator.prototype = {
                       }
                   }
                   if (found !== null) {
-                      if (!maxBuildingReached){
+                      //if (!maxBuildingReached){
+                    //console.log("@@@ " + aos.buildings[i].location[itLocation].name + "//" + buildingMaxBuilding[aos.buildings[i].location[itLocation].name] + "//" + buildingTypeCount[aos.buildings[i].location[itLocation].name])  
+                    if (buildingMaxBuilding[aos.buildings[i].location[itLocation].name]> buildingTypeCount[aos.buildings[i].location[itLocation].name]){
                         var requireOk = true;
                         for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
 
