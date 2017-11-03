@@ -29,12 +29,12 @@ aos.PieChart.prototype = {
 
     render: function () {
         const total = this.calcRatio();
-        let svgCode = '<svg width="150" height="150" viewBox="-20 -20 40 40""><g transform="rotate(-90)">';
+        let svgCode = '<svg width="150" height="150" viewBox="-25 -25 50 50""><g transform="rotate(-90)">';
         this.content.forEach(function (chartSlice) {
             svgCode += '<circle cx="0" cy="0" r="15.9154943092" fill="transparent" stroke="' + chartSlice.color
-                + '" stroke-width="4" stroke-dasharray="0 ' + (chartSlice.offset / total) + ' ' + (chartSlice.value / total) + ' 100"></circle>';
+                + '" stroke-width="6" stroke-dasharray="0 ' + (chartSlice.offset / total) + ' ' + (chartSlice.value / total) + ' 100"></circle>';
         }, this);
-        svgCode += '</g><text font-size="0.3em" text-anchor="middle" x="0" y="0" fill="#ccc" transform="translate(0 1)">' + this.innerText + '</text>';
+        svgCode += '</g><text font-size="0.4em" text-anchor="middle" x="0" y="0" fill="#ccc" transform="translate(0 1)">' + this.innerText + '</text>';
         svgCode += '</svg>';
         this.htmlElement.innerHTML = svgCode;
     },

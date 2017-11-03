@@ -133,7 +133,7 @@ aos.Orchestrator.prototype = {
                 buildingTypeCount[this.selectedStar.selectedPlanet.buildings[itBuilding].builtOn] += 1;
             }
             var buildingMaxBuilding = {'ground' : Math.floor((this.selectedStar.selectedPlanet.size +10) * this.selectedStar.selectedPlanet.landSize/100), 'water' : Math.floor((this.selectedStar.selectedPlanet.size +10) * ((100-this.selectedStar.selectedPlanet.landSize)/100))}
-            console.log(this.selectedStar.selectedPlanet.landSize/100);
+            //console.log(this.selectedStar.selectedPlanet.landSize/100);
             //var maxBuildingGroundReached = ((this.selectedStar.selectedPlanet.size +10) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
             for (let i = 0 ; i < aos.buildings.length ; i++) {
                 for(let itLocation =0 ; itLocation < aos.buildings[i].location.length ; itLocation ++){
@@ -152,10 +152,10 @@ aos.Orchestrator.prototype = {
                     //console.log("@@@ " + aos.buildings[i].location[itLocation].name + "//" + buildingMaxBuilding[aos.buildings[i].location[itLocation].name] + "//" + buildingTypeCount[aos.buildings[i].location[itLocation].name])  
                     if (buildingMaxBuilding[aos.buildings[i].location[itLocation].name]> buildingTypeCount[aos.buildings[i].location[itLocation].name]){
                         var requireOk = true;
-                        for (let itRequire = 0 ; itRequire < aos.buildings[i].require.materials.length ; itRequire++) {
+                        for (let itRequire = 0 ; itRequire < aos.buildings[i].constructionCost.length ; itRequire++) {
 
-                            var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].require.materials[itRequire].name, aos.buildings[i].require.materials[itRequire].quantity, false, true);
-                            if (qty != aos.buildings[i].require.materials[itRequire].quantity) {
+                            var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].constructionCost[itRequire].name, aos.buildings[i].constructionCost[itRequire].quantity, false, true);
+                            if (qty != aos.buildings[i].constructionCost[itRequire].quantity) {
                                 requireOk = false;
                             }
                         }
@@ -447,6 +447,7 @@ aos.Orchestrator.prototype = {
         window.addEventListener('requestUiSlowRefresh', function (e) {
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.showStats();
+                this.updateBuildingsAdd();
             }
         }.bind(this), false);
 
@@ -465,10 +466,8 @@ aos.Orchestrator.prototype = {
         if (this.gameTime / 1000.0 > this.lastGameplayTick) {
             this.lastGameplayTick += 1;
             this.emitEvent('gameplayTick', { tick: this.lastGameplayTick });
-            this.updateBuildingsAdd();
         }
         window.requestAnimationFrame(this.animationTick.bind(this));
-
     },
 
 };

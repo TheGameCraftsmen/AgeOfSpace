@@ -21,7 +21,7 @@ aos.Building = function () {
     /** @type {string} */
     this.name = "";
     /** @type  */
-    this.require = {};
+    this.constructionCost = [];
     /**  */
     this.produce = {};
     /** @type {number} */
@@ -38,7 +38,7 @@ aos.Building.prototype = {
             if (aos.buildings[i].name == name) {
                 this.name = name;
                 this.type = aos.buildings[i].type;
-                this.require = aos.buildings[i].require;
+                this.constructionCost = aos.buildings[i].constructionCost;
                 this.produce = aos.buildings[i].produce;
                 this.storage = aos.buildings[i].storage;
                 this.location = aos.buildings[i].location;
@@ -53,8 +53,8 @@ aos.Building.prototype = {
         var ctext = "<h3>Construction cost</h3>"
         ctext += "<table>";
 
-        for (let i = 0; i < this.require.materials.length; i++) {
-            ctext += "<tr><td>" + this.require.materials[i].name + "</Td><td width='10px'>:</Td><td>" + this.require.materials[i].quantity + "</td></tr>";
+        for (let i = 0; i < this.constructionCost.length; i++) {
+            ctext += "<tr><td>" + this.constructionCost[i].name + "</Td><td width='10px'>:</Td><td>" + this.constructionCost[i].quantity + "</td></tr>";
         }
         ctext += "</table><br>";
 

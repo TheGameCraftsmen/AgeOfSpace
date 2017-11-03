@@ -103,13 +103,13 @@ aos.Planet.prototype = {
         let b = new aos.Building();
         b.construct(name);
         var constructOk = true;
-        for (let i = 0; i < b.require.materials.length; i++) {
-            var qty = this.removeRessource(b.require.materials[i].name, b.require.materials[i].quantity, false, true);
-            if (qty != b.require.materials[i].quantity) constructOk = false;
+        for (let i = 0; i < b.constructionCost.length; i++) {
+            var qty = this.removeRessource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, true);
+            if (qty != b.constructionCost[i].quantity) constructOk = false;
         }
         if (constructOk) {
-            for (let i = 0; i < b.require.materials.length; i++) {
-                var qty = this.removeRessource(b.require.materials[i].name, b.require.materials[i].quantity, false, false);
+            for (let i = 0; i < b.constructionCost.length; i++) {
+                var qty = this.removeRessource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, false);
             }
             b.builtOn = _location;
             this.buildings.push(b);
