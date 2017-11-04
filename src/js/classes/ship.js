@@ -23,6 +23,7 @@ aos.Ship = function () {
     this.name = "";
     this.speed = 0;
     this.cargoSize = 0;
+    this.constructionCost = [];
 
 };
 

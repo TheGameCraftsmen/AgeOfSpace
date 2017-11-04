@@ -24,6 +24,9 @@ aos.Orchestrator = function () {
     this.lastGameplayTick = 0; // dispatches an update event every x milliseconds in game time (x = 1000?)
     this.lastAnimationFrame = 0; // time interval counter
 
+    this.isDragging = true;
+    this.dragStart = {};
+
     this.pies = [];
     this.resourceBars = [];
 };
@@ -203,6 +206,38 @@ aos.Orchestrator.prototype = {
             this.galaxy.constellations.forEach(function (c, i) {
                 c.render(i === constellationId);
             });
+            if (this.isDragging) {
+                this.galaxy.stars.forEach(function (star) {
+                    if (this.dragStart === star) {
+                        const deltaX = star.x - galaxyCoordX;
+                        const deltaY = star.y - galaxyCoordY;
+                        const dist = deltaX * deltaX + deltaY * deltaY;
+                        const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
+                        if (dist > radius) {
+                            ctx.beginPath();
+                            ctx.lineWidth = 2;
+                            ctx.moveTo(600 + star.x, 450 + star.y);
+                            let lineDrawn = false;
+                            this.galaxy.stars.forEach(function (target) {
+                                const deltaX1 = target.x - galaxyCoordX;
+                                const deltaY1 = target.y - galaxyCoordY;
+                                const dist1 = deltaX1 * deltaX1 + deltaY1 * deltaY1;
+                                const radius1 = target.isNotable ? 225.0 : 100.0; // 15² , 10²
+                                if (dist1 < radius1) {
+                                    ctx.strokeStyle = '#066';
+                                    ctx.lineTo(600 + target.x, 450 + target.y);
+                                    lineDrawn = true;
+                                }
+                            }, this);
+                            if (!lineDrawn) {
+                                ctx.strokeStyle = '#600';
+                                ctx.lineTo(600 + galaxyCoordX, 450 + galaxyCoordY);
+                            }
+                            ctx.stroke();
+                        }
+                    }
+                }, this);
+            }
             if (constellationId === 0) {
                 //ctx.beginPath();
                 //ctx.strokeStyle = '#600';
@@ -316,7 +351,7 @@ aos.Orchestrator.prototype = {
             }, this);
         }.bind(this), false);
 
-        document.getElementById('galaxyOverlayCanvas').addEventListener('click', function (e) {
+        document.getElementById('galaxyOverlayCanvas').addEventListener('mousedown', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             const galaxyCoordX = e.offsetX * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 600;
             const galaxyCoordY = e.offsetY * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 450;
@@ -328,14 +363,35 @@ aos.Orchestrator.prototype = {
                 const dist = deltaX * deltaX + deltaY * deltaY;
                 const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
                 if (dist < radius) {
-                    this.setSelectedStar(star);
+                    this.isDragging = true;
+                    this.dragStart = star;
                 }
             }, this);
+        }.bind(this), false);
+
+        document.getElementById('galaxyOverlayCanvas').addEventListener('mouseup', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            const galaxyCoordX = e.offsetX * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 600;
+            const galaxyCoordY = e.offsetY * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 450;
+
+            this.setSelectedStar(null);
+            this.galaxy.stars.forEach(function (star) {
+                const deltaX = star.x - galaxyCoordX;
+                const deltaY = star.y - galaxyCoordY;
+                const dist = deltaX * deltaX + deltaY * deltaY;
+                const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
+                if (dist < radius && this.isDragging && this.dragStart === star) {
+                    this.setSelectedStar(star);
+                    this.isDragging = false;
+                }
+            }, this);
+            this.isDragging = false;
         }.bind(this), false);
 
         document.getElementById('galaxyOverlayCanvas').addEventListener('mouseleave', function (e) {
             document.getElementById('contextualBlock').style.display = 'none';
             document.getElementById('contextualTxt').innerHTML = '';
+            this.isDragging = false;
         }.bind(this), false);
 
         document.getElementById('closeStarSystem').addEventListener('click', function (e) {
