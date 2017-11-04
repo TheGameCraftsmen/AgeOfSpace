@@ -106,7 +106,7 @@ img {
     cursor: pointer;
 }
 
-#closeStarSystem {
+#closeStarSystem, #closeShip {
     float: right;
     border-bottom-left-radius: 12px;
     position: relative;
@@ -178,7 +178,7 @@ img {
             width: 75px;
         }
 
-#galaxyBlock, #starSystemBlock {
+#galaxyBlock, #starSystemBlock, #shipBlock {
     position: relative;
     overflow-y: auto;
     width: 100%;

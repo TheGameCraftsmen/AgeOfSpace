@@ -24,8 +24,9 @@ aos.Orchestrator = function () {
     this.lastGameplayTick = 0; // dispatches an update event every x milliseconds in game time (x = 1000?)
     this.lastAnimationFrame = 0; // time interval counter
 
-    this.isDragging = true;
-    this.dragStart = {};
+    this.isDragging = false;
+    this.dragStart = null;
+    this.dragEnd = null;
 
     this.pies = [];
     this.resourceBars = [];
@@ -38,6 +39,7 @@ aos.Orchestrator.prototype = {
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
         document.getElementById('starSystemBlock').style.display = 'none';
+        document.getElementById('shipBlock').style.display = 'none';
         document.getElementById('contextualBlock').style.display = 'none';
         document.getElementById('contextualTxt').innerHTML = '';
         this.setupEvents();
@@ -181,10 +183,12 @@ aos.Orchestrator.prototype = {
         if (star === null) {
             document.getElementById('galaxyBlock').style.display = 'block';
             document.getElementById('starSystemBlock').style.display = 'none';
+            document.getElementById('shipBlock').style.display = 'none';
             document.getElementById('contextualBlock').style.display = 'none';
         } else {
             document.getElementById('galaxyBlock').style.display = 'none';
             document.getElementById('starSystemBlock').style.display = 'block';
+            document.getElementById('shipBlock').style.display = 'none';
             document.getElementById('contextualBlock').style.display = 'none';
             star.buildUi();
         }
@@ -206,6 +210,7 @@ aos.Orchestrator.prototype = {
             this.galaxy.constellations.forEach(function (c, i) {
                 c.render(i === constellationId);
             });
+            this.dragEnd = null;
             if (this.isDragging) {
                 this.galaxy.stars.forEach(function (star) {
                     if (this.dragStart === star) {
@@ -227,6 +232,7 @@ aos.Orchestrator.prototype = {
                                     ctx.strokeStyle = '#066';
                                     ctx.lineTo(600 + target.x, 450 + target.y);
                                     lineDrawn = true;
+                                    this.dragEnd = target;
                                 }
                             }, this);
                             if (!lineDrawn) {
@@ -383,6 +389,9 @@ aos.Orchestrator.prototype = {
                 if (dist < radius && this.isDragging && this.dragStart === star) {
                     this.setSelectedStar(star);
                     this.isDragging = false;
+                } else if (this.dragEnd !== null) {
+                    document.getElementById('galaxyBlock').style.display = 'none';
+                    document.getElementById('shipBlock').style.display = 'block';
                 }
             }, this);
             this.isDragging = false;
@@ -395,6 +404,10 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
 
         document.getElementById('closeStarSystem').addEventListener('click', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            this.setSelectedStar(null);
+        }.bind(this), false);
+        document.getElementById('closeShip').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             this.setSelectedStar(null);
         }.bind(this), false);
