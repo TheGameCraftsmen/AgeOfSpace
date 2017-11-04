@@ -46,11 +46,11 @@ aos.Ressource.prototype = {
     },
 
     update: function () {
-        if (this.quantity === 0) {
-            this.htmlElement.style.display = 'none';
-        } else {
-            this.htmlElement.style.display = 'block';
-        }
+        //if (this.quantity === 0) {
+        //    this.htmlElement.style.display = 'none';
+        //} else {
+        //    this.htmlElement.style.display = 'block';
+        //}
         const percent = 100.0 * (Math.log(this.quantity + 1200.0) - 7) / 13.0;
         this.htmlElement.firstChild.lastChild.firstChild.style.width = '' + percent + '%';
         [].forEach.call(this.htmlElement.firstChild.lastChild.childNodes, function (arrow, i) {
