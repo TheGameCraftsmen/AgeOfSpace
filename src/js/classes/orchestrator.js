@@ -537,13 +537,17 @@ aos.Orchestrator.prototype = {
                 0, 0, (far + near) * nf, -1,
                 0, 0, 2 * far * near * nf, 0
             ]);
+
             // http://www.songho.ca/opengl/gl_camera.html#lookat
             // translate (0, 0, 5)
+            const tx = 0;
+            const ty = 0;
+            const tz = 5;
             const glCamera = new Float32Array([
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
-                0, 0, 5, 1
+                tx, ty, tz, 1
             ]);
             const model = new Float32Array([
                 1, 0, 0, 0,
@@ -551,10 +555,34 @@ aos.Orchestrator.prototype = {
                 0, 0, 1, 0,
                 0, 0, 0, 1
             ]);
+            const vm = aos.Math.multiply4x4(glCamera, model);
+            const pvm = aos.Math.multiply4x4(glFrustum, vm);
 
+            const halfWidth = canvas.clientWidth / 2;
+            const halfHeight = canvas.clientHeight / 2;
+
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+            const pointCount = 100;
+            for (let i = 0; i < pointCount; i++) {
+                // golden spiral method
+                // see
+                // https://stackoverflow.com/a/44164075
+                const theta = Math.PI * i * (1 + Math.sqrt(5));
+                const phi = Math.acos(2 * i / pointCount - 1);
+                const vec3 = new Float32Array([
+                    Math.sin(phi) * Math.cos(theta),
+                    Math.sin(phi) * Math.sin(theta),
+                    Math.cos(phi)
+                ]);
+
+                const screenPoint = aos.Math.transformVector3(vec3, pvm);
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(screenPoint[0] * halfWidth + halfWidth, screenPoint[1] * halfHeight + halfHeight, 1, 1);
+            }
 
         }.bind(this), false);
-
     },
 
     emitEvent: function (type, payload) {
