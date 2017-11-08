@@ -317,14 +317,20 @@ aos.Planet.prototype = {
 
     updatePies: function () {
         aos.game.pies.forEach(function (pie, i) {
-            pie.content.forEach(function (res, j) {
-                const label = res.label;
-                this.ressources.forEach(function (resource, i) {
-                    if (resource.name === label) {
-                        res.value = resource.quantity;
-                    }
+            if (pie.innerText !== "Planet"){
+                pie.content.forEach(function (res, j) {
+                    const label = res.label;
+                    this.ressources.forEach(function (resource, i) {
+                        if (resource.name === label) {
+                            res.value = resource.quantity;
+                        }
+                    }, this);
                 }, this);
-            }, this);
+            }else{
+                pie.content[0].value = this.landSize;
+                pie.content[1].value = 100 - this.landSize;
+            }
+            
             pie.update();
         }, this);
     },
@@ -346,8 +352,6 @@ aos.Planet.prototype = {
         this.showBuildings();
         this.updatePies();
         this.updateBars();
-        let rep = document.getElementById("repartition");
-        rep.innerHTML = "Land / Ocean : " + this.landSize + " / " + (100 - this.landSize);
     },
 
     setupEvents: function () {

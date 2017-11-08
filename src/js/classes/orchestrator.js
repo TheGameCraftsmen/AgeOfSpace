@@ -52,6 +52,7 @@ aos.Orchestrator.prototype = {
         this.renderPie(document.getElementById('airPie'), 'Air', 'air');
         this.renderPie(document.getElementById('liquidPie'), 'Ocean', 'liquid');
         this.renderPie(document.getElementById('groundPie'), 'Soil', 'ground');
+        this.renderPieGroundWater(document.getElementById('repartitionPie'));
 
         this.renderBar(document.getElementById('humansPop'), 'Humans');
         this.renderBar(document.getElementById('machinesPop'), 'Machines');
@@ -115,6 +116,18 @@ aos.Orchestrator.prototype = {
         this.pies.push(chart);
     },
 
+    renderPieGroundWater: function(elem){
+        const chart = new aos.PieChart();
+        chart.htmlElement = elem;
+        chart.innerText = "Planet";
+        chart.content = [];
+        const colors = ['#060', '#066'];
+        chart.content.push({label : 'ground', value : 0, color : colors[0] });
+        chart.content.push({label : 'water', value : 1, color : colors[1] });
+        chart.render();
+        this.pies.push(chart);
+    },
+
     renderBar: function (elem, txt) {
         const bar = new aos.Ressource();
         bar.htmlElement = elem;
@@ -140,8 +153,16 @@ aos.Orchestrator.prototype = {
                 buildingTypeCount[this.selectedStar.selectedPlanet.buildings[itBuilding].builtOn] += 1;
             }
             var buildingMaxBuilding = { 'ground': Math.floor((this.selectedStar.selectedPlanet.size + 10) * this.selectedStar.selectedPlanet.landSize / 100), 'water': Math.floor((this.selectedStar.selectedPlanet.size + 10) * ((100 - this.selectedStar.selectedPlanet.landSize) / 100)) }
-            //console.log(this.selectedStar.selectedPlanet.landSize/100);
-            //var maxBuildingGroundReached = ((this.selectedStar.selectedPlanet.size +10) - this.selectedStar.selectedPlanet.buildings.length) > 0 ? false : true;
+            if (buildingTypeCount['ground'] >= buildingMaxBuilding['ground']){
+                document.getElementById('nbBuildingOnGround').innerHTML = "<font color='red'>" + buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'] + "</font>";
+            }else{
+                document.getElementById('nbBuildingOnGround').innerHTML = buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'];
+            }
+            if (buildingTypeCount['water'] >= buildingMaxBuilding['water']){
+                document.getElementById('nbBuildingOnWater').innerHTML = "<font color='red'>" + buildingTypeCount['water'] + " / " + buildingMaxBuilding['water'] + "</font>";
+            }else{
+                document.getElementById('nbBuildingOnWater').innerHTML = buildingTypeCount['water'] + " / " + buildingMaxBuilding['water'];
+            }
             for (let i = 0 ; i < aos.buildings.length ; i++) {
                 for (let itLocation = 0 ; itLocation < aos.buildings[i].location.length ; itLocation++) {
                     let table = document.getElementById(aos.buildings[i].location[itLocation].name + "Buildings");
@@ -155,8 +176,6 @@ aos.Orchestrator.prototype = {
                         }
                     }
                     if (found !== null) {
-                        //if (!maxBuildingReached){
-                        //console.log("@@@ " + aos.buildings[i].location[itLocation].name + "//" + buildingMaxBuilding[aos.buildings[i].location[itLocation].name] + "//" + buildingTypeCount[aos.buildings[i].location[itLocation].name])  
                         if (buildingMaxBuilding[aos.buildings[i].location[itLocation].name] > buildingTypeCount[aos.buildings[i].location[itLocation].name]) {
                             var requireOk = true;
                             for (let itRequire = 0 ; itRequire < aos.buildings[i].constructionCost.length ; itRequire++) {
@@ -484,6 +503,16 @@ aos.Orchestrator.prototype = {
             document.getElementById('contextualBlock').style.display = 'none';
             this.pies[2].setWantContextual(false);
         }.bind(this), false);
+        document.getElementById('repartitionPie').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Planet repartition' + '<br><em>&nbsp;</em>';
+            this.pies[3].setWantContextual(true);
+        }.bind(this), false);
+        document.getElementById('repartitionPie').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            this.pies[3].setWantContextual(false);
+        }.bind(this), false);
+
         //#endregion
 
         document.getElementById('miniatureTabs').addEventListener('click', function (e) {
