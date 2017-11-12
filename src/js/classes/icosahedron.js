@@ -141,7 +141,7 @@ aos.Icosahedron.prototype = {
             });
             this.triangles.forEach(function (tri) {
                 ctx.beginPath();
-                ctx.fillStyle = (tri[2] === 0 ? 'blue' : 'red');
+                ctx.fillStyle = 'rgb(' + (tri[0] * 20) + ', ' + (tri[1] * 20) + ', ' + (tri[2] * 20) + ')';
                 ctx.moveTo(screenPoints[tri[0]][0] * halfWidth + halfWidth, screenPoints[tri[0]][1] * halfHeight + halfHeight);
                 ctx.lineTo(screenPoints[tri[1]][0] * halfWidth + halfWidth, screenPoints[tri[1]][1] * halfHeight + halfHeight);
                 ctx.lineTo(screenPoints[tri[2]][0] * halfWidth + halfWidth, screenPoints[tri[2]][1] * halfHeight + halfHeight);
