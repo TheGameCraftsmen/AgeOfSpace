@@ -22,6 +22,10 @@ aos.Icosahedron = function () {
     this.frustumMatrix = null;
     this.cameraMatrix = null;
     this.rotateY1 = null;
+    this.rotateY1r = null;
+    this.rotates = true;
+    this.hoveredTriangle = -1;
+    this.mousePosition = [0, 0];
 };
 
 
@@ -61,12 +65,18 @@ aos.Icosahedron.prototype = {
             tx, ty, tz, 1
         ]);
 
-        const cos1 = Math.cos(Math.PI / 180);
-        const sin1 = Math.sin(Math.PI / 180);
+        const cos1 = Math.cos(Math.PI / 500);
+        const sin1 = Math.sin(Math.PI / 500);
         this.rotateY1 = new Float32Array([
             cos1, 0, -sin1, 0,
             0, 1, 0, 0,
             sin1, 0, cos1, 0,
+            0, 0, 0, 1
+        ]);
+        this.rotateY1r = new Float32Array([
+            cos1, 0, sin1, 0,
+            0, 1, 0, 0,
+            -sin1, 0, cos1, 0,
             0, 0, 0, 1
         ]);
 
@@ -111,25 +121,53 @@ aos.Icosahedron.prototype = {
 
         window.addEventListener('animationTick', function (e) {
             const canvas = document.getElementById('planetTestCanvas');
+            const halfWidth = canvas.clientWidth / 2;
+            const halfHeight = canvas.clientHeight / 2;
             const ctx = canvas.getContext("2d");
 
-            const newModel = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
-            this.modelMatrix = newModel;
+            ctx.save();
+            ctx.translate(halfWidth, halfHeight);
+            ctx.scale(halfWidth, halfHeight);
+
+            if (this.rotates) {
+                const newModel = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
+                this.modelMatrix = newModel;
+            }
+            else {
+                if (this.mousePosition[0] < 50) {
+                    const newModel1 = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
+                    const newModel2 = aos.Math.multiply4x4(this.rotateY1, newModel1);
+                    const newModel3 = aos.Math.multiply4x4(this.rotateY1, newModel2);
+                    const newModel4 = aos.Math.multiply4x4(this.rotateY1, newModel3);
+                    this.modelMatrix = newModel4;
+                } else if (this.mousePosition[0] < 150) {
+                    const newModel1 = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
+                    const newModel2 = aos.Math.multiply4x4(this.rotateY1, newModel1);
+                    this.modelMatrix = newModel2;
+                } else if (this.mousePosition[0] < 350) {
+                    // No rotation
+                } else if (this.mousePosition[0] < 450) {
+                    const newModel1 = aos.Math.multiply4x4(this.rotateY1r, this.modelMatrix);
+                    const newModel2 = aos.Math.multiply4x4(this.rotateY1r, newModel1);
+                    this.modelMatrix = newModel2;
+                } else {
+                    const newModel1 = aos.Math.multiply4x4(this.rotateY1r, this.modelMatrix);
+                    const newModel2 = aos.Math.multiply4x4(this.rotateY1r, newModel1);
+                    const newModel3 = aos.Math.multiply4x4(this.rotateY1r, newModel2);
+                    const newModel4 = aos.Math.multiply4x4(this.rotateY1r, newModel3);
+                    this.modelMatrix = newModel4;
+                }
+            }
             const vm = aos.Math.multiply4x4(this.cameraMatrix, this.modelMatrix);
             const pvm = aos.Math.multiply4x4(this.frustumMatrix, vm);
 
-            const halfWidth = canvas.clientWidth / 2;
-            const halfHeight = canvas.clientHeight / 2;
-
             ctx.fillStyle = "#000";
-            ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+            ctx.fillRect(-1, -1, 2, 2);
 
             const screenPoints = [];
             this.vertices.forEach(function (vec3) {
                 const screenPoint = aos.Math.transformVector3(vec3, pvm);
                 screenPoints.push(screenPoint);
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(screenPoint[0] * halfWidth + halfWidth, screenPoint[1] * halfHeight + halfHeight, 1, 1);
                 const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
                 vec3[3] = modelPoint[2];
             }, this);
@@ -142,17 +180,38 @@ aos.Icosahedron.prototype = {
             this.triangles.forEach(function (tri) {
                 ctx.beginPath();
                 ctx.fillStyle = 'rgb(' + (tri[0] * 20) + ', ' + (tri[1] * 20) + ', ' + (tri[2] * 20) + ')';
-                ctx.moveTo(screenPoints[tri[0]][0] * halfWidth + halfWidth, screenPoints[tri[0]][1] * halfHeight + halfHeight);
-                ctx.lineTo(screenPoints[tri[1]][0] * halfWidth + halfWidth, screenPoints[tri[1]][1] * halfHeight + halfHeight);
-                ctx.lineTo(screenPoints[tri[2]][0] * halfWidth + halfWidth, screenPoints[tri[2]][1] * halfHeight + halfHeight);
+                ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                 ctx.closePath();
+                if (!this.rotates && ctx.isPointInPath(this.mousePosition[0], this.mousePosition[1])) {
+                    ctx.fillStyle = 'red';
+                }
                 ctx.fill();
+                ctx.lineWidth = 0.004; // 1/250 space units = 1 px on screen
                 ctx.strokeStyle = 'white';
-                ctx.lineTo(screenPoints[tri[1]][0] * halfWidth + halfWidth, screenPoints[tri[1]][1] * halfHeight + halfHeight);
-                ctx.lineTo(screenPoints[tri[2]][0] * halfWidth + halfWidth, screenPoints[tri[2]][1] * halfHeight + halfHeight);
+                ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                 ctx.closePath();
                 ctx.stroke();
             }, this);
+
+            ctx.restore();
+        }.bind(this), false);
+
+        document.getElementById('planetTestCanvas').addEventListener('mouseover', function (e) {
+            this.rotates = false;
+        }.bind(this), false);
+        document.getElementById('planetTestCanvas').addEventListener('mouseout', function (e) {
+            this.rotates = true;
+        }.bind(this), false);
+
+        document.getElementById('planetTestCanvas').addEventListener('mousemove', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            const x = e.offsetX * 500 / document.getElementById('planetTestCanvas').offsetWidth;
+            const y = e.offsetY * 500 / document.getElementById('planetTestCanvas').offsetWidth;
+            this.mousePosition = [x, y];
+            //console.log('m' + x + ',' + y);
         }.bind(this), false);
     },
 };
