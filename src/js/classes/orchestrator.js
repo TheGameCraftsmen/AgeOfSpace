@@ -30,11 +30,20 @@ aos.Orchestrator = function () {
 
     this.pies = [];
     this.resourceBars = [];
+
+    this.planetPoints = [];
+    this.modelMatrix = null;
 };
 
 aos.Orchestrator.prototype = {
 
     start: function () {
+        this.modelMatrix = new Float32Array([
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+        ]);
         this.buildPlanetUi();
         this.galaxy = new aos.Galaxy();
         this.galaxy.generate();
@@ -578,13 +587,17 @@ aos.Orchestrator.prototype = {
                 0, 0, 1, 0,
                 tx, ty, tz, 1
             ]);
-            const model = new Float32Array([
-                1, 0, 0, 0,
+            const cos1 = Math.cos(Math.PI / 180);
+            const sin1 = Math.sin(Math.PI / 180);
+            const rotateY = new Float32Array([
+                cos1, 0, -sin1, 0,
                 0, 1, 0, 0,
-                0, 0, 1, 0,
+                sin1, 0, cos1, 0,
                 0, 0, 0, 1
             ]);
-            const vm = aos.Math.multiply4x4(glCamera, model);
+            const newModel = aos.Math.multiply4x4(rotateY, this.modelMatrix);
+            this.modelMatrix = newModel;
+            const vm = aos.Math.multiply4x4(glCamera, this.modelMatrix);
             const pvm = aos.Math.multiply4x4(glFrustum, vm);
 
             const halfWidth = canvas.clientWidth / 2;
@@ -593,23 +606,49 @@ aos.Orchestrator.prototype = {
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-            const pointCount = 100;
-            for (let i = 0; i < pointCount; i++) {
-                // golden spiral method
-                // see
-                // https://stackoverflow.com/a/44164075
-                const theta = Math.PI * i * (1 + Math.sqrt(5));
-                const phi = Math.acos(2 * i / pointCount - 1);
-                const vec3 = new Float32Array([
-                    Math.sin(phi) * Math.cos(theta),
-                    Math.sin(phi) * Math.sin(theta),
-                    Math.cos(phi)
-                ]);
-
+            if (this.planetPoints.length === 0) {
+                //const pointCount = 100;
+                //for (let i = 0; i < pointCount; i++) {
+                //    // golden spiral method
+                //    // see
+                //    // https://stackoverflow.com/a/44164075
+                //    const theta = Math.PI * i * (1 + Math.sqrt(5));
+                //    const phi = Math.acos(2 * i / pointCount - 1);
+                //    const vec3 = new Float32Array([
+                //        Math.sin(phi) * Math.cos(theta),
+                //        Math.sin(phi) * Math.sin(theta),
+                //        Math.cos(phi)
+                //    ]);
+                //    this.planetPoints.push(vec3);
+                //}
+                const invphi = 2 / (1 + Math.sqrt(5));
+                this.planetPoints.push(new Float32Array([1, invphi, 0]));
+                this.planetPoints.push(new Float32Array([1, -invphi, 0]));
+                this.planetPoints.push(new Float32Array([-1, invphi, 0]));
+                this.planetPoints.push(new Float32Array([-1, -invphi, 0]));
+                this.planetPoints.push(new Float32Array([0, 1, invphi]));
+                this.planetPoints.push(new Float32Array([0, 1, -invphi]));
+                this.planetPoints.push(new Float32Array([0, -1, invphi]));
+                this.planetPoints.push(new Float32Array([0, -1, -invphi]));
+                this.planetPoints.push(new Float32Array([invphi, 0, 1]));
+                this.planetPoints.push(new Float32Array([-invphi, 0, 1]));
+                this.planetPoints.push(new Float32Array([invphi, 0, -1]));
+                this.planetPoints.push(new Float32Array([-invphi, 0, -1]));
+            }
+            const screenPoints = [];
+            this.planetPoints.forEach(function (vec3) {
                 const screenPoint = aos.Math.transformVector3(vec3, pvm);
+                screenPoints.push(screenPoint);
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(screenPoint[0] * halfWidth + halfWidth, screenPoint[1] * halfHeight + halfHeight, 1, 1);
-            }
+            }, this);
+            ctx.beginPath();
+            ctx.strokeStyle = 'blue';
+            ctx.moveTo(screenPoints[4][0] * halfWidth + halfWidth, screenPoints[4][1] * halfHeight + halfHeight);
+            ctx.lineTo(screenPoints[5][0] * halfWidth + halfWidth, screenPoints[5][1] * halfHeight + halfHeight);
+            ctx.lineTo(screenPoints[0][0] * halfWidth + halfWidth, screenPoints[0][1] * halfHeight + halfHeight);
+            ctx.closePath();
+            ctx.stroke();
 
         }.bind(this), false);
     },
