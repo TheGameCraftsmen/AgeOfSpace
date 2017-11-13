@@ -18,6 +18,7 @@ var aos = aos || {};
 aos.Icosahedron = function () {
     this.vertices = [];
     this.triangles = [];
+    this.tessellatedTriangles = [];
     this.modelMatrix = null;
     this.frustumMatrix = null;
     this.cameraMatrix = null;
@@ -41,8 +42,8 @@ aos.Icosahedron.prototype = {
         ]);
 
         // http://www.songho.ca/opengl/gl_projectionmatrix.html
-        const right = 0.268;
-        const top = 0.268;
+        const right = 0.2;
+        const top = 0.2;
         const near = 1;
         const far = 100;
         const nf = 1 / (near - far);
@@ -57,13 +58,20 @@ aos.Icosahedron.prototype = {
         // translate (0, 0, 5)
         const tx = 0;
         const ty = 0;
-        const tz = 5;
-        this.cameraMatrix = new Float32Array([
+        const tz = 6;
+        const cos10 = Math.cos(Math.PI / 12);
+        const sin10 = Math.sin(Math.PI / 12);
+        this.cameraMatrix = aos.Math.multiply4x4(new Float32Array([
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             tx, ty, tz, 1
-        ]);
+        ]), new Float32Array([
+            cos10, -sin10, 0, 0,
+            sin10, cos10, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ]));
 
         const cos1 = Math.cos(Math.PI / 500);
         const sin1 = Math.sin(Math.PI / 500);
@@ -81,6 +89,7 @@ aos.Icosahedron.prototype = {
         ]);
 
         const invphi = 2 / (1 + Math.sqrt(5));
+        const radius = Math.sqrt(1 + invphi * invphi);
 
         // Vertices coordinates: [Xworld, Yworld, Zworld, Zmodel]
         this.vertices.push(new Float32Array([1, invphi, 0, 0]));    // 0
@@ -96,27 +105,44 @@ aos.Icosahedron.prototype = {
         this.vertices.push(new Float32Array([invphi, 0, -1, 0]));    // 10
         this.vertices.push(new Float32Array([-invphi, 0, -1, 0]));    // 11
 
-        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel]
-        this.triangles.push([4, 5, 0, 0]);
-        this.triangles.push([4, 5, 2, 0]);
-        this.triangles.push([6, 7, 1, 0]);
-        this.triangles.push([6, 7, 3, 0]);
-        this.triangles.push([0, 1, 8, 0]);
-        this.triangles.push([0, 1, 10, 0]);
-        this.triangles.push([2, 3, 9, 0]);
-        this.triangles.push([2, 3, 11, 0]);
-        this.triangles.push([8, 9, 4, 0]);
-        this.triangles.push([8, 9, 6, 0]);
-        this.triangles.push([10, 11, 5, 0]);
-        this.triangles.push([10, 11, 7, 0]);
-        this.triangles.push([0, 4, 8, 0]); // +++
-        this.triangles.push([0, 5, 10, 0]); // ++-
-        this.triangles.push([1, 6, 8, 0]); // +-+
-        this.triangles.push([1, 7, 10, 0]); // +--
-        this.triangles.push([2, 4, 9, 0]); // -++
-        this.triangles.push([2, 5, 11, 0]); // -+-
-        this.triangles.push([3, 6, 9, 0]); // --+
-        this.triangles.push([3, 7, 11, 0]); // ---
+        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel, triangle index]
+        this.triangles.push([4, 5, 0, 0, 0]);
+        this.triangles.push([4, 5, 2, 0, 1]);
+        this.triangles.push([6, 7, 1, 0, 2]);
+        this.triangles.push([6, 7, 3, 0, 3]);
+        this.triangles.push([0, 1, 8, 0, 4]);
+        this.triangles.push([0, 1, 10, 0, 5]);
+        this.triangles.push([2, 3, 9, 0, 6]);
+        this.triangles.push([2, 3, 11, 0, 7]);
+        this.triangles.push([8, 9, 4, 0, 8]);
+        this.triangles.push([8, 9, 6, 0, 9]);
+        this.triangles.push([10, 11, 5, 0, 10]);
+        this.triangles.push([10, 11, 7, 0, 11]);
+        this.triangles.push([0, 4, 8, 0, 12]); // +++
+        this.triangles.push([0, 5, 10, 0, 13]); // ++-
+        this.triangles.push([1, 6, 8, 0, 14]); // +-+
+        this.triangles.push([1, 7, 10, 0, 15]); // +--
+        this.triangles.push([2, 4, 9, 0, 16]); // -++
+        this.triangles.push([2, 5, 11, 0, 17]); // -+-
+        this.triangles.push([3, 6, 9, 0, 18]); // --+
+        this.triangles.push([3, 7, 11, 0, 19]); // ---
+
+        this.triangles.forEach(function (tri) {
+            // Tessellated triangles arrays: [vertex1, vertex2, vertex3, average Zmodel, parent triangle]
+            const v1 = this.vertices[tri[0]];
+            const v2 = this.vertices[tri[1]];
+            const v3 = this.vertices[tri[2]];
+            const m12 = aos.Math.normalizeVector3(new Float32Array([(v1[0] + v2[0]) * 0.5, (v1[1] + v2[1]) * 0.5, (v1[2] + v2[2]) * 0.5]));
+            const m23 = aos.Math.normalizeVector3(new Float32Array([(v2[0] + v3[0]) * 0.5, (v2[1] + v3[1]) * 0.5, (v2[2] + v3[2]) * 0.5]));
+            const m31 = aos.Math.normalizeVector3(new Float32Array([(v3[0] + v1[0]) * 0.5, (v3[1] + v1[1]) * 0.5, (v3[2] + v1[2]) * 0.5]));
+            this.vertices.push(new Float32Array([m12[0] * radius, m12[1] * radius, m12[2] * radius, 0]));
+            this.vertices.push(new Float32Array([m23[0] * radius, m23[1] * radius, m23[2] * radius, 0]));
+            this.vertices.push(new Float32Array([m31[0] * radius, m31[1] * radius, m31[2] * radius, 0]));
+            this.tessellatedTriangles.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, tri[4]]);
+            this.tessellatedTriangles.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, tri[4]]);
+            this.tessellatedTriangles.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, tri[4]]);
+            this.tessellatedTriangles.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, tri[4]]);
+        }, this);
 
 
         window.addEventListener('animationTick', function (e) {
@@ -134,19 +160,19 @@ aos.Icosahedron.prototype = {
                 this.modelMatrix = newModel;
             }
             else {
-                if (this.mousePosition[0] < 50) {
+                if (this.mousePosition[0] < 80) {
                     const newModel1 = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
                     const newModel2 = aos.Math.multiply4x4(this.rotateY1, newModel1);
                     const newModel3 = aos.Math.multiply4x4(this.rotateY1, newModel2);
                     const newModel4 = aos.Math.multiply4x4(this.rotateY1, newModel3);
                     this.modelMatrix = newModel4;
-                } else if (this.mousePosition[0] < 150) {
+                } else if (this.mousePosition[0] < 160) {
                     const newModel1 = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
                     const newModel2 = aos.Math.multiply4x4(this.rotateY1, newModel1);
                     this.modelMatrix = newModel2;
-                } else if (this.mousePosition[0] < 350) {
+                } else if (this.mousePosition[0] < 340) {
                     // No rotation
-                } else if (this.mousePosition[0] < 450) {
+                } else if (this.mousePosition[0] < 420) {
                     const newModel1 = aos.Math.multiply4x4(this.rotateY1r, this.modelMatrix);
                     const newModel2 = aos.Math.multiply4x4(this.rotateY1r, newModel1);
                     this.modelMatrix = newModel2;
@@ -171,29 +197,59 @@ aos.Icosahedron.prototype = {
                 const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
                 vec3[3] = modelPoint[2];
             }, this);
-            this.triangles.forEach(function (tri) {
+            this.tessellatedTriangles.forEach(function (tri) {
                 tri[3] = this.vertices[tri[0]][3] + this.vertices[tri[1]][3] + this.vertices[tri[2]][3];
             }, this);
-            this.triangles.sort(function (a, b) {
+            this.tessellatedTriangles.sort(function (a, b) {
                 return b[3] - a[3];
             });
-            this.triangles.forEach(function (tri) {
+            let selectedTriangle = -1;
+            this.tessellatedTriangles.forEach(function (tri) {
                 ctx.beginPath();
-                ctx.fillStyle = 'rgb(' + (tri[0] * 20) + ', ' + (tri[1] * 20) + ', ' + (tri[2] * 20) + ')';
-                ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                 ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                 ctx.closePath();
                 if (!this.rotates && ctx.isPointInPath(this.mousePosition[0], this.mousePosition[1])) {
-                    ctx.fillStyle = 'red';
+                    selectedTriangle = tri[4];
                 }
-                ctx.fill();
-                ctx.lineWidth = 0.004; // 1/250 space units = 1 px on screen
-                ctx.strokeStyle = 'white';
-                ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+            }, this);
+            this.tessellatedTriangles.forEach(function (tri) {
+                const parentTri = this.triangles[tri[4]];
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
+                ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                 ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                 ctx.closePath();
-                ctx.stroke();
+                if (selectedTriangle === tri[4]) {
+                    ctx.fillStyle = '#600';
+                }
+                ctx.fill();
+                if (tri[0] < 12) {
+                    ctx.beginPath();
+                    ctx.lineWidth = 0.005; // 0.004 space units = 1 px on screen
+                    ctx.strokeStyle = '#000';
+                    ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.lineWidth = 0.001;
+                    ctx.strokeStyle = '#888';
+                    ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.lineWidth = 0.001;
+                    ctx.strokeStyle = '#888';
+                    ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                    ctx.closePath();
+                    ctx.stroke();
+                }
             }, this);
 
             ctx.restore();
@@ -211,7 +267,8 @@ aos.Icosahedron.prototype = {
             const x = e.offsetX * 500 / document.getElementById('planetTestCanvas').offsetWidth;
             const y = e.offsetY * 500 / document.getElementById('planetTestCanvas').offsetWidth;
             this.mousePosition = [x, y];
-            //console.log('m' + x + ',' + y);
+            document.getElementById('debug').innerHTML = '' + x + '/' + y + '<br/>';
         }.bind(this), false);
     },
+
 };

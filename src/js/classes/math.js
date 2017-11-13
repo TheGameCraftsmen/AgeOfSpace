@@ -93,6 +93,23 @@ aos.Math = {
             (m[2] * x + m[6] * y + m[10] * z + m[14]) / w
         ]);
     },
+
+    /**
+     * Normalizes a vector.
+     *
+     * @static
+     */
+    normalizeVector3: function (v) {
+        const x = v[0];
+        const y = v[1];
+        const z = v[2];
+        const length = Math.sqrt(x * x + y * y + z * z);
+        return new Float32Array([
+            x / length,
+            y / length,
+            z / length
+        ]);
+    },
 };
 
 
