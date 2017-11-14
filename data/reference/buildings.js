@@ -28,12 +28,12 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "metal",
                     "quantity": 1000,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -67,12 +67,12 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "carbon",
                     "quantity": 500,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -101,12 +101,12 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "oil",
                     "quantity": 500,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -135,12 +135,12 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "fissile material",
                     "quantity": 50,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -167,20 +167,20 @@ aos.buildings = [
                 {
                     "name": "oxocarbon",
                     "quantity": 500,
-                    "to": "planet"
+                    "to": "local"
                 }
             ],
             "require": [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false,
+                    "planetResource": false,
                     "remove": true
                 },
                 {
                     "name": "metal",
                     "quantity": 100,
-                    "planetRessource": true,
+                    "planetResource": true,
                     "remove": true
                 }
             ],
@@ -188,7 +188,7 @@ aos.buildings = [
                 {
                     "name": "oxygen",
                     "percent": 70,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -210,7 +210,7 @@ aos.buildings = [
                 {
                     "name": "humans",
                     "quantity": 50,
-                    "to": "storage"
+                    "to": "local"
                 },
                 {
                     "name": "oxocarbon",
@@ -222,13 +222,13 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 200,
-                    "planetRessource": false,
+                    "planetResource": false,
                     "remove": true
                 },
                 {
                     "name": "metal",
                     "quantity": 100,
-                    "planetRessource": true,
+                    "planetResource": true,
                     "remove": true
                 }
             ],
@@ -236,7 +236,7 @@ aos.buildings = [
                 {
                     "name": "oxygen",
                     "percent": 70,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -375,12 +375,12 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "oxocarbon",
                     "quantity": 50,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -416,12 +416,12 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "oxocarbon",
                     "quantity": 10,
-                    "planetRessource": true
+                    "planetResource": true
                 }
             ]
         },
@@ -449,17 +449,17 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 },
                 {
                     "name": "inert gases",
                     "quantity": 50,
-                    "planetRessource": true
+                    "planetResource": true
                 },
                 {
                     "name": "fissile material",
                     "quantity": 50,
-                    "planetRessource": false
+                    "planetResource": false
                 }
             ]
         },

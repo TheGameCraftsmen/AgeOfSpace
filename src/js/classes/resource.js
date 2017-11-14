@@ -11,11 +11,11 @@ var aos = aos || {};
 //debugger;
 
 /**
- * This class concerns the ressource available on a planet (air, ground, crops...)
+ * This class concerns the resource available on a planet (air, ground, crops...)
  *
  * @class
  */
-aos.Ressource = function () {
+aos.Resource = function () {
     /** @type {String} 
      * Air, Ground, metal
     */
@@ -30,7 +30,7 @@ aos.Ressource = function () {
     this.htmlElement = null;
 };
 
-aos.Ressource.prototype = {
+aos.Resource.prototype = {
 
     render: function () {
         let code = '<div class="resourceBar"><div>' + this.name + '</div><div><div></div>';

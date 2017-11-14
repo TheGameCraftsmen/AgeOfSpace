@@ -25,14 +25,17 @@ aos.Planet = function () {
      * in Million km2
     */
     this.size = 0;
-    /** @type {aos.ressource} */
-    this.ressources = [];
-    /** @type {aos.ressource} */
-    this.ressourcesStored = [];
+    /** @type {aos.Resource} */
+    this.resources = [];
+    /** @type {aos.Resource} */
+    this.resourcesStored = [];
     /** @type {number} */
     this.landSize = 0;
     /** @type {number} */
     this.population = 0;
+
+    /** @type {aos.star} */
+    this.star = null;
     
     /** @type {aos.building} */
     this.buildings = [];
@@ -44,28 +47,28 @@ aos.Planet = function () {
 
 aos.Planet.prototype = {
     /**
-     * addressource : allow to add a ressource to a storage on a planet
+     * addResource : allow to add a resource to a storage on a planet
      *
      * This method allows :
-     *         -- to pass argument ressource an aos.ressource (type & quantity are optional in this case)
-     *         -- to pass argument ressource as a string, type & quantity are mandatory in this case
+     *         -- to pass argument resource an aos.resource (type & quantity are optional in this case)
+     *         -- to pass argument resource as a string, type & quantity are mandatory in this case
      *
-     * Argument to if passed define which store is concerned by the ressource :
-     *         -- "planet" : to add ressource to planet (water, oxygen, ...)
-     *         -- "local"  : to add ressource to stored ressource by the player (metal, food, ...)
+     * Argument to if passed define which store is concerned by the resource :
+     *         -- "planet" : to add resource to planet (water, oxygen, ...)
+     *         -- "local"  : to add resource to stored resource by the player (metal, food, ...)
      */
-    addRessource: function (ressource, to, quantity) {
-        let res = ressource;
+    addResource: function (resource, to, quantity) {
+        let res = resource;
         let quant = quantity;
-        if (typeof ressource == "object") {
-            res = ressource.name;
-            quant = ressource.quantity;
+        if (typeof resource == "object") {
+            res = resource.name;
+            quant = resource.quantity;
         }
         let storage = null;
         if (to == "planet") {
-            storage = this.ressources;
+            storage = this.resources;
         } else {
-            storage = this.ressourcesStored;
+            storage = this.star.resourceShared;
         }
         let resFound = null;
         
@@ -75,7 +78,7 @@ aos.Planet.prototype = {
             }
         }
         if (resFound == null) {
-            resFound = new aos.Ressource();
+            resFound = new aos.Resource();
             resFound.name = res;
             resFound.quantity = quant;
             storage.push(resFound);
@@ -91,11 +94,6 @@ aos.Planet.prototype = {
         this.generateGround();
         this.generateLiquid();
 
-        let r = new aos.Ressource();
-        r.type = "metal";
-        r.name = "metal"
-        r.quantity = 200;
-        this.ressourcesStored.push(r);
     },
 
     addBuilding: function (name,location) {
@@ -104,12 +102,12 @@ aos.Planet.prototype = {
         b.construct(name);
         var constructOk = true;
         for (let i = 0; i < b.constructionCost.length; i++) {
-            var qty = this.removeRessource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, true);
+            var qty = this.removeResource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, true);
             if (qty != b.constructionCost[i].quantity) constructOk = false;
         }
         if (constructOk) {
             for (let i = 0; i < b.constructionCost.length; i++) {
-                var qty = this.removeRessource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, false);
+                var qty = this.removeResource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, false);
             }
             b.builtOn = _location;
             this.buildings.push(b);
@@ -119,62 +117,62 @@ aos.Planet.prototype = {
 
     generateAir: function () {
         var compositionPercent = 0;
-        for (let i = 0 ; i < aos.ressources.length ; i++) {
-            if (aos.ressources[i].category == "air") {
-                let ressource = new aos.Ressource();
-                ressource.type = "air";
-                ressource.name = aos.ressources[i].name;
-                if (i == (aos.ressources.length - 1)) {
-                    ressource.percent = 100 - compositionPercent;
-                    ressource.quantity = (100 - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
+        for (let i = 0 ; i < aos.resources.length ; i++) {
+            if (aos.resources[i].category == "air") {
+                let resource = new aos.Resource();
+                resource.type = "air";
+                resource.name = aos.resources[i].name;
+                if (i == (aos.resources.length - 1)) {
+                    resource.percent = 100 - compositionPercent;
+                    resource.quantity = (100 - compositionPercent) * this.size * aos.volumeResources[resource.type];
                 } else {
                     let itAirPrcent = Math.floor(Math.random() * (100 - compositionPercent))
-                    ressource.quantity = itAirPrcent * this.size * aos.volumeRessources[ressource.type];
-                    ressource.percent = itAirPrcent;
+                    resource.quantity = itAirPrcent * this.size * aos.volumeResources[resource.type];
+                    resource.percent = itAirPrcent;
                     compositionPercent += itAirPrcent;
                 }
-                this.ressources.push(ressource);
+                this.resources.push(resource);
             }
         }
     },
 
     generateLiquid: function () {
         var compositionPercent = 0;
-        for (let i = 0 ; i < aos.ressources.length ; i++) {
-            if (aos.ressources[i].category == "liquid") {
-                let ressource = new aos.Ressource();
-                ressource.type = "liquid";
-                ressource.name = aos.ressources[i].name;
-                if (i == (aos.ressources.length - 1)) {
-                    ressource.quantity = (100 - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
-                    ressource.percent = (100 - compositionPercent) * this.size * aos.volumeRessources[ressource.type];
+        for (let i = 0 ; i < aos.resources.length ; i++) {
+            if (aos.resources[i].category == "liquid") {
+                let resource = new aos.Resource();
+                resource.type = "liquid";
+                resource.name = aos.resources[i].name;
+                if (i == (aos.resources.length - 1)) {
+                    resource.quantity = (100 - compositionPercent) * this.size * aos.volumeResources[resource.type];
+                    resource.percent = (100 - compositionPercent) * this.size * aos.volumeResources[resource.type];
                 } else {
                     let itPrcent = Math.floor(Math.random() * (100 - compositionPercent))
-                    ressource.quantity = itPrcent * this.size * aos.volumeRessources[ressource.type];
-                    ressource.percent = itPrcent;
+                    resource.quantity = itPrcent * this.size * aos.volumeResources[resource.type];
+                    resource.percent = itPrcent;
                     compositionPercent += itPrcent;
                 }
-                this.ressources.push(ressource);
+                this.resources.push(resource);
             }
         }
     },
 
     generateGround: function () {
         var compositionPercent = 0;
-        for (let i = 0 ; i < aos.ressources.length ; i++) {
-            if (aos.ressources[i].category == "ground") {
-                let ressource = new aos.Ressource();
-                ressource.type = "ground";
-                ressource.name = aos.ressources[i].name;
-                if (i == (aos.ressources.length - 1)) {
-                    ressource.percent = 100 - compositionPercent;
-                    ressource.quantity = ressource.percent * this.size * aos.volumeRessources[ressource.type];
-                    this.ressources.push(ressource);
+        for (let i = 0 ; i < aos.resources.length ; i++) {
+            if (aos.resources[i].category == "ground") {
+                let resource = new aos.Resource();
+                resource.type = "ground";
+                resource.name = aos.resources[i].name;
+                if (i == (aos.resources.length - 1)) {
+                    resource.percent = 100 - compositionPercent;
+                    resource.quantity = resource.percent * this.size * aos.volumeResources[resource.type];
+                    this.resources.push(resource);
                 } else {
                     let itPrcent = Math.floor(Math.random() * (100 - compositionPercent))
-                    ressource.percent = itPrcent;
-                    ressource.quantity = itPrcent * this.size * aos.volumeRessources[ressource.type];
-                    this.ressources.push(ressource);
+                    resource.percent = itPrcent;
+                    resource.quantity = itPrcent * this.size * aos.volumeResources[resource.type];
+                    this.resources.push(resource);
                     compositionPercent += itPrcent;
                 }
             }
@@ -190,20 +188,20 @@ aos.Planet.prototype = {
         }
     },
 
-    removeRessource: function (name, quantity, planetRessource, isChecking) {
+    removeResource: function (name, quantity, planetResource, isChecking) {
         let qtyRemoved = 0;
-        if (planetRessource) {
-            for (let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++) {
-                if (this.ressources[itPlanetRes].name == name && this.ressources[itPlanetRes].quantity >= quantity) {
-                    if (!isChecking) this.ressources[itPlanetRes].quantity -= quantity;
+        if (planetResource) {
+            for (let itPlanetRes = 0 ; itPlanetRes < this.resources.length ; itPlanetRes++) {
+                if (this.resources[itPlanetRes].name == name && this.resources[itPlanetRes].quantity >= quantity) {
+                    if (!isChecking) this.resources[itPlanetRes].quantity -= quantity;
                     qtyRemoved = quantity;
                 }
             }
         } else {
-            for (let itRes = 0 ; itRes < this.ressourcesStored.length ; itRes++) {
-                if (this.ressourcesStored[itRes].name == name && this.ressourcesStored[itRes].quantity >= quantity) {
+            for (let itRes = 0 ; itRes < this.star.resourceShared.length ; itRes++) {
+                if (this.star.resourceShared[itRes].name == name && this.star.resourceShared[itRes].quantity >= quantity) {
                     qtyRemoved = quantity;
-                    if (!isChecking) this.ressourcesStored[itRes].quantity -= qtyRemoved;
+                    if (!isChecking) this.star.resourceShared[itRes].quantity -= qtyRemoved;
                 }
             }
         }
@@ -212,13 +210,13 @@ aos.Planet.prototype = {
 
     checkCondition: function (condition) {
         var result = true;
-        if (condition.planetRessource) {
-            for (let itPlanetRes = 0 ; itPlanetRes < this.ressources.length ; itPlanetRes++) {
-                if (this.ressources[itPlanetRes].name == condition.name) {
+        if (condition.planetResource) {
+            for (let itPlanetRes = 0 ; itPlanetRes < this.resources.length ; itPlanetRes++) {
+                if (this.resources[itPlanetRes].name == condition.name) {
                     if (typeof condition.quantity === "undefined") {
-                        result = this.ressources[itPlanetRes].percent >= condition.percent;
+                        result = this.resources[itPlanetRes].percent >= condition.percent;
                     } else {
-                        result = this.ressources[itPlanetRes].quantity >= condition.quantity;
+                        result = this.resources[itPlanetRes].quantity >= condition.quantity;
                     }
                 }
             }
@@ -227,41 +225,39 @@ aos.Planet.prototype = {
         return result;
     },
 
-    produce: function (typeProduct) {
+    produce: function () {
         for (let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++) {
             let building = this.buildings[itBuilding];
-            if (building.type === typeProduct || typeof typeProduct === "undefined" || typeProduct == "" || typeProduct == null) {
-                building.functional = true;
-                if (typeof building.produce.conditions !== "undefined") {
-                    for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
-                        building.functional = building.functional && this.checkCondition(building.produce.conditions[itCondition]);
-                    }
+            building.functional = true;
+            if (typeof building.produce.conditions !== "undefined") {
+                for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
+                    building.functional = building.functional && this.checkCondition(building.produce.conditions[itCondition]);
                 }
+            }
 
-                if (typeof building.produce.require !== "undefined" && building.functional) {
-                    for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
-                        let removeRes = this.removeRessource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetRessource, true);
-                        if (removeRes != building.produce.require[itProd].quantity) {
-                            building.functional = false;
-                            break;
-                        }
-                    }
-                    if (building.functional) {
-                        for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
-                            this.removeRessource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetRessource, false);
-                        }
+            if (typeof building.produce.require !== "undefined" && building.functional) {
+                for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
+                    let removeRes = this.removeResource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetResource, true);
+                    if (removeRes != building.produce.require[itProd].quantity) {
+                        building.functional = false;
+                        break;
                     }
                 }
                 if (building.functional) {
-                    for(let itProd = 0 ; itProd < building.produce.product.length ; itProd ++ ){
-                        this.addRessource(building.produce.product[itProd].name, building.produce.product[itProd].to, building.produce.product[itProd].quantity);
+                    for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
+                        this.removeResource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetResource, false);
                     }
+                }
+            }
+            if (building.functional) {
+                for(let itProd = 0 ; itProd < building.produce.product.length ; itProd ++ ){
+                    this.addResource(building.produce.product[itProd].name, building.produce.product[itProd].to, building.produce.product[itProd].quantity);
                 }
             }
         }
     },
 
-    run: function (speedTick) {
+    run: function () {
         this.produce();
 
     },
@@ -320,7 +316,7 @@ aos.Planet.prototype = {
             if (pie.innerText !== "Planet"){
                 pie.content.forEach(function (res, j) {
                     const label = res.label;
-                    this.ressources.forEach(function (resource, i) {
+                    this.resources.forEach(function (resource, i) {
                         if (resource.name === label) {
                             res.value = resource.quantity;
                         }
@@ -339,7 +335,7 @@ aos.Planet.prototype = {
         aos.game.resourceBars.forEach(function (bar, i) {
             const label = bar.name;
             bar.quantity = 0;
-            this.ressourcesStored.forEach(function (resource, i) {
+            this.star.resourceShared.forEach(function (resource,i ){
                 if (resource.name === label) {
                     bar.quantity = resource.quantity;
                 }
@@ -356,7 +352,7 @@ aos.Planet.prototype = {
 
     setupEvents: function () {
         window.addEventListener('gameplayTick', function (e) {
-            this.run(1);
+            this.run();
         }.bind(this), false);
     },
 

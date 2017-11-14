@@ -23,6 +23,7 @@ aos.Star = function () {
     this.greekLetter = {};
     this.properName = {};
     this.constellation = {};
+    this.resourceShared = [];
 
     // detail data for star (lore)
     this.luminosityClass = '?';
@@ -39,6 +40,7 @@ aos.Star = function () {
     this.r = 0;
     this.group = 0;
     this.keep = true;
+
 
     //planet details
     /** @type {aos.Planet} */
@@ -65,6 +67,7 @@ aos.Star.prototype = {
         this.planets.forEach(function (planet) {
             planet.generate();
             planet.setupEvents();
+            planet.star = this;
         }, this);
         //#region Lore
         if (classRatio < 1.0) {
@@ -188,6 +191,12 @@ aos.Star.prototype = {
         //#endregion
         this.selectedPlanetIndex = 0;
         this.selectedPlanet = this.planets[0];
+
+        let r = new aos.Resource();
+        r.type = "metal";
+        r.name = "metal"
+        r.quantity = 200;
+        this.resourceShared.push(r);
     },
 
     setSelectedPlanetIndex: function (planetId) {
