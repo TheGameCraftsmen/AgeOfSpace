@@ -63,7 +63,7 @@ aos.Orchestrator.prototype = {
         this.renderBar(document.getElementById('animalsPop'), 'Animals');
 
         let resourceGroup = 'air';
-        aos.ressources.forEach(function (resource, i) {
+        aos.resources.forEach(function (resource, i) {
             this.renderBar(document.getElementById('res' + i + 'Storage'), resource.name);
             if (resource.category !== resourceGroup) {
                 document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
@@ -109,7 +109,7 @@ aos.Orchestrator.prototype = {
         chart.innerText = txt;
         chart.content = [];
         const colors = ['#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606'];
-        aos.ressources.forEach(function (resource, i) {
+        aos.resources.forEach(function (resource, i) {
             if (resource.category === category) {
                 chart.content.push({ label: resource.name, value: i + 1, color: colors[i] });
             }
@@ -131,7 +131,7 @@ aos.Orchestrator.prototype = {
     },
 
     renderBar: function (elem, txt) {
-        const bar = new aos.Ressource();
+        const bar = new aos.Resource();
         bar.htmlElement = elem;
         bar.name = txt;
         bar.render();
@@ -182,7 +182,7 @@ aos.Orchestrator.prototype = {
                             var requireOk = true;
                             for (let itRequire = 0 ; itRequire < aos.buildings[i].constructionCost.length ; itRequire++) {
 
-                                var qty = this.selectedStar.selectedPlanet.removeRessource(aos.buildings[i].constructionCost[itRequire].name, aos.buildings[i].constructionCost[itRequire].quantity, false, true);
+                                var qty = this.selectedStar.selectedPlanet.removeResource(aos.buildings[i].constructionCost[itRequire].name, aos.buildings[i].constructionCost[itRequire].quantity, false, true);
                                 if (qty != aos.buildings[i].constructionCost[itRequire].quantity) {
                                     requireOk = false;
                                 }
