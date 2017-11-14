@@ -27,13 +27,14 @@ aos.Icosahedron = function () {
     this.rotates = true;
     this.hoveredTriangle = -1;
     this.mousePosition = [0, 0];
+    this.cameraXrotate = 0;
 };
 
 
 aos.Icosahedron.prototype = {
 
     initialize: function () {
-        //identity
+        // start with identity; we'll rotate that matrix along the Y axis later, to simulate planetary revolution
         this.modelMatrix = new Float32Array([
                 1, 0, 0, 0,
                 0, 1, 0, 0,
@@ -55,24 +56,21 @@ aos.Icosahedron.prototype = {
         ]);
 
         // http://www.songho.ca/opengl/gl_camera.html#lookat
-        // translate (0, 0, 5)
+        // per openGL doc, the camera starts in (0, 0, 0), is oriented along the Z axis, and is looking into the direction of negative Z
+        // to maintain a "lookAt" (0, 0, 0) we have to rotate it first along the X axis, then translate it backwards along the Z axis
+        // rotation is 0 during init, we just translate
         const tx = 0;
         const ty = 0;
         const tz = 6;
-        const cos10 = Math.cos(Math.PI / 12);
-        const sin10 = Math.sin(Math.PI / 12);
-        this.cameraMatrix = aos.Math.multiply4x4(new Float32Array([
+        this.cameraMatrix = new Float32Array([
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             tx, ty, tz, 1
-        ]), new Float32Array([
-            cos10, -sin10, 0, 0,
-            sin10, cos10, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        ]));
+        ]);
+        this.cameraXrotate = 0;
 
+        // these constants are used for planetary revolution along its polar axis (always Y, in the model space)
         const cos1 = Math.cos(Math.PI / 500);
         const sin1 = Math.sin(Math.PI / 500);
         this.rotateY1 = new Float32Array([
@@ -158,6 +156,19 @@ aos.Icosahedron.prototype = {
             if (this.rotates) {
                 const newModel = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
                 this.modelMatrix = newModel;
+                if (this.cameraXrotate !== 0) {
+                    this.cameraXrotate *= 0.9;
+                    if (Math.abs(this.cameraXrotate) < 0.01) {
+                        this.cameraXrotate = 0;
+                        this.cameraMatrix = new Float32Array([
+                        1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        tx, ty, tz, 1
+                        ]);
+
+                    }
+                }
             }
             else {
                 if (this.mousePosition[0] < 80) {
@@ -183,25 +194,47 @@ aos.Icosahedron.prototype = {
                     const newModel4 = aos.Math.multiply4x4(this.rotateY1r, newModel3);
                     this.modelMatrix = newModel4;
                 }
+                const yWish = (this.mousePosition[1] - 250) / 60;
+                this.cameraXrotate = 0.9 * this.cameraXrotate + 0.1 * yWish; // LERP
             }
+            // rotate along X axis
+            if (this.cameraXrotate !== 0) {
+                const cos10 = Math.cos(Math.atan2(this.cameraXrotate, 6));
+                const sin10 = Math.sin(Math.atan2(this.cameraXrotate, 6));
+                this.cameraMatrix = aos.Math.multiply4x4(new Float32Array([
+                    1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 6, 1
+                ]), new Float32Array([
+                    1, 0, 0, 0,
+                    0, cos10, sin10, 0,
+                    0, -sin10, cos10, 0,
+                    0, 0, 0, 1
+                ]));
+            }
+
             const vm = aos.Math.multiply4x4(this.cameraMatrix, this.modelMatrix);
             const pvm = aos.Math.multiply4x4(this.frustumMatrix, vm);
 
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = "#444";
             ctx.fillRect(-1, -1, 2, 2);
 
             const screenPoints = [];
+            //let maxX = 0;
             this.vertices.forEach(function (vec3) {
                 const screenPoint = aos.Math.transformVector3(vec3, pvm);
                 screenPoints.push(screenPoint);
                 const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
-                vec3[3] = modelPoint[2];
+                vec3[3] = (6 - modelPoint[2]) * (6 - modelPoint[2]) + (this.cameraXrotate - modelPoint[1]) * (this.cameraXrotate - modelPoint[1]); // TODO !!!! Proper Y value
+                //maxX = Math.max(maxX, modelPoint[0]);
             }, this);
+            //document.getElementById('debug').innerHTML = '' + maxX;
             this.tessellatedTriangles.forEach(function (tri) {
                 tri[3] = this.vertices[tri[0]][3] + this.vertices[tri[1]][3] + this.vertices[tri[2]][3];
             }, this);
             this.tessellatedTriangles.sort(function (a, b) {
-                return b[3] - a[3];
+                return a[3] - b[3];
             });
             let selectedTriangle = -1;
             this.tessellatedTriangles.forEach(function (tri) {
@@ -214,7 +247,7 @@ aos.Icosahedron.prototype = {
                     selectedTriangle = tri[4];
                 }
             }, this);
-            this.tessellatedTriangles.forEach(function (tri) {
+            this.tessellatedTriangles.forEach(function (tri, idx) {
                 const parentTri = this.triangles[tri[4]];
                 ctx.beginPath();
                 ctx.fillStyle = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
@@ -227,12 +260,15 @@ aos.Icosahedron.prototype = {
                 }
                 ctx.fill();
                 if (tri[0] < 12) {
-                    ctx.beginPath();
                     ctx.lineWidth = 0.005; // 0.004 space units = 1 px on screen
                     ctx.strokeStyle = '#000';
-                    ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    ctx.beginPath();
+                    ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                    ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                     ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                     ctx.stroke();
                     ctx.beginPath();
                     ctx.lineWidth = 0.001;
@@ -263,11 +299,10 @@ aos.Icosahedron.prototype = {
         }.bind(this), false);
 
         document.getElementById('planetTestCanvas').addEventListener('mousemove', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            e.preventDefault();
             const x = e.offsetX * 500 / document.getElementById('planetTestCanvas').offsetWidth;
             const y = e.offsetY * 500 / document.getElementById('planetTestCanvas').offsetWidth;
             this.mousePosition = [x, y];
-            document.getElementById('debug').innerHTML = '' + x + '/' + y + '<br/>';
         }.bind(this), false);
     },
 
