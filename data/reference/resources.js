@@ -19,6 +19,7 @@ aos.resources =
         { "name": "bacteria", "category": "population" },
         { "name": "plants", "category": "population" },
         { "name": "animals", "category": "population" },
+        { "name": "potable water", "category": "liquid" },
     ];
 
 aos.volumeResources = { "air": 1000, "liquid": 10000, "ground": 10000 };

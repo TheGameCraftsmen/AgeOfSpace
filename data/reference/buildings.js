@@ -37,7 +37,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
@@ -76,7 +75,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
@@ -110,7 +108,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "water" }]
     },
     {
@@ -144,9 +141,118 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
+    {
+        "type": "mine",
+        "name": "Oxygen Mine",
+        "constructionCost": [
+            {
+                "name": "metal",
+                "quantity": 500
+            }
+        ],
+        "produce": {
+            "type": "material",
+            "product": [
+                {
+                    "name": "oxygen",
+                    "quantity": 1000,
+                    "to": "storage"
+                }
+            ],
+            "require": [
+                {
+                    "name": "energy",
+                    "quantity": 50,
+                    "planetResource": false
+                },
+                {
+                    "name": "oxygen",
+                    "quantity": 1000,
+                    "planetResource": true
+                }
+            ]
+        },
+        "location": [{ "name": "ground" },{ "name": "water" }]
+    },
+    {
+        "type": "mine",
+        "name": "Salt Mine",
+        "constructionCost": [
+            {
+                "name": "metal",
+                "quantity": 500
+            }
+        ],
+        "produce": {
+            "type": "material",
+            "product": [
+                {
+                    "name": "salt",
+                    "quantity": 1000,
+                    "to": "storage"
+                },
+                {
+                    "name": "potable water",
+                    "quantity": 1000,
+                    "to": "storage"
+                }
+            ],
+            "require": [
+                {
+                    "name": "energy",
+                    "quantity": 50,
+                    "planetResource": false
+                },
+                {
+                    "name": "salt",
+                    "quantity": 1000,
+                    "planetResource": true
+                },
+                {
+                    "name": "water",
+                    "quantity": 1000,
+                    "planetResource": true
+                }
+            ]
+        },
+        "location": [{ "name": "ground" },{ "name": "water" }]
+    },
+    {
+        "type": "Factory",
+        "name": "Bacteria Factory",
+        "constructionCost": [
+            {
+                "name": "metal",
+                "quantity": 500
+            }
+        ],
+        "produce": {
+            "type": "material",
+            "product": [
+                {
+                    "name": "bacteria",
+                    "quantity": 1000,
+                    "to": "storage"
+                }
+            ],
+            "require": [
+                {
+                    "name": "water",
+                    "quantity": 1000,
+                    "planetResource": true
+                },
+                {
+                    "name": "mineral",
+                    "quantity": 1000,
+                    "planetResource": true
+                }
+            ]
+        },
+        "location": [{ "name": "water" }]
+    }
+    ,
     {
         "type": "habitation",
         "name": "house",
@@ -192,7 +298,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
@@ -240,7 +345,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "water" }]
     },
     {
@@ -261,7 +365,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [
             { "name": "ground" },
             { "name": "water" }
@@ -291,7 +394,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
@@ -323,7 +425,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
@@ -350,7 +451,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
