@@ -3,7 +3,7 @@ var aos = aos || {};
 aos.buildings = [
     {
         "type": "mine",
-        "name": "metal Mine",
+        "name": "Metal mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -41,7 +41,7 @@ aos.buildings = [
     },
     {
         "type": "mine",
-        "name": "coal Mine",
+        "name": "Coal mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -79,7 +79,7 @@ aos.buildings = [
     },
     {
         "type": "mine",
-        "name": "oil Mine",
+        "name": "Oil mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -112,7 +112,7 @@ aos.buildings = [
     },
     {
         "type": "mine",
-        "name": "fissile material Mine",
+        "name": "Fissile Material mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -145,7 +145,7 @@ aos.buildings = [
     },
     {
         "type": "mine",
-        "name": "Oxygen Mine",
+        "name": "Oxygen mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -178,7 +178,7 @@ aos.buildings = [
     },
     {
         "type": "mine",
-        "name": "Salt Mine",
+        "name": "Salt mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -221,7 +221,7 @@ aos.buildings = [
     },
     {
         "type": "Factory",
-        "name": "Bacteria Factory",
+        "name": "Bacteria factory",
         "constructionCost": [
             {
                 "name": "metal",
@@ -255,7 +255,7 @@ aos.buildings = [
     ,
     {
         "type": "habitation",
-        "name": "house",
+        "name": "House",
         "constructionCost": [
             {
                 "name": "metal",
@@ -302,7 +302,7 @@ aos.buildings = [
     },
     {
         "type": "habitation",
-        "name": "floating house",
+        "name": "Floating house",
         "constructionCost": [
             {
                 "name": "metal",
@@ -349,7 +349,7 @@ aos.buildings = [
     },
     {
         "type": "plant",
-        "name": "solar plant",
+        "name": "Solar plant",
         "constructionCost": [
             {
                 "name": "metal",
@@ -398,7 +398,7 @@ aos.buildings = [
     },
     {
         "type": "plant",
-        "name": "oil plant",
+        "name": "Oil plant",
         "constructionCost": [
             {
                 "name": "metal",
@@ -429,7 +429,7 @@ aos.buildings = [
     },
     {
         "type": "plant",
-        "name": "nuclear plant",
+        "name": "Nuclear plant",
         "constructionCost": [
             {
                 "name": "metal",
@@ -491,7 +491,7 @@ aos.buildings = [
     },
     {
         "type": "farm",
-        "name": "crops farm",
+        "name": "Crops farm",
         "constructionCost": [
             {
                 "name": "metal",
@@ -529,7 +529,7 @@ aos.buildings = [
     },
     {
         "type": "epurateur",
-        "name": "inert gaz epuration",
+        "name": "Inert Gaz epuration",
         "constructionCost": [
             {
                 "name": "metal",

@@ -99,7 +99,7 @@ aos.Orchestrator.prototype = {
                     }
                 
                 }.bind(this), false);
-                cell5.innerHTML = "+";
+                cell5.innerHTML = "Build";
                 cell5.addEventListener('click', function (e) {
                     if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
                         let planet = this.selectedStar.selectedPlanet;
@@ -198,7 +198,7 @@ aos.Orchestrator.prototype = {
                                 }
                             }
                             if (requireOk) {
-                                found.cells[4].innerHTML = "build";
+                                found.cells[4].innerHTML = "Build";
                             } else {
                                 found.cells[4].innerHTML = "<font color='red'>No</font>";
                             }
