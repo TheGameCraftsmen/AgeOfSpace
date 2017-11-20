@@ -90,6 +90,8 @@ aos.Icosahedron.prototype = {
         const radius = Math.sqrt(1 + invphi * invphi);
 
         // Vertices coordinates: [Xworld, Yworld, Zworld, Zmodel]
+        // Zmodel is re-calculated for each frame during render
+        // source for coordinates is: https://en.wikipedia.org/wiki/Platonic_solid#Cartesian_coordinates
         this.vertices.push(new Float32Array([1, invphi, 0, 0]));    // 0
         this.vertices.push(new Float32Array([1, -invphi, 0, 0]));    // 1
         this.vertices.push(new Float32Array([-1, invphi, 0, 0]));    // 2
@@ -103,30 +105,31 @@ aos.Icosahedron.prototype = {
         this.vertices.push(new Float32Array([invphi, 0, -1, 0]));    // 10
         this.vertices.push(new Float32Array([-invphi, 0, -1, 0]));    // 11
 
-        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel, triangle index]
-        this.triangles.push([4, 5, 0, 0, 0]);
-        this.triangles.push([4, 5, 2, 0, 1]);
-        this.triangles.push([6, 7, 1, 0, 2]);
-        this.triangles.push([6, 7, 3, 0, 3]);
-        this.triangles.push([0, 1, 8, 0, 4]);
-        this.triangles.push([0, 1, 10, 0, 5]);
-        this.triangles.push([2, 3, 9, 0, 6]);
-        this.triangles.push([2, 3, 11, 0, 7]);
-        this.triangles.push([8, 9, 4, 0, 8]);
-        this.triangles.push([8, 9, 6, 0, 9]);
-        this.triangles.push([10, 11, 5, 0, 10]);
-        this.triangles.push([10, 11, 7, 0, 11]);
-        this.triangles.push([0, 4, 8, 0, 12]); // +++
-        this.triangles.push([0, 5, 10, 0, 13]); // ++-
-        this.triangles.push([1, 6, 8, 0, 14]); // +-+
-        this.triangles.push([1, 7, 10, 0, 15]); // +--
-        this.triangles.push([2, 4, 9, 0, 16]); // -++
-        this.triangles.push([2, 5, 11, 0, 17]); // -+-
-        this.triangles.push([3, 6, 9, 0, 18]); // --+
-        this.triangles.push([3, 7, 11, 0, 19]); // ---
+        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel]
+        // This array should not be sorrted
+        this.triangles.push([4, 5, 0, 0]);
+        this.triangles.push([4, 5, 2, 0]);
+        this.triangles.push([6, 7, 1, 0]);
+        this.triangles.push([6, 7, 3, 0]);
+        this.triangles.push([0, 1, 8, 0]);
+        this.triangles.push([0, 1, 10, 0]);
+        this.triangles.push([2, 3, 9, 0]);
+        this.triangles.push([2, 3, 11, 0]);
+        this.triangles.push([8, 9, 4, 0]);
+        this.triangles.push([8, 9, 6, 0]);
+        this.triangles.push([10, 11, 5, 0]);
+        this.triangles.push([10, 11, 7, 0]);
+        this.triangles.push([0, 4, 8, 0]); // +++
+        this.triangles.push([0, 5, 10, 0]); // ++-
+        this.triangles.push([1, 6, 8, 0]); // +-+
+        this.triangles.push([1, 7, 10, 0]); // +--
+        this.triangles.push([2, 4, 9, 0]); // -++
+        this.triangles.push([2, 5, 11, 0]); // -+-
+        this.triangles.push([3, 6, 9, 0]); // --+
+        this.triangles.push([3, 7, 11, 0]); // ---
 
-        this.triangles.forEach(function (tri) {
-            // Tessellated triangles arrays: [vertex1, vertex2, vertex3, average Zmodel, parent triangle]
+        this.triangles.forEach(function (tri, idx) {
+            // Tessellated triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent triangle]
             const v1 = this.vertices[tri[0]];
             const v2 = this.vertices[tri[1]];
             const v3 = this.vertices[tri[2]];
@@ -136,10 +139,10 @@ aos.Icosahedron.prototype = {
             this.vertices.push(new Float32Array([m12[0] * radius, m12[1] * radius, m12[2] * radius, 0]));
             this.vertices.push(new Float32Array([m23[0] * radius, m23[1] * radius, m23[2] * radius, 0]));
             this.vertices.push(new Float32Array([m31[0] * radius, m31[1] * radius, m31[2] * radius, 0]));
-            this.tessellatedTriangles.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, tri[4]]);
-            this.tessellatedTriangles.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, tri[4]]);
-            this.tessellatedTriangles.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, tri[4]]);
-            this.tessellatedTriangles.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, tri[4]]);
+            this.tessellatedTriangles.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, idx]);
+            this.tessellatedTriangles.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, idx]);
+            this.tessellatedTriangles.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, idx]);
+            this.tessellatedTriangles.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, idx]);
         }, this);
 
 
@@ -221,13 +224,11 @@ aos.Icosahedron.prototype = {
             ctx.fillRect(-1, -1, 2, 2);
 
             const screenPoints = [];
-            //let maxX = 0;
             this.vertices.forEach(function (vec3) {
                 const screenPoint = aos.Math.transformVector3(vec3, pvm);
                 screenPoints.push(screenPoint);
                 const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
-                vec3[3] = (6 - modelPoint[2]) * (6 - modelPoint[2]) + (this.cameraXrotate - modelPoint[1]) * (this.cameraXrotate - modelPoint[1]); // TODO !!!! Proper Y value
-                //maxX = Math.max(maxX, modelPoint[0]);
+                vec3[3] = (6 - modelPoint[2]) * (6 - modelPoint[2]) + (this.cameraXrotate - modelPoint[1]) * (this.cameraXrotate - modelPoint[1]);
             }, this);
             //document.getElementById('debug').innerHTML = '' + maxX;
             this.tessellatedTriangles.forEach(function (tri) {

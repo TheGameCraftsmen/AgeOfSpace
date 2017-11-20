@@ -11,7 +11,7 @@ var aos = aos || {};
 //debugger;
 
 /**
- * Building are built on Planet. They are about terraforming, or exploiting ressources.
+ * Building are built on Planet. They are about terraforming, or exploiting resources.
  *
  * @class
  */

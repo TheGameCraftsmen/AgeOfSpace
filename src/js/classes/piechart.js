@@ -12,7 +12,7 @@ var aos = aos || {};
 
 /**
  * This is an utility class.
- * Use it to render a pie chart, based on an array of ressources
+ * Use it to render a pie chart, based on an array of resources
  *
  * @class
  */
