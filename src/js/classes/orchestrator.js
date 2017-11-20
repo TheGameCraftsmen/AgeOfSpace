@@ -90,12 +90,22 @@ aos.Orchestrator.prototype = {
                 const cell3 = row.insertCell();
                 const cell4 = row.insertCell();
                 const cell5 = row.insertCell();
-                cell5.innerHTML = "+";
+                const cell6 = row.insertCell();
+                cell6.innerHTML = "Destroy"
+                cell6.addEventListener('click', function (e) {
+                    if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
+                        let planet = this.selectedStar.selectedPlanet;
+                        planet.removeBuilding(building.name);
+                    }
+                
+                }.bind(this), false);
+                cell5.innerHTML = "Build";
                 cell5.addEventListener('click', function (e) {
                     if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
                         let planet = this.selectedStar.selectedPlanet;
                         planet.addBuilding(building.name, building.location[itLocation].name);
                     }
+                
                 }.bind(this), false);
             }
         }, this);
@@ -188,13 +198,14 @@ aos.Orchestrator.prototype = {
                                 }
                             }
                             if (requireOk) {
-                                found.cells[4].innerHTML = "build";
+                                found.cells[4].innerHTML = "Build";
                             } else {
                                 found.cells[4].innerHTML = "<font color='red'>No</font>";
                             }
                         } else {
                             found.cells[4].innerHTML = "<font color='red'>No</font>";
                         }
+
                     }
                 }
             }

@@ -3,7 +3,7 @@ var aos = aos || {};
 aos.buildings = [
     {
         "type": "mine",
-        "name": "metal Mine",
+        "name": "Metal mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -21,14 +21,14 @@ aos.buildings = [
                 {
                     "name": "oxocarbon",
                     "quantity": 100,
-                    "to": "storage"
+                    "to": "planet"
                 }
             ],
             "require": [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "metal",
@@ -37,12 +37,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
         "type": "mine",
-        "name": "coal Mine",
+        "name": "Coal mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -67,7 +66,7 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "carbon",
@@ -76,12 +75,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
         "type": "mine",
-        "name": "oil Mine",
+        "name": "Oil mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -101,7 +99,7 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "oil",
@@ -110,12 +108,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "water" }]
     },
     {
         "type": "mine",
-        "name": "fissile material Mine",
+        "name": "Fissile Material mine",
         "constructionCost": [
             {
                 "name": "metal",
@@ -135,7 +132,7 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "fissile material",
@@ -144,12 +141,121 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
+        "type": "mine",
+        "name": "Oxygen mine",
+        "constructionCost": [
+            {
+                "name": "metal",
+                "quantity": 500
+            }
+        ],
+        "produce": {
+            "type": "material",
+            "product": [
+                {
+                    "name": "oxygen",
+                    "quantity": 1000,
+                    "to": "storage"
+                }
+            ],
+            "require": [
+                {
+                    "name": "energy",
+                    "quantity": 50,
+                    "planetResource": true
+                },
+                {
+                    "name": "oxygen",
+                    "quantity": 1000,
+                    "planetResource": true
+                }
+            ]
+        },
+        "location": [{ "name": "ground" },{ "name": "water" }]
+    },
+    {
+        "type": "mine",
+        "name": "Salt mine",
+        "constructionCost": [
+            {
+                "name": "metal",
+                "quantity": 500
+            }
+        ],
+        "produce": {
+            "type": "material",
+            "product": [
+                {
+                    "name": "salt",
+                    "quantity": 1000,
+                    "to": "storage"
+                },
+                {
+                    "name": "potable water",
+                    "quantity": 1000,
+                    "to": "storage"
+                }
+            ],
+            "require": [
+                {
+                    "name": "energy",
+                    "quantity": 50,
+                    "planetResource": true
+                },
+                {
+                    "name": "salt",
+                    "quantity": 1000,
+                    "planetResource": true
+                },
+                {
+                    "name": "water",
+                    "quantity": 1000,
+                    "planetResource": true
+                }
+            ]
+        },
+        "location": [{ "name": "ground" },{ "name": "water" }]
+    },
+    {
+        "type": "Factory",
+        "name": "Bacteria factory",
+        "constructionCost": [
+            {
+                "name": "metal",
+                "quantity": 500
+            }
+        ],
+        "produce": {
+            "type": "material",
+            "product": [
+                {
+                    "name": "bacteria",
+                    "quantity": 1000,
+                    "to": "storage"
+                }
+            ],
+            "require": [
+                {
+                    "name": "water",
+                    "quantity": 1000,
+                    "planetResource": true
+                },
+                {
+                    "name": "mineral",
+                    "quantity": 1000,
+                    "planetResource": true
+                }
+            ]
+        },
+        "location": [{ "name": "water" }]
+    }
+    ,
+    {
         "type": "habitation",
-        "name": "house",
+        "name": "House",
         "constructionCost": [
             {
                 "name": "metal",
@@ -162,19 +268,20 @@ aos.buildings = [
                 {
                     "name": "humans",
                     "quantity": 100,
-                    "to": "storage"
+                    "to": "planet"
                 },
                 {
                     "name": "oxocarbon",
                     "quantity": 500,
-                    "to": "local"
+                    "to": "planet"
                 }
             ],
             "require": [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false,
+                    "planetResource": true
+                    ,
                     "remove": true
                 },
                 {
@@ -192,12 +299,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
         "type": "habitation",
-        "name": "floating house",
+        "name": "Floating house",
         "constructionCost": [
             {
                 "name": "metal",
@@ -210,19 +316,19 @@ aos.buildings = [
                 {
                     "name": "humans",
                     "quantity": 50,
-                    "to": "local"
+                    "to": "planet"
                 },
                 {
                     "name": "oxocarbon",
                     "quantity": 300,
-                    "to": "storage"
+                    "to": "planet"
                 }
             ],
             "require": [
                 {
                     "name": "energy",
                     "quantity": 200,
-                    "planetResource": false,
+                    "planetResource": true,
                     "remove": true
                 },
                 {
@@ -240,12 +346,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "water" }]
     },
     {
         "type": "plant",
-        "name": "solar plant",
+        "name": "Solar plant",
         "constructionCost": [
             {
                 "name": "metal",
@@ -257,11 +362,11 @@ aos.buildings = [
             "product": [
                 {
                     "name": "energy",
-                    "quantity": 50
+                    "quantity": 50,
+                    "to": "planet"
                 }
             ]
         },
-        "storage": 10000,
         "location": [
             { "name": "ground" },
             { "name": "water" }
@@ -281,7 +386,8 @@ aos.buildings = [
             "product": [
                 {
                     "name": "energy",
-                    "quantity": 100
+                    "quantity": 100,
+                    "to": "planet"
                 }
             ],
             "require": [
@@ -291,12 +397,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
         "type": "plant",
-        "name": "oil plant",
+        "name": "Oil plant",
         "constructionCost": [
             {
                 "name": "metal",
@@ -308,7 +413,8 @@ aos.buildings = [
             "product": [
                 {
                     "name": "energy",
-                    "quantity": 100
+                    "quantity": 100,
+                    "to": "planet"
                 },
                 {
                     "name": "oxocarbon",
@@ -323,12 +429,11 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
         "type": "plant",
-        "name": "nuclear plant",
+        "name": "Nuclear plant",
         "constructionCost": [
             {
                 "name": "metal",
@@ -350,7 +455,6 @@ aos.buildings = [
                 }
             ]
         },
-        "storage": 10000,
         "location": [{ "name": "ground" }]
     },
     {
@@ -375,7 +479,7 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "oxocarbon",
@@ -391,7 +495,7 @@ aos.buildings = [
     },
     {
         "type": "farm",
-        "name": "crops farm",
+        "name": "Crops farm",
         "constructionCost": [
             {
                 "name": "metal",
@@ -416,7 +520,7 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "oxocarbon",
@@ -429,7 +533,7 @@ aos.buildings = [
     },
     {
         "type": "epurateur",
-        "name": "inert gaz epuration",
+        "name": "Inert Gaz epuration",
         "constructionCost": [
             {
                 "name": "metal",
@@ -449,7 +553,7 @@ aos.buildings = [
                 {
                     "name": "energy",
                     "quantity": 50,
-                    "planetResource": false
+                    "planetResource": true
                 },
                 {
                     "name": "inert gases",

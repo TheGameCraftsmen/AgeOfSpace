@@ -86,6 +86,7 @@ aos.Planet.prototype = {
             resFound.quantity += quant;
         }
     },
+    
 
     generate: function () {
         this.size = Math.floor(Math.random() * 5 + 1);
@@ -112,6 +113,17 @@ aos.Planet.prototype = {
             b.builtOn = _location;
             this.buildings.push(b);
         }
+        aos.game.emitEvent('requestUiSlowRefresh', {});
+    },
+
+    removeBuilding: function(name){
+        let findBuildingIndex = -1;
+        for ( let it = 0 ; it < this.buildings.length && findBuildingIndex == -1 ; it ++){
+            if (this.buildings[it].name == name){
+                findBuildingIndex = it;
+            }
+        }
+        this.buildings.splice(findBuildingIndex,1);
         aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
@@ -259,7 +271,6 @@ aos.Planet.prototype = {
 
     run: function () {
         this.produce();
-
     },
 
 
@@ -282,6 +293,7 @@ aos.Planet.prototype = {
                       row.cells[1].innerHTML = "";
                       row.cells[2].innerHTML = "";
                       row.cells[3].innerHTML = "";
+                      row.cells[5].innerHTML = "";
                   }
               });
             }
@@ -298,10 +310,12 @@ aos.Planet.prototype = {
                   }
               }
               if (found) {
-                  if (found.cells[1].innerHTML == "")
-                  { found.cells[1].innerHTML = 1;}
-                  else
-                  { found.cells[1].innerHTML = parseInt(found.cells[1].innerHTML)+1 }
+                if (found.cells[1].innerHTML == ""){
+                    found.cells[1].innerHTML = 1;
+                    found.cells[5].innerHTML = "Destroy";
+                }else{ 
+                    found.cells[1].innerHTML = parseInt(found.cells[1].innerHTML)+1 
+                }
                   
                   found.cells[2].innerHTML = this.buildings[elt].functional ? "Enable" : "Disable";
                   found.cells[3].innerHTML = this.buildings[elt].produce.product[0].quantity;
