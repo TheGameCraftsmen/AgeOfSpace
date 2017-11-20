@@ -271,7 +271,6 @@ aos.Planet.prototype = {
 
     run: function () {
         this.produce();
-
     },
 
 
