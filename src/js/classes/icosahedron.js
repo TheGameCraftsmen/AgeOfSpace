@@ -106,7 +106,7 @@ aos.Icosahedron.prototype = {
         this.vertices.push(new Float32Array([-invphi, 0, -1, 0]));    // 11
 
         // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel]
-        // This array should not be sorrted
+        // This array should not be sorted
         this.triangles.push([4, 5, 0, 0]);
         this.triangles.push([4, 5, 2, 0]);
         this.triangles.push([6, 7, 1, 0]);
