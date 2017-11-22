@@ -55,53 +55,72 @@
                         <path d="M 2 32 L 0 30 L 30 0 L 32 2 Z" stroke-width="0" fill="#000"></path>
                     </svg>
                 </div>
+                <div id="starWrapperPlaceholder"></div>
+                <div id="starWrapperBlock">
+                    <span id="storageBlock">
+                        <h3>In-orbit storage</h3>
+                        <div id="res0Storage"></div>
+                        <div id="res1Storage"></div>
+                        <div id="res2Storage"></div>
+                        <div id="res3Storage"></div>
+                        <div id="res4Storage"></div>
+                        <div id="res5Storage"></div>
+                        <div id="res6Storage"></div>
+                        <div id="res7Storage"></div>
+                        <div id="res8Storage"></div>
+                        <div id="res9Storage"></div>
+                        <div id="res10Storage"></div>
+                        <div id="res11Storage"></div>
+                        <div id="res12Storage"></div>
+                        <div id="res13Storage"></div>
+                        <div id="res14Storage"></div>
+                        <div id="res15Storage"></div>
+                        <div id="res16Storage"></div>
+                        <div id="res17Storage"></div>
+                        <div id="res18Storage"></div>
+                        <div id="res19Storage"></div>
+                        <div id="res20Storage"></div>
+                    </span>
+                </div>
+                <div id="largeStarBlock">
+                    <canvas id="largeStar" width="125" height="600"></canvas>
+                </div>
                 <div>
                     <ol id="miniatureTabs"></ol>
                     <div id="planetBlock">
                         <div id="planetLeftColumn" style="position: absolute; left: 0; top: 0; width: calc((100% - 200px) / 2); text-align: center; height: 100%; border-right: 1px solid #444;">
                             <h3>Populations</h3>
-                            <div id="humansPop"></div>
-                            <div id="machinesPop"></div>
                             <div id="bacteriaPop"></div>
+                            <div id="insectsPop"></div>
                             <div id="plantsPop"></div>
                             <div id="animalsPop"></div>
-                            <br><h3>Storage</h3>
-                            <div id="res0Storage"></div>
-                            <div id="res1Storage"></div>
-                            <div id="res2Storage"></div>
-                            <div id="res3Storage"></div>
-                            <div id="res4Storage"></div>
-                            <div id="res5Storage"></div>
-                            <div id="res6Storage"></div>
-                            <div id="res7Storage"></div>
-                            <div id="res8Storage"></div>
-                            <div id="res9Storage"></div>
-                            <div id="res10Storage"></div>
-                            <div id="res11Storage"></div>
-                            <div id="res12Storage"></div>
-                            <div id="res13Storage"></div>
-                            <div id="res14Storage"></div>
-                            <div id="res15Storage"></div>
-                            <div id="res16Storage"></div>
-                            <div id="res17Storage"></div>
-                            <div id="res18Storage"></div>
-                            <div id="res19Storage"></div>
-                            <div id="res20Storage"></div>
+                            <div id="humansPop"></div>
+                            <div id="machinesPop"></div>
                         </div>
                         <div id="planetMiddleColumn" style="position: absolute; left: calc((100% - 200px) / 2); right: 151px; top: 0; height:100%; ">
                             <h3>Buildings <div id="nbBuildingOnGround">0/10</div></h3>
-                            <hr/>
+                            <hr />
                             <h3>On Ground</h3>
                             <table width="100%" id="groundBuildings" border="1">
-                                    <tr>
-                                        <th>Name</th><th>Number</th><th>Status</th><th>Production</th><th>Build</th><th>Destroy</th>
-                                    </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Number</th>
+                                    <th>Status</th>
+                                    <th>Production</th>
+                                    <th>Build</th>
+                                    <th>Destroy</th>
+                                </tr>
                             </table>
                             <h3>On Water <div id="nbBuildingOnWater">0/10</div></di></h3>
                             <table width="100%" id="waterBuildings" border="1">
-                                    <tr>
-                                        <th>Name</th><th>Number</th><th>Status</th><th>Production</th><th>Build</th><th>Destroy</th>
-                                    </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Number</th>
+                                    <th>Status</th>
+                                    <th>Production</th>
+                                    <th>Build</th>
+                                    <th>Destroy</th>
+                                </tr>
                             </table>
                         </div>
                         <div id="planetRightColumn" style="position: absolute; right: 0; top: 0; width: 151px; height:100%; border-left: 1px solid #444; ">

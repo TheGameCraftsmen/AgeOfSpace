@@ -112,6 +112,7 @@ img {
     position: relative;
     top: -1px;
     right: -1px;
+    z-index: 1;
 }
 
 #speed0 {
@@ -166,17 +167,17 @@ img {
         /*width: 250px;*/
     }
 
-        #contextualTxt tr > td:first-child {
-            width: 120px;
-        }
+    #contextualTxt tr > td:first-child {
+        width: 120px;
+    }
 
-        #contextualTxt tr > td:nth-child(2) {
-            width: 75px;
-        }
+    #contextualTxt tr > td:nth-child(2) {
+        width: 75px;
+    }
 
-        #contextualTxt tr > td:nth-child(3) {
-            width: 75px;
-        }
+    #contextualTxt tr > td:nth-child(3) {
+        width: 75px;
+    }
 
 #galaxyBlock, #starSystemBlock, #shipBlock {
     position: relative;
@@ -185,23 +186,74 @@ img {
     height: 100%;
 }
 
-    #galaxyBlock canvas {
-        position: absolute;
-        width: 100%;
-        max-width: 1200px;
-        left: 0;
-        right: 0;
-        margin: auto;
+#starSystemBlock {
+    overflow-y: hidden;
+}
+
+#galaxyBlock canvas {
+    position: absolute;
+    width: 100%;
+    max-width: 1200px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#starSystemBlock > div:last-child {
+    padding: 15px 20px 0 250px;
+    height: 100%;
+}
+
+#starWrapperPlaceholder {
+    display: none;
+}
+
+#starWrapperBlock {
+    height: 100%;
+    width: 250px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    min-height: 600px;
+}
+
+@media (min-height: 630px) {
+    #starWrapperBlock {
+        bottom: 0;
+    }
+}
+
+#starWrapperBlock > div {
+    height: 10px;
+    float: left;
+    clear: left;
+}
+
+    #starWrapperBlock > div:first-child, #starWrapperBlock > div:last-of-type {
+        height: calc(50% - 300px)
     }
 
-    #starSystemBlock > div:last-child {
-        padding: 15px 20px 0 100px;
-        height: 100%;
+#largeStarBlock {
+    width: 125px;
+    height: 600px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: auto;
+}
+
+@media (min-height: 630px) {
+    #largeStarBlock {
+        bottom: 0;
     }
+}
+
 
 #miniatureTabs {
     border-bottom: 1px solid #444;
     list-style-type: none;
+    position: relative;
 }
 
     #miniatureTabs li {
@@ -231,32 +283,38 @@ img {
 }
 
 .resourceBar {
-    padding: 2px;
+    padding: 0 /*2px*/;
 }
 
     /* Label */
     .resourceBar > div:first-child {
-        width: 105px;
+        width: 32px;
         display: inline-block;
         text-align: right;
-        padding-right: 5px;
+        margin-right: 4px;
+        overflow: hidden;
+        height: 32px;
+        /* background-color: #088; */
     }
 
+    /* Outer order */
     .resourceBar > div:last-child {
-        width: 150px;
+        width: 110px;
         display: inline-block;
         border: 1px solid #444;
         position: relative;
-        top: 2px;
+        top: -10px;
         height: 12px;
     }
 
+    /* Arrows */
     .resourceBar > div > div {
         height: 100%;
         position: absolute;
         top: -4px;
     }
 
+        /* Inner bar */
         .resourceBar > div > div:first-child {
             background-color: #004;
             top: 0;

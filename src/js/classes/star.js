@@ -26,6 +26,7 @@ aos.Star = function () {
     this.resourceShared = [];
 
     // detail data for star (lore)
+    this.sizeRatio = 0;
     this.luminosityClass = '?';
     this.spectralClass = '?';
     this.subSpectral = 0;
@@ -41,7 +42,6 @@ aos.Star = function () {
     this.group = 0;
     this.keep = true;
 
-
     //planet details
     /** @type {aos.Planet} */
     this.planets = [];
@@ -54,14 +54,13 @@ aos.Star.prototype = {
     generate: function () {
         // we only generate main sequence stars because they represent more than 90% of the galaxy
         // source: https://astronomy.stackexchange.com/questions/13165/what-is-the-frequency-distribution-for-luminosity-classes-in-the-milky-way-galax
-        let classRatio;
         if (this.isNotable) {
-            classRatio = 6.0 * Math.random(); // not squared because we want the highest possible variation, for gameplay reason
+            this.sizeRatio = 6.0 * Math.random(); // not squared because we want the highest possible variation, for gameplay reason
             // also blue stars are very unlikely to have planets but we keep them because they're awesome
         } else {
-            classRatio = 7.0 * Math.random() * Math.random(); // squared because low energy stars are supposed to be more common in a real-world galaxy
+            this.sizeRatio = 7.0 * Math.random() * Math.random(); // squared because low energy stars are supposed to be more common in a real-world galaxy
         }
-        for (let nbPlanets = 1 + Math.floor((10 - classRatio) * Math.random()) ; nbPlanets > 0 ; nbPlanets--) {
+        for (let nbPlanets = 1 + Math.floor((10 - this.sizeRatio) * Math.random()) ; nbPlanets > 0 ; nbPlanets--) {
             this.planets.push(new aos.Planet());
         }
         this.planets.forEach(function (planet) {
@@ -70,6 +69,19 @@ aos.Star.prototype = {
             planet.star = this;
         }, this);
         //#region Lore
+        this.fillFromRatio(this.sizeRatio);
+        //#endregion
+        this.selectedPlanetIndex = 0;
+        this.selectedPlanet = this.planets[0];
+
+        let r = new aos.Resource();
+        r.type = "metal";
+        r.name = "metal"
+        r.quantity = 200;
+        this.resourceShared.push(r);
+    },
+
+    fillFromRatio: function (classRatio) {
         if (classRatio < 1.0) {
             // source: https://en.wikipedia.org/wiki/Stellar_classification#Modern_classification
             this.luminosityClass = 'V'; // main sequence
@@ -188,15 +200,6 @@ aos.Star.prototype = {
             };
             this.subSpectral = Math.floor(10 * (1 - classRatio));
         }
-        //#endregion
-        this.selectedPlanetIndex = 0;
-        this.selectedPlanet = this.planets[0];
-
-        let r = new aos.Resource();
-        r.type = "metal";
-        r.name = "metal"
-        r.quantity = 200;
-        this.resourceShared.push(r);
     },
 
     setSelectedPlanetIndex: function (planetId) {
@@ -239,8 +242,86 @@ aos.Star.prototype = {
                 '<img src=' + planetImgs[i] + ' width="64" height="64"></li>';
         }, this);
 
+        // see animateLargeStar for formula explanation
+        const overflow = 120;
+        const leftBorderMaxCosine = 300;
+        const RMaxOuter = (leftBorderMaxCosine * leftBorderMaxCosine + overflow * overflow) / (2 * overflow);
+        const ROuter = (this.sizeRatio + 3) / 10 * RMaxOuter - 20;
+        const centerX = 100 - ROuter;
+
+        let wrapperInnerTxt = "";
+        let idx = 0;
+        let wrapperWidth = 0;
+        for (idx = 0; idx < 30; idx++) {
+            wrapperWidth = idx * 10 > ROuter ? 0 : Math.sqrt(ROuter * ROuter - 100 * idx * idx) + centerX;
+            wrapperInnerTxt = "<div style=\"width:" + wrapperWidth + "px\"></div>" + wrapperInnerTxt + "<div style=\"width:" + wrapperWidth + "px\"></div>";
+        }
+        wrapperInnerTxt = "<div></div>" + wrapperInnerTxt + "<div></div>";
+        //wrapperInnerTxt += "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet?</p>";
+        
+        document.getElementById('starWrapperPlaceholder').appendChild(document.getElementById('storageBlock'));
+        document.getElementById('starWrapperBlock').innerHTML = wrapperInnerTxt;
+        document.getElementById('starWrapperBlock').appendChild(document.getElementById('storageBlock'));
+
         this.setSelectedPlanetIndex(this.selectedPlanetIndex);
     },
+
+    animateLargeStar: function () {
+        const canvas = document.getElementById('largeStar');
+        const ctx = canvas.getContext("2d");
+        /*
+          _____
+         /    .\
+        /     . \
+        |   x . |
+        \     . /
+         \____./.
+              . .
+              | | 120 px
+
+        R² = (R-120px)² + 300px²
+        R² - (R² - 240R + 120²) = 300²
+        240R = 300² + 120²
+        
+        */
+        const overflow = 120;
+        const leftBorderMaxCosine = 300;
+        const RMaxOuter = (leftBorderMaxCosine * leftBorderMaxCosine + overflow * overflow) / (2 * overflow);
+        const ROuter = (this.sizeRatio + 3) / 10 * RMaxOuter;
+        const RInner = ROuter - 120;
+        const centerX = 120 - ROuter;
+
+        ctx.clearRect(0, 0, 125, 600);
+
+        ctx.fillStyle = "#400";
+        ctx.beginPath();
+        ctx.arc(centerX, 300, ROuter, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = "#430";
+        ctx.beginPath();
+        ctx.arc(centerX, 300, RInner, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.clearRect(0, 0, 125, 600);
+        const gradient = ctx.createRadialGradient(centerX, 300, RInner, centerX, 300, ROuter);
+
+        const leftSide = new aos.Star();
+        leftSide.fillFromRatio(Math.max(this.sizeRatio - 1, 0));
+        const colorLeft = leftSide.color;
+        const rightSide = new aos.Star();
+        rightSide.fillFromRatio(Math.min(this.sizeRatio + 0, 7));
+        const colorRight = rightSide.color;
+
+        gradient.addColorStop(0, 'rgba(' + colorRight.R + ', ' + colorRight.G + ', ' + colorRight.B + ', 1)');
+        gradient.addColorStop(0.4, 'rgba(' + colorRight.R + ', ' + colorRight.G + ', ' + colorRight.B + ', 1)');
+        gradient.addColorStop(0.7, 'rgba(' + colorLeft.R + ', ' + colorLeft.G + ', ' + colorLeft.B + ', 1)');
+        gradient.addColorStop(0.72, 'rgba(' + colorLeft.R + ', ' + colorLeft.G + ', ' + colorLeft.B + ', 0.5)');
+        gradient.addColorStop(1, 'rgba(' + colorLeft.R + ', ' + colorLeft.G + ', ' + colorLeft.B + ', 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 125, 600);
+    },
+
 
 };
 

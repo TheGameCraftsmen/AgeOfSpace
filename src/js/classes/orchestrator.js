@@ -55,19 +55,23 @@ aos.Orchestrator.prototype = {
         this.renderPie(document.getElementById('liquidPie'), 'Ocean', 'liquid');
         this.renderPie(document.getElementById('groundPie'), 'Soil', 'ground');
         this.renderPieGroundWater(document.getElementById('repartitionPie'));
-
-        this.renderBar(document.getElementById('humansPop'), 'Humans');
-        this.renderBar(document.getElementById('machinesPop'), 'Machines');
-        this.renderBar(document.getElementById('bacteriaPop'), 'Bacteria');
-        this.renderBar(document.getElementById('plantsPop'), 'Plants');
-        this.renderBar(document.getElementById('animalsPop'), 'Animals');
-
+        /*
+        this.renderBar(document.getElementById('humansPop'), { 'name': 'Humans' });
+        this.renderBar(document.getElementById('machinesPop'), { 'name': 'Machines' });
+        this.renderBar(document.getElementById('bacteriaPop'), aos.resources);
+        this.renderBar(document.getElementById('plantsPop'), { 'name': 'Plants' });
+        this.renderBar(document.getElementById('animalsPop'), { 'name': 'Animals' });
+        */
         let resourceGroup = 'air';
         aos.resources.forEach(function (resource, i) {
-            this.renderBar(document.getElementById('res' + i + 'Storage'), resource.name);
-            if (resource.category !== resourceGroup) {
-                document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
-                resourceGroup = resource.category;
+            if (resource.category === 'population') {
+                this.renderBar(document.getElementById(resource.name + 'Pop'), resource);
+            } else {
+                this.renderBar(document.getElementById('res' + i + 'Storage'), resource);
+                if (resource.category !== resourceGroup) {
+                    //document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
+                    resourceGroup = resource.category;
+                }
             }
         }, this);
 
@@ -97,7 +101,7 @@ aos.Orchestrator.prototype = {
                         let planet = this.selectedStar.selectedPlanet;
                         planet.removeBuilding(building.name);
                     }
-                
+
                 }.bind(this), false);
                 cell5.innerHTML = "Build";
                 cell5.addEventListener('click', function (e) {
@@ -105,7 +109,7 @@ aos.Orchestrator.prototype = {
                         let planet = this.selectedStar.selectedPlanet;
                         planet.addBuilding(building.name, building.location[itLocation].name);
                     }
-                
+
                 }.bind(this), false);
             }
         }, this);
@@ -121,29 +125,31 @@ aos.Orchestrator.prototype = {
         const colors = ['#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606'];
         aos.resources.forEach(function (resource, i) {
             if (resource.category === category) {
-                chart.content.push({ label: resource.name, value: i + 1, color: colors[i] });
+                chart.content.push({ label: resource.name, value: i + 1, color: resource.color === undefined ? colors[i] : resource.color });
             }
         }, this);
         chart.render();
         this.pies.push(chart);
     },
 
-    renderPieGroundWater: function(elem){
+    renderPieGroundWater: function (elem) {
         const chart = new aos.PieChart();
         chart.htmlElement = elem;
         chart.innerText = "Planet";
         chart.content = [];
         const colors = ['#060', '#066'];
-        chart.content.push({label : 'ground', value : 0, color : colors[0] });
-        chart.content.push({label : 'water', value : 1, color : colors[1] });
+        chart.content.push({ label: 'ground', value: 0, color: colors[0] });
+        chart.content.push({ label: 'water', value: 1, color: colors[1] });
         chart.render();
         this.pies.push(chart);
     },
 
-    renderBar: function (elem, txt) {
+    renderBar: function (elem, res) {
         const bar = new aos.Resource();
         bar.htmlElement = elem;
-        bar.name = txt;
+        bar.name = res.name;
+        bar.svgCode = res.svgCode;
+        bar.color = res.color;
         bar.render();
         this.resourceBars.push(bar);
     },
@@ -165,14 +171,14 @@ aos.Orchestrator.prototype = {
                 buildingTypeCount[this.selectedStar.selectedPlanet.buildings[itBuilding].builtOn] += 1;
             }
             var buildingMaxBuilding = { 'ground': Math.floor((this.selectedStar.selectedPlanet.size + 10) * this.selectedStar.selectedPlanet.landSize / 100), 'water': Math.floor((this.selectedStar.selectedPlanet.size + 10) * ((100 - this.selectedStar.selectedPlanet.landSize) / 100)) }
-            if (buildingTypeCount['ground'] >= buildingMaxBuilding['ground']){
+            if (buildingTypeCount['ground'] >= buildingMaxBuilding['ground']) {
                 document.getElementById('nbBuildingOnGround').innerHTML = "<font color='red'>" + buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'] + "</font>";
-            }else{
+            } else {
                 document.getElementById('nbBuildingOnGround').innerHTML = buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'];
             }
-            if (buildingTypeCount['water'] >= buildingMaxBuilding['water']){
+            if (buildingTypeCount['water'] >= buildingMaxBuilding['water']) {
                 document.getElementById('nbBuildingOnWater').innerHTML = "<font color='red'>" + buildingTypeCount['water'] + " / " + buildingMaxBuilding['water'] + "</font>";
-            }else{
+            } else {
                 document.getElementById('nbBuildingOnWater').innerHTML = buildingTypeCount['water'] + " / " + buildingMaxBuilding['water'];
             }
             for (let i = 0 ; i < aos.buildings.length ; i++) {
@@ -561,6 +567,11 @@ aos.Orchestrator.prototype = {
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.showStats();
                 this.updateBuildingsAdd();
+            }
+        }.bind(this), false);
+        window.addEventListener('animationTick', function (e) {
+            if (this.selectedStar !== null) {
+                this.selectedStar.animateLargeStar();
             }
         }.bind(this), false);
 
