@@ -31,8 +31,6 @@ aos.Planet = function () {
     this.resourcesStored = [];
     /** @type {number} */
     this.landSize = 0;
-    /** @type {number} */
-    this.population = 0;
 
     /** @type {aos.star} */
     this.star = null;
@@ -189,14 +187,6 @@ aos.Planet.prototype = {
                 }
             }
 
-        }
-    },
-
-    populationGrowing: function () {
-        if (this.healtingIndicator > 50) {
-            this.population += 100000;
-        } else {
-            this.population -= 100000;
         }
     },
 

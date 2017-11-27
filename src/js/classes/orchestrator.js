@@ -55,13 +55,7 @@ aos.Orchestrator.prototype = {
         this.renderPie(document.getElementById('liquidPie'), 'Ocean', 'liquid');
         this.renderPie(document.getElementById('groundPie'), 'Soil', 'ground');
         this.renderPieGroundWater(document.getElementById('repartitionPie'));
-        /*
-        this.renderBar(document.getElementById('humansPop'), { 'name': 'Humans' });
-        this.renderBar(document.getElementById('machinesPop'), { 'name': 'Machines' });
-        this.renderBar(document.getElementById('bacteriaPop'), aos.resources);
-        this.renderBar(document.getElementById('plantsPop'), { 'name': 'Plants' });
-        this.renderBar(document.getElementById('animalsPop'), { 'name': 'Animals' });
-        */
+
         let resourceGroup = 'air';
         aos.resources.forEach(function (resource, i) {
             if (resource.category === 'population') {
