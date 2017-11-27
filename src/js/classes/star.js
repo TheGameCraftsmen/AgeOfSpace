@@ -291,17 +291,17 @@ aos.Star.prototype = {
         const RInner = ROuter - 120;
         const centerX = 120 - ROuter;
 
-        ctx.clearRect(0, 0, 125, 600);
+        //ctx.clearRect(0, 0, 125, 600);
 
-        ctx.fillStyle = "#400";
-        ctx.beginPath();
-        ctx.arc(centerX, 300, ROuter, 0, 2 * Math.PI);
-        ctx.fill();
+        //ctx.fillStyle = "#400";
+        //ctx.beginPath();
+        //ctx.arc(centerX, 300, ROuter, 0, 2 * Math.PI);
+        //ctx.fill();
 
-        ctx.fillStyle = "#430";
-        ctx.beginPath();
-        ctx.arc(centerX, 300, RInner, 0, 2 * Math.PI);
-        ctx.fill();
+        //ctx.fillStyle = "#430";
+        //ctx.beginPath();
+        //ctx.arc(centerX, 300, RInner, 0, 2 * Math.PI);
+        //ctx.fill();
 
         ctx.clearRect(0, 0, 125, 600);
         const gradient = ctx.createRadialGradient(centerX, 300, RInner, centerX, 300, ROuter);

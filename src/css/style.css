@@ -41,6 +41,10 @@ img {
     }*/
 }
 
+.technical {
+    display: none;
+}
+
 .mainLayout {
     height: calc(100vh - 25px);
     width: 100%;
@@ -220,7 +224,7 @@ img {
 
 @media (min-height: 630px) {
     #starWrapperBlock {
-        bottom: 0;
+        /*bottom: 0;*/
     }
 }
 
@@ -231,7 +235,7 @@ img {
 }
 
     #starWrapperBlock > div:first-child, #starWrapperBlock > div:last-of-type {
-        height: calc(50% - 300px)
+        /*height: calc(50% - 300px)*/
     }
 
 #largeStarBlock {
@@ -245,7 +249,7 @@ img {
 
 @media (min-height: 630px) {
     #largeStarBlock {
-        bottom: 0;
+        /*bottom: 0;*/
     }
 }
 
@@ -305,6 +309,7 @@ img {
         position: relative;
         top: -10px;
         height: 12px;
+        border-radius: 4px;
     }
 
     /* Arrows */
@@ -318,6 +323,7 @@ img {
         .resourceBar > div > div:first-child {
             background-color: #004;
             top: 0;
+            z-index: -1;
         }
 
 

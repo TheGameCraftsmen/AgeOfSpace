@@ -290,6 +290,10 @@ aos.Icosahedron.prototype = {
             }, this);
 
             ctx.restore();
+
+            const image = document.getElementById("resourceImg1");
+            ctx.drawImage(image, 100, 100, 150, 150);
+
         }.bind(this), false);
 
         document.getElementById('planetTestCanvas').addEventListener('mouseover', function (e) {
