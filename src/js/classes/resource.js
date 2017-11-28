@@ -34,6 +34,18 @@ aos.Resource = function () {
 
 aos.Resource.prototype = {
 
+    construct : function(name){
+        for (let itResource =0; itResource < aos.resources.length; itResource++){
+            let res = aos.resources[itResource];
+            if (res.name === name){
+                this.name = name;
+                this.type = res.type;
+                this.svgCode = res.svgCode;
+                break;
+            }
+        }
+    },
+
     render: function () {
         let code = '<div class="resourceBar"><div>';
         if (this.svgCode !== undefined) {
