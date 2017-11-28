@@ -323,6 +323,9 @@ aos.Star.prototype = {
         ctx.fillRect(0, 0, 125, 600);
     },
 
+    showShip: function () {
+    },
+
 
 };
 

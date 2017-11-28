@@ -25,6 +25,7 @@ aos.Ship = function () {
     this.cargoSize = 0;
     this.constructionCost = [];
 
+    this.cargo = [];
 };
 
 aos.Ship.prototype = {

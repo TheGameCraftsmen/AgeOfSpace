@@ -33,7 +33,7 @@ aos.Planet = function () {
 
     /** @type {aos.star} */
     this.star = null;
-    
+
     /** @type {aos.building} */
     this.buildings = [];
 };
@@ -64,7 +64,7 @@ aos.Planet.prototype = {
             storage = this.star.resourceShared;
         }
         let resFound = null;
-        
+
         for (let i = 0 ; i < storage.length && resFound == null ; i++) {
             if (storage[i].name == res) {
                 resFound = storage[i];
@@ -80,18 +80,18 @@ aos.Planet.prototype = {
             resFound.quantity += quant;
         }
     },
-    
+
 
     generate: function () {
         this.size = Math.floor(Math.random() * 5 + 1);
-        this.landSize = Math.floor(Math.random()*100);
+        this.landSize = Math.floor(Math.random() * 100);
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
 
     },
 
-    addBuilding: function (name,location) {
+    addBuilding: function (name, location) {
         let _location = location || "ground";
         let b = new aos.Building();
         b.construct(name);
@@ -110,14 +110,14 @@ aos.Planet.prototype = {
         aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
-    removeBuilding: function(name){
+    removeBuilding: function (name) {
         let findBuildingIndex = -1;
-        for ( let it = 0 ; it < this.buildings.length && findBuildingIndex == -1 ; it ++){
-            if (this.buildings[it].name == name){
+        for (let it = 0 ; it < this.buildings.length && findBuildingIndex == -1 ; it++) {
+            if (this.buildings[it].name == name) {
                 findBuildingIndex = it;
             }
         }
-        this.buildings.splice(findBuildingIndex,1);
+        this.buildings.splice(findBuildingIndex, 1);
         aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
@@ -248,31 +248,31 @@ aos.Planet.prototype = {
                 }
             }
             if (building.functional) {
-                for(let itProd = 0 ; itProd < building.produce.product.length ; itProd ++ ){
+                for (let itProd = 0 ; itProd < building.produce.product.length ; itProd++) {
                     this.addResource(building.produce.product[itProd].name, building.produce.product[itProd].to, building.produce.product[itProd].quantity);
                 }
             }
         }
     },
 
-    runPopulation: function(){
-        for (let itPopulation = 0; itPopulation < this.resources.length; itPopulation++){
+    runPopulation: function () {
+        for (let itPopulation = 0; itPopulation < this.resources.length; itPopulation++) {
             let popResource = this.resources[itPopulation];
-            if (popResource.type == "population"){
-                if (popResource.name === "bacteria"){
+            if (popResource.type == "population") {
+                if (popResource.name === "bacteria") {
                     let oxoCarbonFound = null;
-                    for (let itResource= 0 ; itResource < this.resources.length ; itResource){
+                    for (let itResource = 0 ; itResource < this.resources.length ; itResource) {
                         res = this.resources[itResource];
-                        if (res.name === "oxocarbon" && res.quantity > 1000){
+                        if (res.name === "oxocarbon" && res.quantity > 1000) {
                             oxoCarbonFound = res;
                             break;
                         }
                     }
-                    if (oxoCarbonFound !== null){
-                        oxoCarbonFound.quantity = oxoCarbonFound.quantity > 1000 ? oxoCarbonFound.quantity - 1000 :0;
-                        this.addResource("oxygen","planet",popResource.quantity*0.1);
-                    }else{
-                        popResource.quantity = popResource.quantity > 1000 ? popResource.quantity - 1000 :0;
+                    if (oxoCarbonFound !== null) {
+                        oxoCarbonFound.quantity = oxoCarbonFound.quantity > 1000 ? oxoCarbonFound.quantity - 1000 : 0;
+                        this.addResource("oxygen", "planet", popResource.quantity * 0.1);
+                    } else {
+                        popResource.quantity = popResource.quantity > 1000 ? popResource.quantity - 1000 : 0;
                     }
                 }
             }
@@ -281,7 +281,7 @@ aos.Planet.prototype = {
 
     run: function () {
         this.produce();
-        this.runPopulation();  
+        this.runPopulation();
     },
 
 
@@ -296,48 +296,48 @@ aos.Planet.prototype = {
         }
 
         aos.buildings.forEach(function (building, i) {
-            for(let itLocation = 0 ; itLocation < building.location.length ; itLocation ++){
-              const table = document.getElementById(building.location[itLocation].name + "Buildings");
-              [].forEach.call(table.rows, function (row, i) {
-                  if (i > 0) {
-                      row.cells[1].innerHTML = "";
-                      row.cells[2].innerHTML = "";
-                      row.cells[3].innerHTML = "";
-                      row.cells[5].innerHTML = "";
-                  }
-              });
+            for (let itLocation = 0 ; itLocation < building.location.length ; itLocation++) {
+                const table = document.getElementById(building.location[itLocation].name + "Buildings");
+                [].forEach.call(table.rows, function (row, i) {
+                    if (i > 0) {
+                        row.cells[1].innerHTML = "";
+                        row.cells[2].innerHTML = "";
+                        row.cells[3].innerHTML = "";
+                        row.cells[5].innerHTML = "";
+                    }
+                });
             }
         }, this);
 
         for (let elt in this.buildings) {
-              let table = document.getElementById(this.buildings[elt].builtOn + "Buildings");
-              let nbRows = table.rows.length;
-              let found = null;
-              for (let i = 0 ; i < nbRows ; i++) {
-                  if (table.rows[i].cells[0].innerHTML == this.buildings[elt].name) {
-                      found = table.rows[i];
-                      break;
-                  }
-              }
-              if (found) {
-                if (found.cells[1].innerHTML == ""){
-                    found.cells[1].innerHTML = 1;
-                    found.cells[5].innerHTML = "Destroy";
-                }else{ 
-                    found.cells[1].innerHTML = parseInt(found.cells[1].innerHTML)+1 
+            let table = document.getElementById(this.buildings[elt].builtOn + "Buildings");
+            let nbRows = table.rows.length;
+            let found = null;
+            for (let i = 0 ; i < nbRows ; i++) {
+                if (table.rows[i].cells[0].innerHTML == this.buildings[elt].name) {
+                    found = table.rows[i];
+                    break;
                 }
-                  
-                  found.cells[2].innerHTML = this.buildings[elt].functional ? "Enable" : "Disable";
-                  found.cells[3].innerHTML = this.buildings[elt].produce.product[0].quantity;
-                  
-              }
-         
+            }
+            if (found) {
+                if (found.cells[1].innerHTML == "") {
+                    found.cells[1].innerHTML = 1;
+                    found.cells[5].innerHTML = "-";
+                } else {
+                    found.cells[1].innerHTML = parseInt(found.cells[1].innerHTML) + 1
+                }
+
+                found.cells[2].innerHTML = this.buildings[elt].functional ? "Enable" : "Disable";
+                found.cells[3].innerHTML = this.buildings[elt].produce.product[0].quantity;
+
+            }
+
         }
     },
 
     updatePies: function () {
         aos.game.pies.forEach(function (pie, i) {
-            if (pie.innerText !== "Planet"){
+            if (pie.innerText !== "Planet") {
                 pie.content.forEach(function (res, j) {
                     const label = res.label;
                     this.resources.forEach(function (resource, i) {
@@ -346,20 +346,20 @@ aos.Planet.prototype = {
                         }
                     }, this);
                 }, this);
-            }else{
+            } else {
                 pie.content[0].value = this.landSize;
                 pie.content[1].value = 100 - this.landSize;
             }
-            
+
             pie.update();
         }, this);
     },
 
     updateBars: function () {
-        aos.game.resourceBars.forEach(function (bar, i) {
+        aos.game.planetResourceBars.forEach(function (bar, i) {
             const label = bar.name;
             bar.quantity = 0;
-            this.star.resourceShared.forEach(function (resource,i ){
+            this.star.resourceShared.forEach(function (resource, j) {
                 if (resource.name === label) {
                     bar.quantity = resource.quantity;
                 }

@@ -29,7 +29,8 @@ aos.Orchestrator = function () {
     this.dragEnd = null;
 
     this.pies = [];
-    this.resourceBars = [];
+    this.shipResourceBars = [];
+    this.planetResourceBars = [];
 };
 
 aos.Orchestrator.prototype = {
@@ -81,7 +82,7 @@ aos.Orchestrator.prototype = {
                 const cell4 = row.insertCell();
                 const cell5 = row.insertCell();
                 const cell6 = row.insertCell();
-                cell6.innerHTML = "Destroy"
+                cell6.innerHTML = "+"
                 cell6.addEventListener('click', function (e) {
                     if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
                         let planet = this.selectedStar.selectedPlanet;
@@ -89,7 +90,7 @@ aos.Orchestrator.prototype = {
                     }
 
                 }.bind(this), false);
-                cell5.innerHTML = "Build";
+                cell5.innerHTML = "-";
                 // fixing closure in IE
                 const blocation = building.location[itLocation];
                 cell5.addEventListener('click', function (e) {
@@ -132,14 +133,18 @@ aos.Orchestrator.prototype = {
         this.pies.push(chart);
     },
 
-    renderBar: function (elem, res, withIcon) {
+    renderBar: function (elem, res, isStorage) {
         const bar = new aos.Resource();
         bar.htmlElement = elem;
         bar.name = res.name;
         bar.svgCode = res.svgCode;
         bar.color = res.color;
-        bar.render(withIcon);
-        this.resourceBars.push(bar);
+        bar.render(isStorage);
+        if (isStorage) {
+            this.planetResourceBars.push(bar);
+        } else {
+            this.shipResourceBars.push(bar);
+        }
     },
     //#endregion
 
@@ -192,7 +197,7 @@ aos.Orchestrator.prototype = {
                                 }
                             }
                             if (requireOk) {
-                                found.cells[4].innerHTML = "Build";
+                                found.cells[4].innerHTML = "+";
                             } else {
                                 found.cells[4].innerHTML = "<font color='red'>No</font>";
                             }
@@ -554,6 +559,7 @@ aos.Orchestrator.prototype = {
         window.addEventListener('requestUiSlowRefresh', function (e) {
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.showStats();
+                this.selectedStar.showShip();
                 this.updateBuildingsAdd();
             }
         }.bind(this), false);
