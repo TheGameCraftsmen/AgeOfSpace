@@ -87,7 +87,7 @@ aos.buildings = [
                 {
                     "name": "bacteria",
                     "quantity": 1000,
-                    "to": "storage"
+                    "to": "planet"
                 }
             ],
             "require": [
@@ -239,7 +239,8 @@ aos.buildings = [
             "product": [
                 {
                     "name": "energy",
-                    "quantity": 200
+                    "quantity": 200,
+                    "to" : "planet"
                 }
             ],
             "require": [

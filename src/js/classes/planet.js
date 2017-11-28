@@ -72,6 +72,7 @@ aos.Planet.prototype = {
         }
         if (resFound == null) {
             resFound = new aos.Resource();
+            resFound.construct();
             resFound.name = res;
             resFound.quantity = quant;
             storage.push(resFound);
@@ -254,10 +255,34 @@ aos.Planet.prototype = {
         }
     },
 
-    run: function () {
-        this.produce();
+    runPopulation: function(){
+        for (let itPopulation = 0; itPopulation < this.resources.length; itPopulation++){
+            let popResource = this.resources[itPopulation];
+            if (popResource.type == "population"){
+                if (popResource.name === "bacteria"){
+                    let oxoCarbonFound = null;
+                    for (let itResource= 0 ; itResource < this.resources.length ; itResource){
+                        res = this.resources[itResource];
+                        if (res.name === "oxocarbon" && res.quantity > 1000){
+                            oxoCarbonFound = res;
+                            break;
+                        }
+                    }
+                    if (oxoCarbonFound !== null){
+                        oxoCarbonFound.quantity = oxoCarbonFound.quantity > 1000 ? oxoCarbonFound.quantity - 1000 :0;
+                        this.addResource("oxygen","planet",popResource.quantity*0.1);
+                    }else{
+                        popResource.quantity = popResource.quantity > 1000 ? popResource.quantity - 1000 :0;
+                    }
+                }
+            }
+        }
     },
 
+    run: function () {
+        this.produce();
+        this.runPopulation();  
+    },
 
 
     showBuildings: function () {
