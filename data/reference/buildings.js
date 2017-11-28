@@ -73,82 +73,6 @@ aos.buildings = [
         "location": [{ "name": "ground" }]
     },
     {
-        "type": "mine",
-        "name": "Oxygen mine",
-        "constructionCost": [
-            {
-                "name": "metal",
-                "quantity": 500
-            }
-        ],
-        "produce": {
-            "type": "material",
-            "product": [
-                {
-                    "name": "oxygen",
-                    "quantity": 1000,
-                    "to": "storage"
-                }
-            ],
-            "require": [
-                {
-                    "name": "energy",
-                    "quantity": 50,
-                    "planetResource": true
-                },
-                {
-                    "name": "oxygen",
-                    "quantity": 1000,
-                    "planetResource": true
-                }
-            ]
-        },
-        "location": [{ "name": "ground" },{ "name": "water" }]
-    },
-    {
-        "type": "mine",
-        "name": "Salt mine",
-        "constructionCost": [
-            {
-                "name": "metal",
-                "quantity": 500
-            }
-        ],
-        "produce": {
-            "type": "material",
-            "product": [
-                {
-                    "name": "salt",
-                    "quantity": 1000,
-                    "to": "storage"
-                },
-                {
-                    "name": "potable water",
-                    "quantity": 1000,
-                    "to": "storage"
-                }
-            ],
-            "require": [
-                {
-                    "name": "energy",
-                    "quantity": 50,
-                    "planetResource": true
-                },
-                {
-                    "name": "salt",
-                    "quantity": 1000,
-                    "planetResource": true
-                },
-                {
-                    "name": "water",
-                    "quantity": 1000,
-                    "planetResource": true
-                }
-            ]
-        },
-        "location": [{ "name": "ground" },{ "name": "water" }]
-    },
-    {
         "type": "Factory",
         "name": "Bacteria factory",
         "constructionCost": [
@@ -400,43 +324,5 @@ aos.buildings = [
             ]
         },
         "location": [{ "name": "ground" }]
-    },
-    {
-        "type": "epurateur",
-        "name": "Inert Gaz epuration",
-        "constructionCost": [
-            {
-                "name": "metal",
-                "quantity": 50
-            }
-        ],
-        "produce": {
-            "type": "air",
-            "product": [
-                {
-                    "name": "oxygen",
-                    "quantity": 100,
-                    "to": "planet"
-                }
-            ],
-            "require": [
-                {
-                    "name": "energy",
-                    "quantity": 50,
-                    "planetResource": true
-                },
-                {
-                    "name": "inert gases",
-                    "quantity": 50,
-                    "planetResource": true
-                },
-                {
-                    "name": "fissile material",
-                    "quantity": 50,
-                    "planetResource": false
-                }
-            ]
-        },
-        "location": [{ "name": "water" }]
     }
 ];

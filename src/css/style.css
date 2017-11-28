@@ -8,7 +8,7 @@ body {
     background-color: #000;
     color: #abb;
     font-family: Helvetica, arial, sans-serif;
-    font-size: 0.9em;
+    font-size: 0.85em;
     min-width: 1200px;
     /*min-height: 600px;*/
 }
@@ -204,7 +204,7 @@ img {
 }
 
 #starSystemBlock > div:last-child {
-    padding: 15px 20px 0 250px;
+    padding: 5px 5px 0 230px;
     height: 100%;
 }
 
@@ -214,12 +214,13 @@ img {
 
 #starWrapperBlock {
     height: 100%;
-    width: 250px;
+    width: 282px;
     position: absolute;
     margin: auto;
     left: 0;
-    top: 0;
+    top: 60px;
     min-height: 600px;
+    z-index: 1;
 }
 
 @media (min-height: 630px) {
@@ -245,6 +246,7 @@ img {
     top: 0;
     left: 0;
     margin: auto;
+    z-index: -10;
 }
 
 @media (min-height: 630px) {
@@ -282,7 +284,7 @@ img {
     overflow-y: auto;
     border: 1px solid #444;
     border-top: 0;
-    height: calc(100% - 100px);
+    height: calc(100% - 78px);
     position: relative;
 }
 
@@ -291,8 +293,8 @@ img {
 }
 
     /* Label */
-    .resourceBar > div:first-child {
-        width: 32px;
+    .resourceBar > .resourceIcon {
+        width: 96px;
         display: inline-block;
         text-align: right;
         margin-right: 4px;
@@ -302,14 +304,16 @@ img {
     }
 
     /* Outer order */
-    .resourceBar > div:last-child {
+    .resourceBar > .resourceOuterBlock {
         width: 110px;
         display: inline-block;
         border: 1px solid #444;
         position: relative;
         top: -10px;
         height: 12px;
-        border-radius: 4px;
+        border-radius: 5px;
+        background-color: #000;
+        z-index: -2;
     }
 
     /* Arrows */
@@ -321,12 +325,15 @@ img {
 
         /* Inner bar */
         .resourceBar > div > div:first-child {
-            background-color: #004;
+            background-color: #075;
+            border-radius: 4px;
             top: 0;
             z-index: -1;
         }
 
-
+#storageBlock > div {
+    text-align: right;
+}
 
 
 /* Animations */

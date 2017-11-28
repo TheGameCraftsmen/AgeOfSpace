@@ -27,8 +27,7 @@ aos.Planet = function () {
     this.size = 0;
     /** @type {aos.Resource} */
     this.resources = [];
-    /** @type {aos.Resource} */
-    this.resourcesStored = [];
+    this.storage = [];
     /** @type {number} */
     this.landSize = 0;
 
@@ -37,10 +36,6 @@ aos.Planet = function () {
     
     /** @type {aos.building} */
     this.buildings = [];
-    /** @type {boolean}
-     * Planet must be scanned to show planet properties to Player
-    */
-    this.scanned = false;
 };
 
 aos.Planet.prototype = {

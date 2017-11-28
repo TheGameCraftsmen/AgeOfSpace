@@ -60,7 +60,7 @@ aos.Orchestrator.prototype = {
         aos.resources.forEach(function (resource, i) {
             if (resource.category === 'population') {
                 this.renderBar(document.getElementById(resource.name + 'Pop'), resource);
-            } else {
+            } /*else*/ {
                 this.renderBar(document.getElementById('res' + i + 'Storage'), resource);
                 if (resource.category !== resourceGroup) {
                     //document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
