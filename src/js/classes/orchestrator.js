@@ -56,17 +56,9 @@ aos.Orchestrator.prototype = {
         this.renderPie(document.getElementById('groundPie'), 'Soil', 'ground');
         this.renderPieGroundWater(document.getElementById('repartitionPie'));
 
-        let resourceGroup = 'air';
         aos.resources.forEach(function (resource, i) {
-            if (resource.category === 'population') {
-                this.renderBar(document.getElementById(resource.name + 'Pop'), resource);
-            } /*else*/ {
-                this.renderBar(document.getElementById('res' + i + 'Storage'), resource);
-                if (resource.category !== resourceGroup) {
-                    //document.getElementById('res' + i + 'Storage').style.marginTop = '10px';
-                    resourceGroup = resource.category;
-                }
-            }
+            this.renderBar(document.getElementById('res' + i + 'Storage'), resource, true);
+            this.renderBar(document.getElementById('res' + i + 'Ship'), resource, false);
         }, this);
 
         aos.buildings.forEach(function (b, i) {
@@ -138,13 +130,13 @@ aos.Orchestrator.prototype = {
         this.pies.push(chart);
     },
 
-    renderBar: function (elem, res) {
+    renderBar: function (elem, res, withIcon) {
         const bar = new aos.Resource();
         bar.htmlElement = elem;
         bar.name = res.name;
         bar.svgCode = res.svgCode;
         bar.color = res.color;
-        bar.render();
+        bar.render(withIcon);
         this.resourceBars.push(bar);
     },
     //#endregion

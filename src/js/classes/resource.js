@@ -34,10 +34,10 @@ aos.Resource = function () {
 
 aos.Resource.prototype = {
 
-    construct : function(name){
-        for (let itResource =0; itResource < aos.resources.length; itResource++){
+    construct: function (name) {
+        for (let itResource = 0; itResource < aos.resources.length; itResource++) {
             let res = aos.resources[itResource];
-            if (res.name === name){
+            if (res.name === name) {
                 this.name = name;
                 this.type = res.type;
                 this.svgCode = res.svgCode;
@@ -47,8 +47,41 @@ aos.Resource.prototype = {
     },
 
     // Should be called only once !
-    render: function () {
+    render: function (withIcon) {
         let code = '<div class="resourceBar">';
+
+        if (withIcon) {
+            code += '<div class="resourceIcon">';
+            code += '<svg viewBox="0 0 512 512">'
+                + '<path d="M512 8C181 8 181 504 512 504" fill="#000" stroke="#444" stroke-width="16"></path>'
+                + '</svg>';
+            code += '</div>';
+
+            code += '<div class="resourceIcon">';
+            if (this.svgCode !== undefined) {
+                const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+                    + '<path d="M0 0h512v512H0z" fill="#000"></path>'
+                    + '<g><path fill="{color}" d="'.replace('{color}', this.color)
+                    + this.svgCode
+                    + '"></path></g>'
+                    + '<path d="M0 8h512M0 504h512" stroke="#444" stroke-width="16"></path>'
+                    + '</svg>';
+                code += fullSvgCode;
+            } else {
+                code += 'X'/*this.name*/;
+            }
+            code += '</div>';
+
+            code += '<div class="resourceIcon">';
+            code += '<svg viewBox="0 0 512 512">'
+                + '<path d="M0 8C331 8 331 504 0 504" fill="#000" stroke="#444" stroke-width="16"></path>'
+                + '</svg>';
+            code += '</div>';
+        } else {
+            code += '<div class="resourceIcon">';
+            code += '</div>';
+        }
+
         code += '<div class="resourceOuterBlock"><div></div>';
         let i = 0;
         for (i = 0; i < 5; i++) {
@@ -58,17 +91,7 @@ aos.Resource.prototype = {
             code += '<div style="right:calc(50% + ' + (5 + i * 10) + 'px); animation-delay:' + (i * 0.25) + 's" class="blink"><svg width="8" height="8" viewBox="0 0 32 32"><path d="M 30 0 L 30 32 L 2 16 Z" stroke-width="2" stroke="#fff" fill="rgba(255,255,255,0.2)"></path></svg></div>';
         }
         code += '</div>';
-        code += '<div class="resourceIcon">';
-        if (this.svgCode !== undefined) {
-            this.svgCode = '<svg viewBox="-512 0 1536 512"><path d="M-512 0h1536v512H-512z" fill="#444"></path><path d="M-496 16h1504v480H-496z" fill="rgba(0, 0, 0, 1)"></path><g><path fill="{color}" d="'.replace('{color}', this.color)
-                + this.svgCode
-                + '"></path></g></svg>';
-            //this.svgCode = this.svgCode.replace('{color}', this.color);
-            code += this.svgCode;
-        } else {
-            code += 'X'/*this.name*/;
-        }
-        code += '</div>';
+
         code += '</div>';
         this.htmlElement.innerHTML = code;
     },
@@ -80,11 +103,11 @@ aos.Resource.prototype = {
         //    this.htmlElement.style.display = 'block';
         //}
         const percent = 100.0 * (Math.log(this.quantity + 1200.0) - 7) / 13.0;
-        this.htmlElement.firstChild.firstChild.firstChild.style.width = '' + percent + '%';
+        this.htmlElement.firstChild.lastChild.firstChild.style.width = '' + percent + '%';
         if (this.quantity === 0) {
-            this.htmlElement.firstChild.firstChild.firstChild.style.width = '0';
+            this.htmlElement.firstChild.lastChild.firstChild.style.width = '0';
         }
-        [].forEach.call(this.htmlElement.firstChild.firstChild.childNodes, function (arrow, i) {
+        [].forEach.call(this.htmlElement.firstChild.lastChild.childNodes, function (arrow, i) {
             if (i !== 0) {
                 arrow.style.display = 'none';
             }

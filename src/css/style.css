@@ -191,7 +191,7 @@ img {
 }
 
 #starSystemBlock {
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 #galaxyBlock canvas {
@@ -204,7 +204,7 @@ img {
 }
 
 #starSystemBlock > div:last-child {
-    padding: 5px 5px 0 230px;
+    padding: 4px 5px 0 230px;
     height: 100%;
 }
 
@@ -213,12 +213,12 @@ img {
 }
 
 #starWrapperBlock {
-    height: 100%;
-    width: 282px;
+    /*height: 100%;*/
+    /*width: 282px;*/
     position: absolute;
     margin: auto;
-    left: 0;
-    top: 60px;
+    left: 41px;
+    top: 68px;
     min-height: 600px;
     z-index: 1;
 }
@@ -260,6 +260,7 @@ img {
     border-bottom: 1px solid #444;
     list-style-type: none;
     position: relative;
+    padding-left: 60px;
 }
 
     #miniatureTabs li {
@@ -281,10 +282,10 @@ img {
     }
 
 #planetBlock {
-    overflow-y: auto;
+    /*overflow-y: auto;*/
     border: 1px solid #444;
     border-top: 0;
-    height: calc(100% - 78px);
+    height: calc(100% - 64px);
     position: relative;
 }
 
@@ -294,10 +295,8 @@ img {
 
     /* Label */
     .resourceBar > .resourceIcon {
-        width: 96px;
+        width: 32px;
         display: inline-block;
-        text-align: right;
-        margin-right: 4px;
         overflow: hidden;
         height: 32px;
         /* background-color: #088; */

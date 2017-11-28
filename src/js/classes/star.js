@@ -239,7 +239,7 @@ aos.Star.prototype = {
             document.getElementById('miniatureTabs').innerHTML +=
                 '<li ' +
                 'data-index="' + i + '" class="' + 'inactive">' +
-                '<img src=' + planetImgs[i] + ' width="64" height="64"></li>';
+                '<img src=' + planetImgs[i] + ' width="50" height="50"></li>';
         }, this);
 
         // see animateLargeStar for formula explanation

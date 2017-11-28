@@ -220,8 +220,7 @@ aos.Icosahedron.prototype = {
             const vm = aos.Math.multiply4x4(this.cameraMatrix, this.modelMatrix);
             const pvm = aos.Math.multiply4x4(this.frustumMatrix, vm);
 
-            ctx.fillStyle = "#444";
-            ctx.fillRect(-1, -1, 2, 2);
+            ctx.clearRect(-1, -1, 2, 2);
 
             const screenPoints = [];
             this.vertices.forEach(function (vec3) {
@@ -291,8 +290,8 @@ aos.Icosahedron.prototype = {
 
             ctx.restore();
 
-            const image = document.getElementById("resourceImg1");
-            ctx.drawImage(image, 100, 100, 150, 150);
+            //const image = document.getElementById("resourceImg1");
+            //ctx.drawImage(image, 100, 100, 150, 150);
 
         }.bind(this), false);
 
