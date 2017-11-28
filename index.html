@@ -90,7 +90,7 @@
                 <div>
                     <ol id="miniatureTabs"></ol>
                     <div id="planetBlock">
-                        <div id="planetStorage" style="position: absolute; left: -48px; top: 6px; text-align: left; height: 100%; ">
+                        <div id="planetStorageColumn" style="position: absolute; left: -48px; top: 6px; text-align: left; height: 100%; ">
                             <div id="res0Storage"></div>
                             <div id="res1Storage"></div>
                             <div id="res2Storage"></div>
@@ -113,12 +113,13 @@
                             <div id="res19Storage"></div>
                             <div id="res20Storage"></div>
                         </div>
-                        <div id="planetLeftColumn" style="position: absolute; left: 160px; right: 380px; top: 0; height: 100%;">
-                            <canvas id="planetTestCanvas" width="500" height="500" style="width:100%"></canvas>
+                        <div id="planetModelColumn" style="position: absolute; left: 160px; right: 380px; top: 0; height: 100%; text-align: center;">
+                            <canvas id="planetTestCanvas" width="500" height="500" style="width:100%; max-width: 480px;"></canvas>
+                            <br/>
                             <div id="airPie"></div>
                             <div id="liquidPie"></div>
                             <div id="groundPie"></div>
-                            <div id="repartitionPie"></div>
+                            <div id="repartitionPie" style="display: none;"></div>
                         </div>
                         <div id="planetMiddleColumn" style="position: absolute; width: 380px; right: 0; top: 0; height:100%; ">
                             <h3>Buildings <div id="nbBuildingOnGround">0/10</div></h3>

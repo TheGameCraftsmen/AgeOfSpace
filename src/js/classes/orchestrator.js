@@ -90,10 +90,12 @@ aos.Orchestrator.prototype = {
 
                 }.bind(this), false);
                 cell5.innerHTML = "Build";
+                // fixing closure in IE
+                const blocation = building.location[itLocation];
                 cell5.addEventListener('click', function (e) {
                     if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
                         let planet = this.selectedStar.selectedPlanet;
-                        planet.addBuilding(building.name, building.location[itLocation].name);
+                        planet.addBuilding(building.name, blocation.name);
                     }
 
                 }.bind(this), false);

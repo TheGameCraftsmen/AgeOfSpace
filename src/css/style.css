@@ -9,7 +9,7 @@ body {
     color: #abb;
     font-family: Helvetica, arial, sans-serif;
     font-size: 0.85em;
-    min-width: 1200px;
+    min-width: 1280px;
     /*min-height: 600px;*/
 }
 
@@ -53,6 +53,7 @@ img {
     vertical-align: top;
     /*display: table;*/
     position: relative;
+    min-height: 695px;
 }
 
 #commandColumn {
@@ -191,7 +192,7 @@ img {
 }
 
 #starSystemBlock {
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 #galaxyBlock canvas {
@@ -288,6 +289,15 @@ img {
     height: calc(100% - 64px);
     position: relative;
 }
+
+#planetModelColumn > div {
+    display: inline-block;
+}
+
+    #planetModelColumn > div > svg {
+        width: 120px;
+        height: 120px;
+    }
 
 .resourceBar {
     padding: 0 /*2px*/;
