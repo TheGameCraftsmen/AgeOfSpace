@@ -153,8 +153,8 @@ aos.Icosahedron.prototype = {
             const ctx = canvas.getContext("2d");
 
             ctx.save();
-            ctx.translate(halfWidth, halfHeight);
-            ctx.scale(halfWidth, halfHeight);
+            ctx.translate(250, 250);
+            ctx.scale(250, 250);
 
             if (this.rotates) {
                 const newModel = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
