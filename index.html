@@ -113,10 +113,14 @@
                             <div id="res19Storage"></div>
                             <div id="res20Storage"></div>
                         </div>
-                        <div id="planetLeftColumn" style="position: absolute; left: 160px; top: 0; height: 100%;">
-                            <canvas id="planetTestCanvas" width="500" height="500" style="width:250px"></canvas>
+                        <div id="planetLeftColumn" style="position: absolute; left: 160px; right: 380px; top: 0; height: 100%;">
+                            <canvas id="planetTestCanvas" width="500" height="500" style="width:100%"></canvas>
+                            <div id="airPie"></div>
+                            <div id="liquidPie"></div>
+                            <div id="groundPie"></div>
+                            <div id="repartitionPie"></div>
                         </div>
-                        <div id="planetMiddleColumn" style="position: absolute; left: calc((100% - 200px) / 2); right: 151px; top: 0; height:100%; ">
+                        <div id="planetMiddleColumn" style="position: absolute; width: 380px; right: 0; top: 0; height:100%; ">
                             <h3>Buildings <div id="nbBuildingOnGround">0/10</div></h3>
                             <hr />
                             <h3>On Ground</h3>
@@ -141,12 +145,6 @@
                                     <th>Destroy</th>
                                 </tr>
                             </table>
-                        </div>
-                        <div id="planetRightColumn" style="position: absolute; right: 0; top: 0; width: 151px; height:100%; border-left: 1px solid #444; ">
-                            <div id="airPie"></div>
-                            <div id="liquidPie"></div>
-                            <div id="groundPie"></div>
-                            <div id="repartitionPie"></div>
                         </div>
                     </div>
                 </div>
