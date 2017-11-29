@@ -538,13 +538,6 @@ aos.Orchestrator.prototype = {
             }
         }.bind(this), false);
 
-
-        //window.addEventListener('resize', function (e) {
-        //    document.getElementById('debug').innerHTML = 'x';
-        //    document.getElementById('debug').innerHTML += window.getComputedStyle(document.body, null).width + '/';
-        //    document.getElementById('debug').innerHTML += window.getComputedStyle(document.body, null).height
-        //}.bind(this), false);
-
         window.setInterval(function () {
             this.emitEvent('requestUiFastRefresh', {});
         }.bind(this), 130);

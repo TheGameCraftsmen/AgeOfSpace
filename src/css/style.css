@@ -218,7 +218,7 @@ img {
     /*width: 282px;*/
     position: absolute;
     margin: auto;
-    left: 41px;
+    left: 44px;
     top: 68px;
     min-height: 600px;
     z-index: 1;
@@ -229,16 +229,6 @@ img {
         /*bottom: 0;*/
     }
 }
-
-#starWrapperBlock > div {
-    height: 10px;
-    float: left;
-    clear: left;
-}
-
-    #starWrapperBlock > div:first-child, #starWrapperBlock > div:last-of-type {
-        /*height: calc(50% - 300px)*/
-    }
 
 #largeStarBlock {
     width: 125px;
@@ -290,6 +280,18 @@ img {
     position: relative;
 }
 
+#storageBlock > div {
+    text-align: right;
+}
+
+#planetStorageColumn {
+    position: absolute;
+    left: -46.5px;
+    top: 6px;
+    text-align: left;
+    height: 100%;
+}
+
 #planetModelColumn > div {
     display: inline-block;
 }
@@ -300,15 +302,15 @@ img {
     }
 
 .resourceBar {
-    padding: 0 /*2px*/;
+    padding: 1px;
+    font-size: 0;
 }
 
     /* Label */
     .resourceBar > .resourceIcon {
-        width: 32px;
+        width: 30px;
         display: inline-block;
-        overflow: hidden;
-        height: 32px;
+        height: 30px;
         /* background-color: #088; */
     }
 
@@ -318,7 +320,7 @@ img {
         display: inline-block;
         border: 1px solid #444;
         position: relative;
-        top: -10px;
+        top: -9px;
         height: 12px;
         border-radius: 5px;
         background-color: #000;
@@ -329,7 +331,7 @@ img {
     .resourceBar > div > div {
         height: 100%;
         position: absolute;
-        top: -4px;
+        top: 1px;
     }
 
         /* Inner bar */
@@ -340,8 +342,19 @@ img {
             z-index: -1;
         }
 
-#storageBlock > div {
-    text-align: right;
+@media (min-height: 721px) {
+    .resourceBar > .resourceIcon {
+        width: calc(((100vh - 144px) / 18) - 2px);
+        height: calc(((100vh - 144px) / 18) - 2px);
+    }
+
+    .resourceBar > .resourceOuterBlock {
+        top: calc((((100vh - 144px) / 18) - 14px) / -2);
+    }
+
+    #planetStorageColumn {
+        left: calc(((((100vh - 144px) / 18) - 2px) * -1.5) - 1.5px);
+    }
 }
 
 

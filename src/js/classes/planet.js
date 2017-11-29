@@ -27,7 +27,7 @@ aos.Planet = function () {
     this.size = 0;
     /** @type {aos.Resource} */
     this.resources = [];
-    this.storage = [];
+    this.storedResources = [];
     /** @type {number} */
     this.landSize = 0;
 
@@ -61,7 +61,7 @@ aos.Planet.prototype = {
         if (to == "planet") {
             storage = this.resources;
         } else {
-            storage = this.star.resourceShared;
+            storage = this.storedResources;
         }
         let resFound = null;
 
@@ -88,6 +88,12 @@ aos.Planet.prototype = {
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
+
+        let r = new aos.Resource();
+        r.type = "metal";
+        r.name = "metal"
+        r.quantity = 200;
+        this.storedResources.push(r);
 
     },
 
@@ -196,10 +202,10 @@ aos.Planet.prototype = {
                 }
             }
         } else {
-            for (let itRes = 0 ; itRes < this.star.resourceShared.length ; itRes++) {
-                if (this.star.resourceShared[itRes].name == name && this.star.resourceShared[itRes].quantity >= quantity) {
+            for (let itRes = 0 ; itRes < this.storedResources.length ; itRes++) {
+                if (this.storedResources[itRes].name == name && this.storedResources[itRes].quantity >= quantity) {
                     qtyRemoved = quantity;
-                    if (!isChecking) this.star.resourceShared[itRes].quantity -= qtyRemoved;
+                    if (!isChecking) this.storedResources[itRes].quantity -= qtyRemoved;
                 }
             }
         }
@@ -359,7 +365,7 @@ aos.Planet.prototype = {
         aos.game.planetResourceBars.forEach(function (bar, i) {
             const label = bar.name;
             bar.quantity = 0;
-            this.star.resourceShared.forEach(function (resource, j) {
+            this.storedResources.forEach(function (resource, j) {
                 if (resource.name === label) {
                     bar.quantity = resource.quantity;
                 }
