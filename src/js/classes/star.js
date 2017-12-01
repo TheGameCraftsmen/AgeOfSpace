@@ -46,6 +46,7 @@ aos.Star = function () {
     this.planets = [];
     this.selectedPlanetIndex = 0;
     this.selectedPlanet = null;
+    this.hasShip = false;
 };
 
 aos.Star.prototype = {
@@ -317,6 +318,11 @@ aos.Star.prototype = {
     },
 
     showShip: function () {
+        if (this.hasShip) {
+            document.getElementById('starWrapperBlock').style.display = 'block';
+        } else {
+            document.getElementById('starWrapperBlock').style.display = 'none';
+        }
     },
 
 

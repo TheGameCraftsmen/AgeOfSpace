@@ -128,8 +128,17 @@ aos.Icosahedron.prototype = {
         this.triangles.push([3, 6, 9, 0]); // --+
         this.triangles.push([3, 7, 11, 0]); // ---
 
+        const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+            + '<g><path fill="{color}" d="'.replace('{color}', '#888')
+            + aos.buildings[0].svgCode
+            + '"></path></g>'
+            + '</svg>';
+        const image = document.getElementById("resourceImg1");
+        image.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCode);
+
+
         this.triangles.forEach(function (tri, idx) {
-            // Tessellated triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent triangle]
+            // Tessellated triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent triangle, isCenter]
             const v1 = this.vertices[tri[0]];
             const v2 = this.vertices[tri[1]];
             const v3 = this.vertices[tri[2]];
@@ -139,10 +148,10 @@ aos.Icosahedron.prototype = {
             this.vertices.push(new Float32Array([m12[0] * radius, m12[1] * radius, m12[2] * radius, 0]));
             this.vertices.push(new Float32Array([m23[0] * radius, m23[1] * radius, m23[2] * radius, 0]));
             this.vertices.push(new Float32Array([m31[0] * radius, m31[1] * radius, m31[2] * radius, 0]));
-            this.tessellatedTriangles.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, idx]);
-            this.tessellatedTriangles.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, idx]);
-            this.tessellatedTriangles.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, idx]);
-            this.tessellatedTriangles.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, idx]);
+            this.tessellatedTriangles.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, idx, false]);
+            this.tessellatedTriangles.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, idx, false]);
+            this.tessellatedTriangles.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, idx, false]);
+            this.tessellatedTriangles.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, idx, true]);
         }, this);
 
 
@@ -248,43 +257,77 @@ aos.Icosahedron.prototype = {
                 }
             }, this);
             this.tessellatedTriangles.forEach(function (tri, idx) {
-                const parentTri = this.triangles[tri[4]];
-                ctx.beginPath();
-                ctx.fillStyle = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
-                ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                ctx.closePath();
-                if (selectedTriangle === tri[4]) {
-                    ctx.fillStyle = '#600';
-                }
-                ctx.fill();
-                if (tri[0] < 12) {
-                    ctx.lineWidth = 0.005; // 0.004 space units = 1 px on screen
-                    ctx.strokeStyle = '#000';
+                if (idx >= 40) {
+                    const parentTri = this.triangles[tri[4]];
+                    let triColor = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
+                    if (selectedTriangle === tri[4]) {
+                        triColor = '#600';
+                    }
                     ctx.beginPath();
-                    ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                    ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                    ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.lineWidth = 0.001;
-                    ctx.strokeStyle = '#888';
-                    ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                    ctx.stroke();
-                } else {
-                    ctx.beginPath();
-                    ctx.lineWidth = 0.001;
-                    ctx.strokeStyle = '#888';
+                    ctx.fillStyle = triColor;
                     ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
                     ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                     ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                     ctx.closePath();
-                    ctx.stroke();
+                    ctx.fill();
+                    if (tri[0] < 12) {
+                        ctx.beginPath();
+                        ctx.lineWidth = 0.005;
+                        ctx.strokeStyle = triColor;
+                        ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                        ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                        ctx.stroke();
+
+                        ctx.strokeStyle = '#000';
+                        ctx.lineWidth = 0.005; // 0.004 space units = 1 px on screen
+                        ctx.beginPath();
+                        ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                        ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                        ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                        ctx.stroke();
+
+                    } else {
+                        ctx.beginPath();
+                        ctx.lineWidth = 0.005;
+                        ctx.strokeStyle = triColor;
+                        ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                        ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                        ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+                }
+            }, this);
+            this.tessellatedTriangles.forEach(function (tri, idx) {
+                if (idx >= 45) {
+                    if (tri[5]) { // isCenter
+                        const v1 = this.vertices[tri[0]];
+                        const v2 = this.vertices[tri[1]];
+                        const v3 = this.vertices[tri[2]];
+                        //const m123 = aos.Math.normalizeVector3(new Float32Array([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]));
+                        //const v123 = new Float32Array([m123[0] * radius * 1.0, m123[1] * radius * 1.0, m123[2] * radius * 1.0, 0]);
+                        const v123 = new Float32Array([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
+                        const screenPoint = aos.Math.transformVector3(v123, pvm);
+                        //if (tri[4] === 7) {
+                        if (true) {
+                            // Heron's formula
+                            const point0 = screenPoints[tri[0]];
+                            const point1 = screenPoints[tri[1]];
+                            const point2 = screenPoints[tri[2]];
+                            const da = Math.sqrt((point0[0] - point1[0]) * (point0[0] - point1[0]) + (point0[1] - point1[1]) * (point0[1] - point1[1]));
+                            const db = Math.sqrt((point2[0] - point1[0]) * (point2[0] - point1[0]) + (point2[1] - point1[1]) * (point2[1] - point1[1]));
+                            const dc = Math.sqrt((point0[0] - point2[0]) * (point0[0] - point2[0]) + (point0[1] - point2[1]) * (point0[1] - point2[1]));
+                            const heronP = 0.5 * (da + db + dc);
+                            const heronS = 0.04 + 0.4 * Math.sqrt(heronP * (heronP - da) * (heronP - db) * (heronP - dc));
+                            if (heronS > 0.050) {
+                                const image = document.getElementById("resourceImg1");
+                                ctx.drawImage(image, screenPoint[0] - heronS, screenPoint[1] - heronS, 2 * heronS, 2 * heronS);
+                            }
+                        }
+                    }
                 }
             }, this);
 

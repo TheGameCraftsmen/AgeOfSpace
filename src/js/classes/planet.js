@@ -83,8 +83,9 @@ aos.Planet.prototype = {
 
 
     generate: function () {
-        this.size = Math.floor(Math.random() * 5 + 1);
-        this.landSize = Math.floor(Math.random() * 100);
+        //this.size = Math.floor(Math.random() * 5 + 1);
+        this.size = 10;
+        this.landSize = 5 * Math.floor(Math.random() * 21);
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
@@ -92,7 +93,7 @@ aos.Planet.prototype = {
         let r = new aos.Resource();
         r.type = "metal";
         r.name = "metal"
-        r.quantity = 200;
+        r.quantity = 20000;
         this.storedResources.push(r);
 
     },
