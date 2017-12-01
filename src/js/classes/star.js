@@ -322,9 +322,11 @@ aos.Star.prototype = {
         if (this.hasShip) {
             document.getElementById('starWrapperBlock').style.display = 'block';
             document.getElementById('shipAnimation').style.display = 'block';
+            document.getElementById('planetStorageColumn').className = 'sendToShipVisible';
         } else {
             document.getElementById('starWrapperBlock').style.display = 'none';
             document.getElementById('shipAnimation').style.display = 'none';
+            document.getElementById('planetStorageColumn').className = 'sendToShipInvisible';
         }
     },
 

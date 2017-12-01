@@ -213,6 +213,10 @@ img {
     display: none;
 }
 
+.sendToShipInvisible > div > .resourceBar > .resourceIcon > svg > .sendToShipArrow {
+    display: none;
+}
+
 #shipAnimation {
     position: absolute;
     left: 0px;
