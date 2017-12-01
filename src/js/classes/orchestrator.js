@@ -559,6 +559,7 @@ aos.Orchestrator.prototype = {
         window.addEventListener('animationTick', function (e) {
             if (this.selectedStar !== null) {
                 this.selectedStar.animateLargeStar();
+                //this.selectedStar.animateShip();
             }
         }.bind(this), false);
 

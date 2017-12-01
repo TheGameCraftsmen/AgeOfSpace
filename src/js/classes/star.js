@@ -47,6 +47,7 @@ aos.Star = function () {
     this.selectedPlanetIndex = 0;
     this.selectedPlanet = null;
     this.hasShip = false;
+    this.shipAngle = 0;
 };
 
 aos.Star.prototype = {
@@ -320,9 +321,18 @@ aos.Star.prototype = {
     showShip: function () {
         if (this.hasShip) {
             document.getElementById('starWrapperBlock').style.display = 'block';
+            document.getElementById('shipAnimation').style.display = 'block';
         } else {
             document.getElementById('starWrapperBlock').style.display = 'none';
+            document.getElementById('shipAnimation').style.display = 'none';
         }
+    },
+
+    animateShip: function () {
+        if (this.hasShip) {
+            this.shipAngle += 3;
+            document.getElementById('shipAnimation').style.transform = 'rotate(' + this.shipAngle + 'deg)';
+        } 
     },
 
 

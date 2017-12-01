@@ -48,7 +48,7 @@ aos.Planet.prototype = {
      *
      * Argument to if passed define which store is concerned by the resource :
      *         -- "planet" : to add resource to planet (water, oxygen, ...)
-     *         -- "local"  : to add resource to stored resource by the player (metal, food, ...)
+     *         -- "storage"  : to add resource to stored resource by the player (metal, food, ...)
      */
     addResource: function (resource, to, quantity) {
         let res = resource;
@@ -72,7 +72,7 @@ aos.Planet.prototype = {
         }
         if (resFound == null) {
             resFound = new aos.Resource();
-            resFound.construct();
+            resFound.construct(res);
             resFound.name = res;
             resFound.quantity = quant;
             storage.push(resFound);
@@ -83,18 +83,41 @@ aos.Planet.prototype = {
 
 
     generate: function () {
-        //this.size = Math.floor(Math.random() * 5 + 1);
-        this.size = 10;
+        this.generateEarth();
+
+        this.addResource('metal', 'storage', 20000);
+    },
+
+    generateRandom: function () {
+        this.size = Math.floor(Math.random() * 5 + 1);
         this.landSize = 5 * Math.floor(Math.random() * 21);
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
+    },
 
-        let r = new aos.Resource();
-        r.type = "metal";
-        r.name = "metal"
-        r.quantity = 20000;
-        this.storedResources.push(r);
+    generateEarth: function () {
+        this.size = 10;
+        this.landSize = 5 * 6;
+
+        this.addResource('oxygen', 'planet', 210000);
+        this.addResource('inert gases', 'planet', 790000);
+        this.addResource('oxocarbon', 'planet', 400);
+        this.addResource('acid cloud', 'planet', 0);
+        this.addResource('salt water', 'planet', 9750000);
+        this.addResource('fresh water', 'planet', 250000);
+        this.addResource('toxic waste', 'planet', 0);
+        this.addResource('mineral', 'planet', 9700000);
+        this.addResource('metal', 'planet', 200000);
+        this.addResource('fissile material', 'planet', 10000);
+        this.addResource('ground pollution', 'planet', 1000);
+
+        this.addResource('bacteria', 'storage', 1000);
+        this.addResource('flora', 'storage', 1000);
+        this.addResource('fauna', 'storage', 1000);
+        this.addResource('humans', 'storage', 1000);
+        this.addResource('virus', 'storage', 1000);
+        this.addResource('machines', 'storage', 1000);
 
     },
 
@@ -113,6 +136,9 @@ aos.Planet.prototype = {
             }
             b.builtOn = _location;
             this.buildings.push(b);
+            if (b.type === 'ship') {
+                this.star.hasShip = true;
+            }
         }
         aos.game.emitEvent('requestUiSlowRefresh', {});
     },
@@ -120,8 +146,12 @@ aos.Planet.prototype = {
     removeBuilding: function (name) {
         let findBuildingIndex = -1;
         for (let it = 0 ; it < this.buildings.length && findBuildingIndex == -1 ; it++) {
-            if (this.buildings[it].name == name) {
+            if (this.buildings[it].name === name) {
                 findBuildingIndex = it;
+                if (this.buildings[it].type === 'ship') {
+                    this.star.hasShip = false;
+                }
+
             }
         }
         this.buildings.splice(findBuildingIndex, 1);
@@ -231,8 +261,7 @@ aos.Planet.prototype = {
     },
 
     produce: function () {
-        for (let itBuilding = 0 ; itBuilding < this.buildings.length ; itBuilding++) {
-            let building = this.buildings[itBuilding];
+        this.buildings.forEach(function (building, i) {
             building.functional = true;
             if (typeof building.produce.conditions !== "undefined") {
                 for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
@@ -259,7 +288,7 @@ aos.Planet.prototype = {
                     this.addResource(building.produce.product[itProd].name, building.produce.product[itProd].to, building.produce.product[itProd].quantity);
                 }
             }
-        }
+        }, this);
     },
 
     runPopulation: function () {

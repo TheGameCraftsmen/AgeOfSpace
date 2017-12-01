@@ -213,6 +213,16 @@ img {
     display: none;
 }
 
+#shipAnimation {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 128px;
+    height: 128px;
+    z-index: 1;
+    transform-origin: 50% 50%;
+}
+
 #starWrapperBlock {
     /*height: 100%;*/
     /*width: 282px;*/

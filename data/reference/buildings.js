@@ -330,7 +330,7 @@ aos.buildings = [
             "product": [
                 {
                     "name": "ship",
-                    "quantity": 1,
+                    "quantity": 0,
                 }
             ],
             "require": [

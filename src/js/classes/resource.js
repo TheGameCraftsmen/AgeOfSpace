@@ -40,6 +40,7 @@ aos.Resource.prototype = {
             if (res.name === name) {
                 this.name = name;
                 this.type = res.type;
+                this.color = res.color;
                 this.svgCode = res.svgCode;
                 break;
             }
