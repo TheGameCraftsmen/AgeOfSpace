@@ -46,8 +46,11 @@ aos.Star = function () {
     this.planets = [];
     this.selectedPlanetIndex = 0;
     this.selectedPlanet = null;
+
+    // ship
     this.hasShip = false;
     this.shipAngle = 0;
+    this.ship = null;
 };
 
 aos.Star.prototype = {
@@ -253,7 +256,7 @@ aos.Star.prototype = {
         }
         wrapperInnerTxt = "<div></div>" + wrapperInnerTxt + "<div></div>";
         //wrapperInnerTxt += "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet?</p>";
-        
+
         document.getElementById('starWrapperPlaceholder').appendChild(document.getElementById('storageBlock'));
         //document.getElementById('starWrapperBlock').innerHTML = wrapperInnerTxt;
         document.getElementById('starWrapperBlock').innerHTML = '';
@@ -323,6 +326,7 @@ aos.Star.prototype = {
             document.getElementById('starWrapperBlock').style.display = 'block';
             document.getElementById('shipAnimation').style.display = 'block';
             document.getElementById('planetStorageColumn').className = 'sendToShipVisible';
+            this.ship.updateBars();
         } else {
             document.getElementById('starWrapperBlock').style.display = 'none';
             document.getElementById('shipAnimation').style.display = 'none';
@@ -331,10 +335,11 @@ aos.Star.prototype = {
     },
 
     animateShip: function () {
+        // TODO
         if (this.hasShip) {
             this.shipAngle += 3;
             document.getElementById('shipAnimation').style.transform = 'rotate(' + this.shipAngle + 'deg)';
-        } 
+        }
     },
 
 

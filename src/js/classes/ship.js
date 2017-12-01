@@ -25,10 +25,33 @@ aos.Ship = function () {
     this.cargoSize = 0;
     this.constructionCost = [];
 
-    this.cargo = [];
+    this.storedResources = [];
 };
 
 aos.Ship.prototype = {
+
+    init: function () {
+        aos.resources.forEach(function (resource, i) {
+            const res = new aos.Resource();
+            res.construct(resource.name);
+            res.quantity = 0;
+            this.storedResources.push(res);
+        }, this);
+    },
+
+    updateBars: function () {
+        aos.game.shipResourceBars.forEach(function (bar, i) {
+            const label = bar.name;
+            bar.quantity = 0;
+            this.storedResources.forEach(function (resource, j) {
+                if (resource.name === label) {
+                    bar.quantity = resource.quantity;
+                }
+            }, this);
+            bar.update();
+        }, this);
+    },
+
 
 };
 

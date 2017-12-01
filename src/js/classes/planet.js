@@ -138,6 +138,8 @@ aos.Planet.prototype = {
             this.buildings.push(b);
             if (b.type === 'ship') {
                 this.star.hasShip = true;
+                this.star.ship = new aos.Ship();
+                this.star.ship.init();
             }
         }
         aos.game.emitEvent('requestUiSlowRefresh', {});

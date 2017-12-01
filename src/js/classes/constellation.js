@@ -87,7 +87,7 @@ aos.Constellation.prototype = {
         if (highlight) {
             this.stars.forEach(function (star) {
                 ctx.beginPath();
-                if (star.isNotable) {
+                if (star.hasShip) {
                     ctx.strokeStyle = '#360';
                     ctx.lineWidth = 2;
                     ctx.arc(600 + star.x, 450 + star.y, 15, 0, 2 * Math.PI);
