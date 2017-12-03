@@ -41,11 +41,15 @@ aos.Ship.prototype = {
 
     updateBars: function () {
         aos.game.shipResourceBars.forEach(function (bar, i) {
+            aos.game.planetResourceBars[i].htmlElement.firstChild.childNodes[3].style = 'display: none';
             const label = bar.name;
             bar.quantity = 0;
             this.storedResources.forEach(function (resource, j) {
                 if (resource.name === label) {
                     bar.quantity = resource.quantity;
+                    if (resource.quantity > 0) {
+                        aos.game.planetResourceBars[i].htmlElement.firstChild.childNodes[3].style = 'display: inline-block';
+                    }
                 }
             }, this);
             bar.update();

@@ -30,6 +30,7 @@ aos.Resource = function () {
     this.htmlElement = null;
     this.svgCode = '';
     this.color = '';
+    this.wantContextual = false;
 };
 
 aos.Resource.prototype = {
@@ -52,13 +53,20 @@ aos.Resource.prototype = {
         let code = '<div class="resourceBar">';
 
         if (withIcon) {
-            code += '<div class="resourceIcon">';
+            // left arrow
+            code += '<div class="resourceIcon onTop">';
             code += '<svg viewBox="0 0 512 512">'
-                + '<path d="M512 8C181 8 181 504 512 504" fill="#000" stroke="#444" stroke-width="16"></path>'
                 + '<path class="sendToShipArrow" d="M448 128l0 256l-128 -128z" fill="#888"></path>'
                 + '</svg>';
             code += '</div>';
+            // left rounded border
+            code += '<div class="resourceIcon">';
+            code += '<svg viewBox="0 0 512 512">'
+                + '<path d="M512 8C181 8 181 504 512 504" fill="#000" stroke="#444" stroke-width="16"></path>'
+                + '</svg>';
+            code += '</div>';
 
+            // main resource icon (svg image)
             code += '<div class="resourceIcon">';
             if (this.svgCode !== undefined) {
                 const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
@@ -70,16 +78,24 @@ aos.Resource.prototype = {
                     + '</svg>';
                 code += fullSvgCode;
             } else {
-                code += 'X'/*this.name*/;
+                code += 'X';
             }
             code += '</div>';
 
-            code += '<div class="resourceIcon">';
+            // right arrow
+            code += '<div class="resourceIcon onTop">';
             code += '<svg viewBox="0 0 512 512">'
-                + '<path d="M0 8C331 8 331 504 0 504" fill="#000" stroke="#444" stroke-width="16"></path>'
                 + '<path class="sendToShipArrow" d="M64 128l0 256l128 -128z" fill="#888"></path>'
                 + '</svg>';
             code += '</div>';
+            // right rounded border
+            code += '<div class="resourceIcon">';
+            code += '<svg viewBox="0 0 512 512">'
+                + '<path d="M0 8C331 8 331 504 0 504" fill="#000" stroke="#444" stroke-width="16"></path>'
+                + '</svg>';
+            code += '</div>';
+
+
         } else {
             code += '<div class="resourceIcon">';
             code += '</div>';
@@ -115,6 +131,25 @@ aos.Resource.prototype = {
                 arrow.style.display = 'none';
             }
         });
+        if (this.wantContextual) {
+            this.renderContextual();
+        }
+    },
+
+    setWantContextual: function (want) {
+        this.wantContextual = want;
+        this.renderContextual();
+    },
+
+    renderContextual: function () {
+        if (this.wantContextual) {
+            document.getElementById('contextualTitle').innerHTML = '' + this.name + '<br><em>Resource</em>';
+            document.getElementById('contextualTxt').innerHTML = '';
+            document.getElementById('contextualTxt').innerHTML +=
+                '<dl><dt>' + 'Quantity' + '</dt><dd>' + this.quantity + '</dd></dl>';
+        } else {
+        }
+
     },
 
 };

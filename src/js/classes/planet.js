@@ -395,11 +395,15 @@ aos.Planet.prototype = {
 
     updateBars: function () {
         aos.game.planetResourceBars.forEach(function (bar, i) {
+            bar.htmlElement.firstChild.childNodes[0].style = 'display: none';
             const label = bar.name;
             bar.quantity = 0;
             this.storedResources.forEach(function (resource, j) {
                 if (resource.name === label) {
                     bar.quantity = resource.quantity;
+                    if (resource.quantity > 0) {
+                        bar.htmlElement.firstChild.childNodes[0].style = 'display: inline-block';
+                    }
                 }
             }, this);
             bar.update();

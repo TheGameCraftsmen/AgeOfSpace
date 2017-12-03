@@ -217,6 +217,14 @@ img {
     display: none;
 }
 
+#res0Ship {
+    visibility: hidden;
+}
+
+#res0Storage > .resourceBar > .onTop {
+    visibility: hidden;
+}
+
 #shipAnimation {
     position: absolute;
     left: 0px;
@@ -326,6 +334,10 @@ img {
         display: inline-block;
         height: 30px;
         /* background-color: #088; */
+    }
+
+    .resourceBar > .onTop {
+        position: absolute;
     }
 
     /* Outer order */

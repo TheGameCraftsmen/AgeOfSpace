@@ -145,6 +145,15 @@ aos.Orchestrator.prototype = {
         } else {
             this.shipResourceBars.push(bar);
         }
+        elem.addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            bar.setWantContextual(true);
+        }.bind(this), false);
+        elem.addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            bar.setWantContextual(false);
+        }.bind(this), false);
+
     },
     //#endregion
 

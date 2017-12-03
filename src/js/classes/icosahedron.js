@@ -265,21 +265,26 @@ aos.Icosahedron.prototype = {
                     }
                     ctx.beginPath();
                     ctx.fillStyle = triColor;
+                    ctx.strokeStyle = triColor;
+                    ctx.lineWidth = 0.004;
                     ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
                     ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                     ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                     ctx.closePath();
                     ctx.fill();
+                    // we have to stroke because:
+                    // https://stackoverflow.com/questions/19319963/how-to-avoid-seams-between-filled-areas-in-canvas
+                    ctx.stroke();
                     if (tri[0] < 12) {
-                        ctx.beginPath();
-                        ctx.lineWidth = 0.005;
-                        ctx.strokeStyle = triColor;
-                        ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                        ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        ctx.stroke();
+                        //ctx.beginPath();
+                        //ctx.lineWidth = 0.005;
+                        //ctx.strokeStyle = triColor;
+                        //ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                        //ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                        //ctx.stroke();
 
                         ctx.strokeStyle = '#000';
-                        ctx.lineWidth = 0.005; // 0.004 space units = 1 px on screen
+                        ctx.lineWidth = 0.009; // 0.004 space units = 1 px on screen
                         ctx.beginPath();
                         ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                         ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
@@ -290,14 +295,14 @@ aos.Icosahedron.prototype = {
                         ctx.stroke();
 
                     } else {
-                        ctx.beginPath();
-                        ctx.lineWidth = 0.005;
-                        ctx.strokeStyle = triColor;
-                        ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                        ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                        ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        ctx.closePath();
-                        ctx.stroke();
+                        //ctx.beginPath();
+                        //ctx.lineWidth = 0.005;
+                        //ctx.strokeStyle = triColor;
+                        //ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                        //ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                        //ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                        //ctx.closePath();
+                        //ctx.stroke();
                     }
                 }
             }, this);
@@ -330,6 +335,7 @@ aos.Icosahedron.prototype = {
                     }
                 }
             }, this);
+
 
             ctx.restore();
 
