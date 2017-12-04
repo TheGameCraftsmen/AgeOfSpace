@@ -28,8 +28,7 @@ aos.Resource = function () {
     this.percent = 0;
 
     this.htmlElement = null;
-    this.svgCode = '';
-    this.color = '';
+    this.index = 0;
     this.wantContextual = false;
 };
 
@@ -41,8 +40,6 @@ aos.Resource.prototype = {
             if (res.name === name) {
                 this.name = name;
                 this.type = res.type;
-                this.color = res.color;
-                this.svgCode = res.svgCode;
                 break;
             }
         }
@@ -68,18 +65,14 @@ aos.Resource.prototype = {
 
             // main resource icon (svg image)
             code += '<div class="resourceIcon">';
-            if (this.svgCode !== undefined) {
-                const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
-                    + '<path d="M0 0h512v512H0z" fill="#000"></path>'
-                    + '<g><path fill="{color}" d="'.replace('{color}', this.color)
-                    + this.svgCode
-                    + '"></path></g>'
-                    + '<path d="M0 8h512M0 504h512" stroke="#444" stroke-width="16"></path>'
-                    + '</svg>';
-                code += fullSvgCode;
-            } else {
-                code += 'X';
-            }
+            const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+                + '<path d="M0 0h512v512H0z" fill="#000"></path>'
+                + '<path fill="{color}" d="'.replace('{color}', aos.resources[this.index].color)
+                + aos.resources[this.index].svgCode
+                + '"></path>'
+                + '<path d="M0 8h512M0 504h512" stroke="#444" stroke-width="16"></path>'
+                + '</svg>';
+            code += fullSvgCode;
             code += '</div>';
 
             // right arrow
@@ -145,8 +138,14 @@ aos.Resource.prototype = {
         if (this.wantContextual) {
             document.getElementById('contextualTitle').innerHTML = '' + this.name + '<br><em>Resource</em>';
             document.getElementById('contextualTxt').innerHTML = '';
-            document.getElementById('contextualTxt').innerHTML +=
-                '<dl><dt>' + 'Quantity' + '</dt><dd>' + this.quantity + '</dd></dl>';
+            if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null) {
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Storage quantity' + '</dt><dd>' + aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity + '</dd></dl>';
+            }
+            if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null && aos.game.selectedStar.hasShip) {
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Ship quantity' + '</dt><dd>' + aos.game.selectedStar.ship.storedResources[this.index].quantity + '</dd></dl>';
+            }
         } else {
         }
 

@@ -70,7 +70,6 @@ aos.Star.prototype = {
         this.planets.forEach(function (planet) {
             planet.generate();
             planet.setupEvents();
-            planet.star = this;
         }, this);
         //#region Lore
         this.fillFromRatio(this.sizeRatio);
@@ -326,7 +325,6 @@ aos.Star.prototype = {
             document.getElementById('starWrapperBlock').style.display = 'block';
             document.getElementById('shipAnimation').style.display = 'block';
             document.getElementById('planetStorageColumn').className = 'sendToShipVisible';
-            this.ship.storedResources.push({ "name": "oxygen", "quantity": 2000 });
             this.ship.updateBars();
         } else {
             document.getElementById('starWrapperBlock').style.display = 'none';

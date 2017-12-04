@@ -58,8 +58,8 @@ aos.Orchestrator.prototype = {
         this.renderPieGroundWater(document.getElementById('repartitionPie'));
 
         aos.resources.forEach(function (resource, i) {
-            this.renderBar(document.getElementById('res' + i + 'Storage'), resource, true);
-            this.renderBar(document.getElementById('res' + i + 'Ship'), resource, false);
+            this.renderBar(document.getElementById('res' + i + 'Storage'), resource, i, true);
+            this.renderBar(document.getElementById('res' + i + 'Ship'), resource, i, false);
         }, this);
 
         aos.buildings.forEach(function (b, i) {
@@ -133,15 +133,38 @@ aos.Orchestrator.prototype = {
         this.pies.push(chart);
     },
 
-    renderBar: function (elem, res, isStorage) {
+    renderBar: function (elem, res, idx, isStorage) {
         const bar = new aos.Resource();
         bar.htmlElement = elem;
         bar.name = res.name;
         bar.svgCode = res.svgCode;
         bar.color = res.color;
+        bar.index = idx;
         bar.render(isStorage);
         if (isStorage) {
             this.planetResourceBars.push(bar);
+            elem.firstChild.childNodes[0].addEventListener('click', function (e) {
+                e.preventDefault();
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null && this.selectedStar.hasShip) {
+                    if (this.selectedStar.selectedPlanet.storedResources[bar.index].quantity > 0) {
+                        const transferAmount = Math.min(10000, this.selectedStar.selectedPlanet.storedResources[bar.index].quantity, this.selectedStar.ship.availableSpace());
+                        this.selectedStar.selectedPlanet.storedResources[bar.index].quantity -= transferAmount;
+                        this.selectedStar.ship.storedResources[bar.index].quantity += transferAmount;
+                        this.emitEvent('requestUiSlowRefresh', {});
+                    }
+                }
+            }.bind(this), false);
+            elem.firstChild.childNodes[3].addEventListener('click', function (e) {
+                e.preventDefault();
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null && this.selectedStar.hasShip) {
+                    if (this.selectedStar.ship.storedResources[bar.index].quantity > 0) {
+                        const transferAmount = Math.min(10000, this.selectedStar.ship.storedResources[bar.index].quantity);
+                        this.selectedStar.selectedPlanet.storedResources[bar.index].quantity += transferAmount;
+                        this.selectedStar.ship.storedResources[bar.index].quantity -= transferAmount;
+                        this.emitEvent('requestUiSlowRefresh', {});
+                    }
+                }
+            }.bind(this), false);
         } else {
             this.shipResourceBars.push(bar);
         }
@@ -153,7 +176,6 @@ aos.Orchestrator.prototype = {
             document.getElementById('contextualBlock').style.display = 'none';
             bar.setWantContextual(false);
         }.bind(this), false);
-
     },
     //#endregion
 

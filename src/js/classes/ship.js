@@ -22,7 +22,7 @@ aos.Ship = function () {
 
     this.name = "";
     this.speed = 0;
-    this.cargoSize = 0;
+    this.cargoSize = 50000;
     this.constructionCost = [];
 
     this.storedResources = [];
@@ -56,6 +56,17 @@ aos.Ship.prototype = {
         }, this);
     },
 
+    occupiedSpace: function () {
+        let sum = 0;
+        this.storedResources.forEach(function (res, i) {
+            sum += 10000 * Math.ceil(res.quantity / 10000);
+        }, this);
+        return sum;
+    },
+
+    availableSpace: function () {
+        return this.cargoSize - this.occupiedSpace();
+    },
 
 };
 

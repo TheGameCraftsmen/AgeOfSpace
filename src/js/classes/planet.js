@@ -31,9 +31,6 @@ aos.Planet = function () {
     /** @type {number} */
     this.landSize = 0;
 
-    /** @type {aos.star} */
-    this.star = null;
-
     /** @type {aos.building} */
     this.buildings = [];
 };
@@ -100,6 +97,11 @@ aos.Planet.prototype = {
         this.size = 10;
         this.landSize = 5 * 6;
 
+        aos.resources.forEach(function (resource, i) {
+            this.addResource(resource.name, 'storage', 0);
+            this.addResource(resource.name, 'planet', 0);
+        }, this);
+
         this.addResource('oxygen', 'planet', 210000);
         this.addResource('inert gases', 'planet', 790000);
         this.addResource('oxocarbon', 'planet', 400);
@@ -137,9 +139,11 @@ aos.Planet.prototype = {
             b.builtOn = _location;
             this.buildings.push(b);
             if (b.type === 'ship') {
-                this.star.hasShip = true;
-                this.star.ship = new aos.Ship();
-                this.star.ship.init();
+                aos.game.selectedStar.hasShip = true;
+                aos.game.selectedStar.ship = new aos.Ship();
+                aos.game.selectedStar.ship.init();
+                aos.game.selectedStar.ship.storedResources[7].quantity = 2000; // oxygen
+
             }
         }
         aos.game.emitEvent('requestUiSlowRefresh', {});
@@ -151,7 +155,7 @@ aos.Planet.prototype = {
             if (this.buildings[it].name === name) {
                 findBuildingIndex = it;
                 if (this.buildings[it].type === 'ship') {
-                    this.star.hasShip = false;
+                    aos.game.selectedStar.hasShip = false;
                 }
 
             }
