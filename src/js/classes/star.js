@@ -202,6 +202,7 @@ aos.Star.prototype = {
     setSelectedPlanetIndex: function (planetId) {
         this.selectedPlanetIndex = planetId;
         this.selectedPlanet = this.planets[planetId];
+        //this.selectedPlanet.addResource('metal', 'storage', 20000);
         [].forEach.call(document.getElementById('miniatureTabs').childNodes, function (li) {
             if (+li.dataset.index === planetId) {
                 li.className = 'active';

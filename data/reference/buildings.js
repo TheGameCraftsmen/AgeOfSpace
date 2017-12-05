@@ -85,12 +85,12 @@ aos.buildings = [
                 {
                     "name": "bacteria",
                     "quantity": 1000,
-                    "to": "planet"
+                    "to": "local"
                 }
             ],
             "require": [
                 {
-                    "name": "water",
+                    "name": "fresh water",
                     "quantity": 1000,
                     "planetResource": true
                 },

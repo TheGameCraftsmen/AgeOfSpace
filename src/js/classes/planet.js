@@ -33,6 +33,9 @@ aos.Planet = function () {
 
     /** @type {aos.building} */
     this.buildings = [];
+    /** @type {number}*/
+    this.luminosity = 70;
+
 };
 
 aos.Planet.prototype = {
@@ -68,6 +71,7 @@ aos.Planet.prototype = {
             }
         }
         if (resFound == null) {
+
             resFound = new aos.Resource();
             resFound.construct(res);
             resFound.name = res;
@@ -75,7 +79,7 @@ aos.Planet.prototype = {
             storage.push(resFound);
         } else {
             resFound.quantity += quant;
-        }
+        }        
     },
 
 
@@ -97,10 +101,10 @@ aos.Planet.prototype = {
         this.size = 10;
         this.landSize = 5 * 6;
 
-        aos.resources.forEach(function (resource, i) {
+        /*aos.resources.forEach(function (resource, i) {
             this.addResource(resource.name, 'storage', 0);
             this.addResource(resource.name, 'planet', 0);
-        }, this);
+        }, this);*/
 
         this.addResource('oxygen', 'planet', 210000);
         this.addResource('inert gases', 'planet', 790000);
@@ -114,7 +118,7 @@ aos.Planet.prototype = {
         this.addResource('fissile material', 'planet', 10000);
         this.addResource('ground pollution', 'planet', 1000);
 
-        this.addResource('bacteria', 'storage', 1000);
+        //this.addResource('bacteria', 'storage', 1000);
         this.addResource('flora', 'storage', 1000);
         this.addResource('fauna', 'storage', 1000);
         this.addResource('humans', 'storage', 1000);
@@ -268,6 +272,7 @@ aos.Planet.prototype = {
 
     produce: function () {
         this.buildings.forEach(function (building, i) {
+        
             building.functional = true;
             if (typeof building.produce.conditions !== "undefined") {
                 for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
@@ -298,13 +303,13 @@ aos.Planet.prototype = {
     },
 
     runPopulation: function () {
-        for (let itPopulation = 0; itPopulation < this.resources.length; itPopulation++) {
-            let popResource = this.resources[itPopulation];
+        for (let itPopulation = 0; itPopulation < this.storedResources.length; itPopulation++) {
+            let popResource = this.storedResources[itPopulation];
             if (popResource.type == "population") {
                 if (popResource.name === "bacteria") {
                     let oxoCarbonFound = null;
-                    for (let itResource = 0 ; itResource < this.resources.length ; itResource) {
-                        res = this.resources[itResource];
+                    for (let itResource = 0 ; itResource < this.resources.length ; itResource++) {
+                        let res = this.resources[itResource];
                         if (res.name === "oxocarbon" && res.quantity > 1000) {
                             oxoCarbonFound = res;
                             break;
@@ -313,9 +318,7 @@ aos.Planet.prototype = {
                     if (oxoCarbonFound !== null) {
                         oxoCarbonFound.quantity = oxoCarbonFound.quantity > 1000 ? oxoCarbonFound.quantity - 1000 : 0;
                         this.addResource("oxygen", "planet", popResource.quantity * 0.1);
-                    } else {
-                        popResource.quantity = popResource.quantity > 1000 ? popResource.quantity - 1000 : 0;
-                    }
+                    } 
                 }
             }
         }
@@ -403,6 +406,14 @@ aos.Planet.prototype = {
             const label = bar.name;
             bar.quantity = 0;
             this.storedResources.forEach(function (resource, j) {
+                if (resource.name === label) {
+                    bar.quantity = resource.quantity;
+                    if (resource.quantity > 0) {
+                        bar.htmlElement.firstChild.childNodes[0].style = 'display: inline-block';
+                    }
+                }
+            }, this);
+            this.resources.forEach(function (resource, j) {
                 if (resource.name === label) {
                     bar.quantity = resource.quantity;
                     if (resource.quantity > 0) {
