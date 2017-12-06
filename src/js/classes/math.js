@@ -56,7 +56,7 @@ aos.Math = {
         const b32 = b[14];
         const b33 = b[15];
 
-        return new Float32Array([
+        return [
             a00 * b00 + a10 * b01 + a20 * b02 + a30 * b03,
             a01 * b00 + a11 * b01 + a21 * b02 + a31 * b03,
             a02 * b00 + a12 * b01 + a22 * b02 + a32 * b03,
@@ -73,7 +73,7 @@ aos.Math = {
             a01 * b30 + a11 * b31 + a21 * b32 + a31 * b33,
             a02 * b30 + a12 * b31 + a22 * b32 + a32 * b33,
             a03 * b30 + a13 * b31 + a23 * b32 + a33 * b33
-        ]);
+        ];
     },
 
     /**
@@ -87,11 +87,11 @@ aos.Math = {
         const z = v[2];
         let w = m[3] * x + m[7] * y + m[11] * z + m[15];
         w = w || 1.0;
-        return new Float32Array([
+        return [
             (m[0] * x + m[4] * y + m[8] * z + m[12]) / w,
             (m[1] * x + m[5] * y + m[9] * z + m[13]) / w,
             (m[2] * x + m[6] * y + m[10] * z + m[14]) / w
-        ]);
+        ];
     },
 
     /**

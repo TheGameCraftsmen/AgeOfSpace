@@ -34,57 +34,65 @@ aos.Icosahedron = function () {
 aos.Icosahedron.prototype = {
 
     initialize: function () {
-        // start with identity; we'll rotate that matrix along the Y axis later, to simulate planetary revolution
-        this.modelMatrix = new Float32Array([
+        // ---
+        // All matrix use the OpenGL / WebGL ordering of elements ("column major")
+        // see : https://en.wikipedia.org/wiki/Row-_and_column-major_order
+        // ---
+
+        // model matrix start with identity
+        // we'll rotate that matrix along the Y axis later, to simulate planetary revolution
+        this.modelMatrix = [
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1
-        ]);
+        ];
 
-        // http://www.songho.ca/opengl/gl_projectionmatrix.html
+        // frustum matrix is an orthogonal projection
+        // see : http://www.songho.ca/opengl/gl_projectionmatrix.html
+        // this matrix never changes
         const right = 0.2;
         const top = 0.2;
         const near = 1;
         const far = 100;
         const nf = 1 / (near - far);
-        this.frustumMatrix = new Float32Array([
+        this.frustumMatrix = [
             near / right, 0, 0, 0,
             0, near / top, 0, 0,
             0, 0, (far + near) * nf, -1,
             0, 0, 2 * far * near * nf, 0
-        ]);
+        ];
 
         // http://www.songho.ca/opengl/gl_camera.html#lookat
         // per openGL doc, the camera starts in (0, 0, 0), is oriented along the Z axis, and is looking into the direction of negative Z
-        // to maintain a "lookAt" (0, 0, 0) we have to rotate it first along the X axis, then translate it backwards along the Z axis
+        // to maintain a "lookAt" (0, 0, 0) we have to rotate it first along the X axis, then translate it backwards along the (new) Z axis
         // rotation is 0 during init, we just translate
         const tx = 0;
         const ty = 0;
         const tz = 6;
-        this.cameraMatrix = new Float32Array([
+        this.cameraMatrix = [
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             tx, ty, tz, 1
-        ]);
+        ];
         this.cameraXrotate = 0;
 
         // these constants are used for planetary revolution along its polar axis (always Y, in the model space)
         const cos1 = Math.cos(Math.PI / 500);
         const sin1 = Math.sin(Math.PI / 500);
-        this.rotateY1 = new Float32Array([
+        this.rotateY1 = [
             cos1, 0, -sin1, 0,
             0, 1, 0, 0,
             sin1, 0, cos1, 0,
             0, 0, 0, 1
-        ]);
-        this.rotateY1r = new Float32Array([
+        ];
+        this.rotateY1r = [
             cos1, 0, sin1, 0,
             0, 1, 0, 0,
             -sin1, 0, cos1, 0,
             0, 0, 0, 1
-        ]);
+        ];
 
         const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
             + '<g><path fill="{color}" d="'.replace('{color}', '#888')
@@ -113,12 +121,12 @@ aos.Icosahedron.prototype = {
                     this.cameraXrotate *= 0.9;
                     if (Math.abs(this.cameraXrotate) < 0.01) {
                         this.cameraXrotate = 0;
-                        this.cameraMatrix = new Float32Array([
+                        this.cameraMatrix = [
                         1, 0, 0, 0,
                         0, 1, 0, 0,
                         0, 0, 1, 0,
                         tx, ty, tz, 1
-                        ]);
+                        ];
                     }
                 }
             }
@@ -153,17 +161,17 @@ aos.Icosahedron.prototype = {
             if (this.cameraXrotate !== 0) {
                 const cos10 = Math.cos(Math.atan2(this.cameraXrotate, 6));
                 const sin10 = Math.sin(Math.atan2(this.cameraXrotate, 6));
-                this.cameraMatrix = aos.Math.multiply4x4(new Float32Array([
+                this.cameraMatrix = aos.Math.multiply4x4([
                     1, 0, 0, 0,
                     0, 1, 0, 0,
                     0, 0, 1, 0,
                     0, 0, 6, 1
-                ]), new Float32Array([
+                ], [
                     1, 0, 0, 0,
                     0, cos10, sin10, 0,
                     0, -sin10, cos10, 0,
                     0, 0, 0, 1
-                ]));
+                ]);
             }
 
             const vm = aos.Math.multiply4x4(this.cameraMatrix, this.modelMatrix);
@@ -239,33 +247,33 @@ aos.Icosahedron.prototype = {
                     //}
                 }
             }, this);
-            this.tessellatedTriangles.forEach(function (tri, idx) {
-                if (idx >= this.tessellatedTriangles.length * 0.6) {
-                    if (tri[5]) { // isCenter
-                        const v1 = this.vertices[tri[0]];
-                        const v2 = this.vertices[tri[1]];
-                        const v3 = this.vertices[tri[2]];
-                        const v123 = new Float32Array([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]); // We do NOT normalize because we want the point to be at the center of the tri, not on the bounding sphere
-                        const screenPoint = aos.Math.transformVector3(v123, pvm);
-                        //if (tri[4] === 7) {
-                        if (true) {
-                            // Heron's formula
-                            const point0 = screenPoints[tri[0]];
-                            const point1 = screenPoints[tri[1]];
-                            const point2 = screenPoints[tri[2]];
-                            const da = Math.sqrt((point0[0] - point1[0]) * (point0[0] - point1[0]) + (point0[1] - point1[1]) * (point0[1] - point1[1]));
-                            const db = Math.sqrt((point2[0] - point1[0]) * (point2[0] - point1[0]) + (point2[1] - point1[1]) * (point2[1] - point1[1]));
-                            const dc = Math.sqrt((point0[0] - point2[0]) * (point0[0] - point2[0]) + (point0[1] - point2[1]) * (point0[1] - point2[1]));
-                            const heronP = 0.5 * (da + db + dc);
-                            const heronS = 0.03 + 1.6 * Math.sqrt(heronP * (heronP - da) * (heronP - db) * (heronP - dc));
-                            if (heronS > 0.04) {
-                                const image = document.getElementById("resourceImg1");
-                                ctx.drawImage(image, screenPoint[0] - heronS, screenPoint[1] - heronS, 2 * heronS, 2 * heronS);
-                            }
-                        }
-                    }
-                }
-            }, this);
+            //this.tessellatedTriangles.forEach(function (tri, idx) {
+            //    if (idx >= this.tessellatedTriangles.length * 0.6) {
+            //        if (tri[5]) { // isCenter
+            //            const v1 = this.vertices[tri[0]];
+            //            const v2 = this.vertices[tri[1]];
+            //            const v3 = this.vertices[tri[2]];
+            //            const v123 = [(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]; // We do NOT normalize here because we want the point to be at the center of the tri, not on the bounding sphere
+            //            const screenPoint = aos.Math.transformVector3(v123, pvm);
+            //            //if (tri[4] === 7) {
+            //            if (true) {
+            //                // Heron's formula
+            //                const point0 = screenPoints[tri[0]];
+            //                const point1 = screenPoints[tri[1]];
+            //                const point2 = screenPoints[tri[2]];
+            //                const da = Math.sqrt((point0[0] - point1[0]) * (point0[0] - point1[0]) + (point0[1] - point1[1]) * (point0[1] - point1[1]));
+            //                const db = Math.sqrt((point2[0] - point1[0]) * (point2[0] - point1[0]) + (point2[1] - point1[1]) * (point2[1] - point1[1]));
+            //                const dc = Math.sqrt((point0[0] - point2[0]) * (point0[0] - point2[0]) + (point0[1] - point2[1]) * (point0[1] - point2[1]));
+            //                const heronP = 0.5 * (da + db + dc);
+            //                const heronS = 0.03 + 1.6 * Math.sqrt(heronP * (heronP - da) * (heronP - db) * (heronP - dc));
+            //                if (heronS > 0.04) {
+            //                    const image = document.getElementById("resourceImg1");
+            //                    ctx.drawImage(image, screenPoint[0] - heronS, screenPoint[1] - heronS, 2 * heronS, 2 * heronS);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}, this);
 
 
             ctx.restore();
@@ -296,9 +304,9 @@ aos.Icosahedron.prototype = {
             const v0 = this.vertices[tri[0]];
             const v1 = this.vertices[tri[1]];
             const v2 = this.vertices[tri[2]];
-            this.vertices.push(aos.Math.normalizeVector3(new Float32Array([(v0[0] + v1[0]) * 0.5, (v0[1] + v1[1]) * 0.5, (v0[2] + v1[2]) * 0.5])));
-            this.vertices.push(aos.Math.normalizeVector3(new Float32Array([(v1[0] + v2[0]) * 0.5, (v1[1] + v2[1]) * 0.5, (v1[2] + v2[2]) * 0.5])));
-            this.vertices.push(aos.Math.normalizeVector3(new Float32Array([(v2[0] + v0[0]) * 0.5, (v2[1] + v0[1]) * 0.5, (v2[2] + v0[2]) * 0.5])));
+            this.vertices.push(aos.Math.normalizeVector3([(v0[0] + v1[0]) * 0.5, (v0[1] + v1[1]) * 0.5, (v0[2] + v1[2]) * 0.5]).concat(0));
+            this.vertices.push(aos.Math.normalizeVector3([(v1[0] + v2[0]) * 0.5, (v1[1] + v2[1]) * 0.5, (v1[2] + v2[2]) * 0.5]).concat(0));
+            this.vertices.push(aos.Math.normalizeVector3([(v2[0] + v0[0]) * 0.5, (v2[1] + v0[1]) * 0.5, (v2[2] + v0[2]) * 0.5]).concat(0));
             destTri.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, tri[4], false, tri[6], false, tri[8]]);
             destTri.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, tri[4], false, tri[6], false, tri[7]]);
             destTri.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, tri[4], false, tri[7], false, tri[8]]);
@@ -452,10 +460,10 @@ aos.Icosahedron.prototype = {
         }, this);
 
         //this.tessellatedTriangles = this.tessellate(this.triangles);
-        const intermediate = this.tessellate(this.triangles);
+        //const intermediate = this.tessellate(this.triangles);
         //const intermediate2 = this.tessellate(intermediate);
-        this.tessellatedTriangles = this.tessellate(intermediate);
-        //this.tessellatedTriangles = this.tessellate(this.triangles);
+        //this.tessellatedTriangles = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
 };
