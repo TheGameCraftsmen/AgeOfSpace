@@ -413,14 +413,7 @@ aos.Planet.prototype = {
                     }
                 }
             }, this);
-            this.resources.forEach(function (resource, j) {
-                if (resource.name === label) {
-                    bar.quantity = resource.quantity;
-                    if (resource.quantity > 0) {
-                        bar.htmlElement.firstChild.childNodes[0].style = 'display: inline-block';
-                    }
-                }
-            }, this);
+           
             bar.update();
         }, this);
     },

@@ -85,7 +85,7 @@ aos.buildings = [
                 {
                     "name": "bacteria",
                     "quantity": 1000,
-                    "to": "local"
+                    "to": "storage"
                 }
             ],
             "require": [
