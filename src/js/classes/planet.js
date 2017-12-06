@@ -101,10 +101,10 @@ aos.Planet.prototype = {
         this.size = 10;
         this.landSize = 5 * 6;
 
-        /*aos.resources.forEach(function (resource, i) {
+        aos.resources.forEach(function (resource, i) {
             this.addResource(resource.name, 'storage', 0);
             this.addResource(resource.name, 'planet', 0);
-        }, this);*/
+        }, this);
 
         this.addResource('oxygen', 'planet', 210000);
         this.addResource('inert gases', 'planet', 790000);
