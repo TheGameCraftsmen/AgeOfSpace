@@ -200,7 +200,7 @@ aos.Icosahedron.prototype = {
                 if (idx >= this.tessellatedTriangles.length * 0.5) {
                     const parentTri = this.triangles[tri[4]];
                     let triColor = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
-                    triColor = tri[4] < 6 ? '#640' : '#00b';
+                    triColor = tri[4] % 2 === 0 ? '#640' : '#00b';
                     if (selectedTriangle === tri[4]) {
                         triColor = '#600';
                     }
@@ -217,26 +217,26 @@ aos.Icosahedron.prototype = {
                     // https://stackoverflow.com/questions/19319963/how-to-avoid-seams-between-filled-areas-in-canvas
                     ctx.stroke();
 
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = 0.009; // 0.004 space units = 1 px on screen
-                    if (tri[6]) {
-                        ctx.beginPath();
-                        ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                        ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                        ctx.stroke();
-                    }
-                    if (tri[7]) {
-                        ctx.beginPath();
-                        ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                        ctx.stroke();
-                    }
-                    if (tri[8]) {
-                        ctx.beginPath();
-                        ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                        ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        ctx.stroke();
-                    }
+                    //ctx.strokeStyle = '#000';
+                    //ctx.lineWidth = 0.009; // 0.004 space units = 1 px on screen
+                    //if (tri[6]) {
+                    //    ctx.beginPath();
+                    //    ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                    //    ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    //    ctx.stroke();
+                    //}
+                    //if (tri[7]) {
+                    //    ctx.beginPath();
+                    //    ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                    //    ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                    //    ctx.stroke();
+                    //}
+                    //if (tri[8]) {
+                    //    ctx.beginPath();
+                    //    ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                    //    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                    //    ctx.stroke();
+                    //}
                 }
             }, this);
             this.tessellatedTriangles.forEach(function (tri, idx) {
@@ -384,8 +384,8 @@ aos.Icosahedron.prototype = {
 
         this.applyPostGeneration();
         const intermediate = this.tessellate(this.triangles);
-        //const intermediate2 = this.tessellate(intermediate);
-        this.tessellatedTriangles = this.tessellate(intermediate);
+        const intermediate2 = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(intermediate2);
         //this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
