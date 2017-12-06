@@ -86,48 +86,6 @@ aos.Icosahedron.prototype = {
             0, 0, 0, 1
         ]);
 
-        const invphi = 2 / (1 + Math.sqrt(5));
-        const radius = Math.sqrt(1 + invphi * invphi);
-
-        // Vertices coordinates: [Xworld, Yworld, Zworld, Zmodel]
-        // Zmodel is re-calculated for each frame during render
-        // source for coordinates is: https://en.wikipedia.org/wiki/Platonic_solid#Cartesian_coordinates
-        this.vertices.push(new Float32Array([1, invphi, 0, 0]));    // 0
-        this.vertices.push(new Float32Array([1, -invphi, 0, 0]));    // 1
-        this.vertices.push(new Float32Array([-1, invphi, 0, 0]));    // 2
-        this.vertices.push(new Float32Array([-1, -invphi, 0, 0]));    // 3
-        this.vertices.push(new Float32Array([0, 1, invphi, 0]));    // 4
-        this.vertices.push(new Float32Array([0, 1, -invphi, 0]));    // 5
-        this.vertices.push(new Float32Array([0, -1, invphi, 0]));    // 6
-        this.vertices.push(new Float32Array([0, -1, -invphi, 0]));    // 7
-        this.vertices.push(new Float32Array([invphi, 0, 1, 0]));    // 8
-        this.vertices.push(new Float32Array([-invphi, 0, 1, 0]));    // 9
-        this.vertices.push(new Float32Array([invphi, 0, -1, 0]));    // 10
-        this.vertices.push(new Float32Array([-invphi, 0, -1, 0]));    // 11
-
-        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel]
-        // This array should not be sorted
-        this.triangles.push([4, 5, 0, 0]);
-        this.triangles.push([4, 5, 2, 0]);
-        this.triangles.push([6, 7, 1, 0]);
-        this.triangles.push([6, 7, 3, 0]);
-        this.triangles.push([0, 1, 8, 0]);
-        this.triangles.push([0, 1, 10, 0]);
-        this.triangles.push([2, 3, 9, 0]);
-        this.triangles.push([2, 3, 11, 0]);
-        this.triangles.push([8, 9, 4, 0]);
-        this.triangles.push([8, 9, 6, 0]);
-        this.triangles.push([10, 11, 5, 0]);
-        this.triangles.push([10, 11, 7, 0]);
-        this.triangles.push([0, 4, 8, 0]); // +++
-        this.triangles.push([0, 5, 10, 0]); // ++-
-        this.triangles.push([1, 6, 8, 0]); // +-+
-        this.triangles.push([1, 7, 10, 0]); // +--
-        this.triangles.push([2, 4, 9, 0]); // -++
-        this.triangles.push([2, 5, 11, 0]); // -+-
-        this.triangles.push([3, 6, 9, 0]); // --+
-        this.triangles.push([3, 7, 11, 0]); // ---
-
         const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
             + '<g><path fill="{color}" d="'.replace('{color}', '#888')
             + aos.buildings[0].svgCode
@@ -136,24 +94,7 @@ aos.Icosahedron.prototype = {
         const image = document.getElementById("resourceImg1");
         image.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCode);
 
-
-        this.triangles.forEach(function (tri, idx) {
-            // Tessellated triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent triangle, isCenter]
-            const v1 = this.vertices[tri[0]];
-            const v2 = this.vertices[tri[1]];
-            const v3 = this.vertices[tri[2]];
-            const m12 = aos.Math.normalizeVector3(new Float32Array([(v1[0] + v2[0]) * 0.5, (v1[1] + v2[1]) * 0.5, (v1[2] + v2[2]) * 0.5]));
-            const m23 = aos.Math.normalizeVector3(new Float32Array([(v2[0] + v3[0]) * 0.5, (v2[1] + v3[1]) * 0.5, (v2[2] + v3[2]) * 0.5]));
-            const m31 = aos.Math.normalizeVector3(new Float32Array([(v3[0] + v1[0]) * 0.5, (v3[1] + v1[1]) * 0.5, (v3[2] + v1[2]) * 0.5]));
-            this.vertices.push(new Float32Array([m12[0] * radius, m12[1] * radius, m12[2] * radius, 0]));
-            this.vertices.push(new Float32Array([m23[0] * radius, m23[1] * radius, m23[2] * radius, 0]));
-            this.vertices.push(new Float32Array([m31[0] * radius, m31[1] * radius, m31[2] * radius, 0]));
-            this.tessellatedTriangles.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, idx, false]);
-            this.tessellatedTriangles.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, idx, false]);
-            this.tessellatedTriangles.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, idx, false]);
-            this.tessellatedTriangles.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, idx, true]);
-        }, this);
-
+        this.generateD12();
 
         window.addEventListener('animationTick', function (e) {
             const canvas = document.getElementById('planetTestCanvas');
@@ -178,7 +119,6 @@ aos.Icosahedron.prototype = {
                         0, 0, 1, 0,
                         tx, ty, tz, 1
                         ]);
-
                     }
                 }
             }
@@ -257,16 +197,17 @@ aos.Icosahedron.prototype = {
                 }
             }, this);
             this.tessellatedTriangles.forEach(function (tri, idx) {
-                if (idx >= 40) {
+                if (idx >= this.tessellatedTriangles.length * 0.5) {
                     const parentTri = this.triangles[tri[4]];
                     let triColor = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
+                    triColor = tri[4] < 6 ? '#640' : '#00b';
                     if (selectedTriangle === tri[4]) {
                         triColor = '#600';
                     }
                     ctx.beginPath();
                     ctx.fillStyle = triColor;
                     ctx.strokeStyle = triColor;
-                    ctx.lineWidth = 0.004;
+                    ctx.lineWidth = 0.003;
                     ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
                     ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                     ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
@@ -275,46 +216,36 @@ aos.Icosahedron.prototype = {
                     // we have to stroke because:
                     // https://stackoverflow.com/questions/19319963/how-to-avoid-seams-between-filled-areas-in-canvas
                     ctx.stroke();
-                    if (tri[0] < 12) {
-                        //ctx.beginPath();
-                        //ctx.lineWidth = 0.005;
-                        //ctx.strokeStyle = triColor;
-                        //ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                        //ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        //ctx.stroke();
 
-                        ctx.strokeStyle = '#000';
-                        ctx.lineWidth = 0.009; // 0.004 space units = 1 px on screen
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 0.009; // 0.004 space units = 1 px on screen
+                    if (tri[6]) {
                         ctx.beginPath();
                         ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
                         ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
                         ctx.stroke();
+                    }
+                    if (tri[7]) {
                         ctx.beginPath();
                         ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                        ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
                         ctx.stroke();
-
-                    } else {
-                        //ctx.beginPath();
-                        //ctx.lineWidth = 0.005;
-                        //ctx.strokeStyle = triColor;
-                        //ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                        //ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                        //ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                        //ctx.closePath();
-                        //ctx.stroke();
+                    }
+                    if (tri[8]) {
+                        ctx.beginPath();
+                        ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                        ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                        ctx.stroke();
                     }
                 }
             }, this);
             this.tessellatedTriangles.forEach(function (tri, idx) {
-                if (idx >= 45) {
+                if (idx >= this.tessellatedTriangles.length * 0.6) {
                     if (tri[5]) { // isCenter
                         const v1 = this.vertices[tri[0]];
                         const v2 = this.vertices[tri[1]];
                         const v3 = this.vertices[tri[2]];
-                        //const m123 = aos.Math.normalizeVector3(new Float32Array([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]));
-                        //const v123 = new Float32Array([m123[0] * radius * 1.0, m123[1] * radius * 1.0, m123[2] * radius * 1.0, 0]);
-                        const v123 = new Float32Array([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
+                        const v123 = new Float32Array([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]); // We do NOT normalize because we want the point to be at the center of the tri, not on the bounding sphere
                         const screenPoint = aos.Math.transformVector3(v123, pvm);
                         //if (tri[4] === 7) {
                         if (true) {
@@ -326,8 +257,8 @@ aos.Icosahedron.prototype = {
                             const db = Math.sqrt((point2[0] - point1[0]) * (point2[0] - point1[0]) + (point2[1] - point1[1]) * (point2[1] - point1[1]));
                             const dc = Math.sqrt((point0[0] - point2[0]) * (point0[0] - point2[0]) + (point0[1] - point2[1]) * (point0[1] - point2[1]));
                             const heronP = 0.5 * (da + db + dc);
-                            const heronS = 0.04 + 0.4 * Math.sqrt(heronP * (heronP - da) * (heronP - db) * (heronP - dc));
-                            if (heronS > 0.050) {
+                            const heronS = 0.03 + 1.6 * Math.sqrt(heronP * (heronP - da) * (heronP - db) * (heronP - dc));
+                            if (heronS > 0.04) {
                                 const image = document.getElementById("resourceImg1");
                                 ctx.drawImage(image, screenPoint[0] - heronS, screenPoint[1] - heronS, 2 * heronS, 2 * heronS);
                             }
@@ -350,13 +281,181 @@ aos.Icosahedron.prototype = {
         document.getElementById('planetTestCanvas').addEventListener('mouseout', function (e) {
             this.rotates = true;
         }.bind(this), false);
-
         document.getElementById('planetTestCanvas').addEventListener('mousemove', function (e) {
             e.preventDefault();
             const x = e.offsetX * 500 / document.getElementById('planetTestCanvas').offsetWidth;
             const y = e.offsetY * 500 / document.getElementById('planetTestCanvas').offsetWidth;
             this.mousePosition = [x, y];
         }.bind(this), false);
+    },
+
+    tessellate: function (sourceTri) {
+        const destTri = [];
+        sourceTri.forEach(function (tri, idx) {
+            // Triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent triangle, isCenter, has01Border, has12Border, has20Border]
+            const v0 = this.vertices[tri[0]];
+            const v1 = this.vertices[tri[1]];
+            const v2 = this.vertices[tri[2]];
+            this.vertices.push(aos.Math.normalizeVector3(new Float32Array([(v0[0] + v1[0]) * 0.5, (v0[1] + v1[1]) * 0.5, (v0[2] + v1[2]) * 0.5])));
+            this.vertices.push(aos.Math.normalizeVector3(new Float32Array([(v1[0] + v2[0]) * 0.5, (v1[1] + v2[1]) * 0.5, (v1[2] + v2[2]) * 0.5])));
+            this.vertices.push(aos.Math.normalizeVector3(new Float32Array([(v2[0] + v0[0]) * 0.5, (v2[1] + v0[1]) * 0.5, (v2[2] + v0[2]) * 0.5])));
+            destTri.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, tri[4], false, tri[6], false, tri[8]]);
+            destTri.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, tri[4], false, tri[6], false, tri[7]]);
+            destTri.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, tri[4], false, tri[7], false, tri[8]]);
+            destTri.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, tri[4], tri[5], false, false, false]);
+        }, this);
+        return destTri;
+    },
+
+    applyPostGeneration: function () {
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
+        }, this);
+        this.triangles.forEach(function (tri, idx) {
+            this.triangles[idx] = tri.concat(0, idx, true, true, true, true);
+        }, this);
+    },
+
+    generateD20: function () {
+        const invphi = 2 / (1 + Math.sqrt(5));
+
+        // Vertices coordinates: [Xworld, Yworld, Zworld, Zmodel]
+        // Zmodel is re-calculated for each frame during render
+        // source for coordinates is: https://en.wikipedia.org/wiki/Platonic_solid#Cartesian_coordinates
+        this.vertices.push([1, invphi, 0]);    // 0
+        this.vertices.push([1, -invphi, 0]);    // 1
+        this.vertices.push([-1, invphi, 0]);    // 2
+        this.vertices.push([-1, -invphi, 0]);    // 3
+        this.vertices.push([0, 1, invphi]);    // 4
+        this.vertices.push([0, 1, -invphi]);    // 5
+        this.vertices.push([0, -1, invphi]);    // 6
+        this.vertices.push([0, -1, -invphi]);    // 7
+        this.vertices.push([invphi, 0, 1]);    // 8
+        this.vertices.push([-invphi, 0, 1]);    // 9
+        this.vertices.push([invphi, 0, -1]);    // 10
+        this.vertices.push([-invphi, 0, -1]);    // 11
+
+        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel, parent triangle, isCenter, has01Border, has12Border, has20Border]
+        // This array should not be sorted
+        this.triangles.push([4, 5, 0]);
+        this.triangles.push([4, 5, 2]);
+        this.triangles.push([6, 7, 1]);
+        this.triangles.push([6, 7, 3]);
+        this.triangles.push([0, 1, 8]);
+        this.triangles.push([0, 1, 10]);
+        this.triangles.push([2, 3, 9]);
+        this.triangles.push([2, 3, 11]);
+        this.triangles.push([8, 9, 4]);
+        this.triangles.push([8, 9, 6]);
+        this.triangles.push([10, 11, 5]);
+        this.triangles.push([10, 11, 7]);
+        this.triangles.push([0, 4, 8]); // +++
+        this.triangles.push([0, 5, 10]); // ++-
+        this.triangles.push([1, 6, 8]); // +-+
+        this.triangles.push([1, 7, 10]); // +--
+        this.triangles.push([2, 4, 9]); // -++
+        this.triangles.push([2, 5, 11]); // -+-
+        this.triangles.push([3, 6, 9]); // --+
+        this.triangles.push([3, 7, 11]); // ---
+
+        this.applyPostGeneration();
+        const intermediate = this.tessellate(this.triangles);
+        //const intermediate2 = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(intermediate);
+        //this.tessellatedTriangles = this.tessellate(this.triangles);
+    },
+
+    generateD8: function () {
+        this.vertices.push([1, 0, 0]);    // 0
+        this.vertices.push([-1, 0, 0]);    // 1
+        this.vertices.push([0, 1, 0]);    // 2
+        this.vertices.push([0, -1, 0]);    // 3
+        this.vertices.push([0, 0, 1]);    // 4
+        this.vertices.push([0, 0, -1]);    // 5
+
+        this.triangles.push([0, 2, 4]);
+        this.triangles.push([0, 2, 5]);
+        this.triangles.push([0, 3, 4]);
+        this.triangles.push([0, 3, 5]);
+        this.triangles.push([1, 2, 4]);
+        this.triangles.push([1, 2, 5]);
+        this.triangles.push([1, 3, 4]);
+        this.triangles.push([1, 3, 5]);
+
+        this.applyPostGeneration();
+        const intermediate = this.tessellate(this.triangles);
+        //const intermediate2 = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(intermediate);
+        //this.tessellatedTriangles = this.tessellate(this.triangles);
+    },
+
+    generateD12: function () {
+        const invphi = 2 / (1 + Math.sqrt(5));
+        this.vertices.push([1, invphi, 0]);    // 0
+        this.vertices.push([1, -invphi, 0]);    // 1
+        this.vertices.push([-1, invphi, 0]);    // 2
+        this.vertices.push([-1, -invphi, 0]);    // 3
+        this.vertices.push([0, 1, invphi]);    // 4
+        this.vertices.push([0, 1, -invphi]);    // 5
+        this.vertices.push([0, -1, invphi]);    // 6
+        this.vertices.push([0, -1, -invphi]);    // 7
+        this.vertices.push([invphi, 0, 1]);    // 8
+        this.vertices.push([-invphi, 0, 1]);    // 9
+        this.vertices.push([invphi, 0, -1]);    // 10
+        this.vertices.push([-invphi, 0, -1]);    // 11
+
+        const icosahedron = [];
+        icosahedron.push([4, 5, 0]); // 12
+        icosahedron.push([4, 5, 2]); // 13
+        icosahedron.push([6, 7, 1]); // 14
+        icosahedron.push([6, 7, 3]); // 15
+        icosahedron.push([0, 1, 8]); // 16
+        icosahedron.push([0, 1, 10]); // 17
+        icosahedron.push([2, 3, 9]); // 18
+        icosahedron.push([2, 3, 11]); // 19
+        icosahedron.push([8, 9, 4]); // 20
+        icosahedron.push([8, 9, 6]); // 21
+        icosahedron.push([10, 11, 5]); // 22
+        icosahedron.push([10, 11, 7]); // 23
+        icosahedron.push([0, 4, 8]); // 24
+        icosahedron.push([0, 5, 10]); // 25
+        icosahedron.push([1, 6, 8]); // 26
+        icosahedron.push([1, 7, 10]); // 27
+        icosahedron.push([2, 4, 9]); // 28
+        icosahedron.push([2, 5, 11]); // 29
+        icosahedron.push([3, 6, 9]); // 30
+        icosahedron.push([3, 7, 11]); // 31
+        icosahedron.forEach(function (tri, idx) {
+            const v1 = this.vertices[tri[0]];
+            const v2 = this.vertices[tri[1]];
+            const v3 = this.vertices[tri[2]];
+            this.vertices.push([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
+        }, this);
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
+        }, this);
+
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].forEach(function (num) {
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].forEach(function (other) {
+                if (other != num) {
+                    icosahedron.forEach(function (ico1, idx1) {
+                        if (ico1.indexOf(num) >= 0 && ico1.indexOf(other) >= 0) {
+                            icosahedron.forEach(function (ico2, idx2) {
+                                if (idx2 > idx1 && ico2.indexOf(num) >= 0 && ico2.indexOf(other) >= 0) {
+                                    this.triangles.push([num, idx1 + 12, idx2 + 12, 0, num, false, false, true, false]);
+                                }
+                            }, this);
+                        }
+                    }, this);
+                }
+            }, this);
+        }, this);
+
+        //this.tessellatedTriangles = this.tessellate(this.triangles);
+        const intermediate = this.tessellate(this.triangles);
+        //const intermediate2 = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(intermediate);
+        //this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
 };

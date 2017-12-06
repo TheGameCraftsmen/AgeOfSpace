@@ -104,11 +104,11 @@ aos.Math = {
         const y = v[1];
         const z = v[2];
         const length = Math.sqrt(x * x + y * y + z * z);
-        return new Float32Array([
+        return [
             x / length,
             y / length,
             z / length
-        ]);
+        ];
     },
 };
 
