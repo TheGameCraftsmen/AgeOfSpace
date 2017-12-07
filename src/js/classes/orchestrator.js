@@ -43,8 +43,7 @@ aos.Orchestrator.prototype = {
         document.getElementById('shipBlock').style.display = 'none';
         document.getElementById('contextualBlock').style.display = 'none';
         document.getElementById('contextualTxt').innerHTML = '';
-        const icoTest = new aos.Icosahedron();
-        icoTest.initialize();
+
         this.setupEvents();
         this.animationTick(0);
         this.setGameSpeed(1);
@@ -569,6 +568,25 @@ aos.Orchestrator.prototype = {
             }
         }.bind(this), false);
 
+        document.getElementById('planetModelCanvas').addEventListener('mouseover', function (e) {
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.renderModel.rotates = false;
+            }
+        }.bind(this), false);
+        document.getElementById('planetModelCanvas').addEventListener('mouseout', function (e) {
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.renderModel.rotates = true;
+            }
+        }.bind(this), false);
+        document.getElementById('planetModelCanvas').addEventListener('mousemove', function (e) {
+            e.preventDefault();
+            const x = e.offsetX * 500 / document.getElementById('planetModelCanvas').offsetWidth;
+            const y = e.offsetY * 500 / document.getElementById('planetModelCanvas').offsetWidth;
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.renderModel.mousePosition = [x, y];
+            }
+        }.bind(this), false);
+
         window.setInterval(function () {
             this.emitEvent('requestUiFastRefresh', {});
         }.bind(this), 130);
@@ -590,6 +608,7 @@ aos.Orchestrator.prototype = {
         window.addEventListener('animationTick', function (e) {
             if (this.selectedStar !== null) {
                 this.selectedStar.animateLargeStar();
+                this.selectedStar.selectedPlanet.animateModel();
                 //this.selectedStar.animateShip();
             }
         }.bind(this), false);

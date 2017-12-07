@@ -33,9 +33,12 @@ aos.Planet = function () {
 
     /** @type {aos.building} */
     this.buildings = [];
+    /** @type {Array.<string>} */
+    this.tiles = [];
     /** @type {number}*/
     this.luminosity = 70;
 
+    this.renderModel = null;
 };
 
 aos.Planet.prototype = {
@@ -79,14 +82,16 @@ aos.Planet.prototype = {
             storage.push(resFound);
         } else {
             resFound.quantity += quant;
-        }        
+        }
     },
-
 
     generate: function () {
         this.generateEarth();
 
         this.addResource('metal', 'storage', 20000);
+        this.tiles = Array(12).join('x').split('x');
+        this.renderModel = new aos.Polyhedron();
+        this.renderModel.initialize();
     },
 
     generateRandom: function () {
@@ -272,7 +277,7 @@ aos.Planet.prototype = {
 
     produce: function () {
         this.buildings.forEach(function (building, i) {
-        
+
             building.functional = true;
             if (typeof building.produce.conditions !== "undefined") {
                 for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
@@ -318,7 +323,7 @@ aos.Planet.prototype = {
                     if (oxoCarbonFound !== null) {
                         oxoCarbonFound.quantity = oxoCarbonFound.quantity > 1000 ? oxoCarbonFound.quantity - 1000 : 0;
                         this.addResource("oxygen", "planet", popResource.quantity * 0.1);
-                    } 
+                    }
                 }
             }
         }
@@ -413,7 +418,7 @@ aos.Planet.prototype = {
                     }
                 }
             }, this);
-           
+
             bar.update();
         }, this);
     },
@@ -429,5 +434,9 @@ aos.Planet.prototype = {
             this.run();
         }.bind(this), false);
     },
+
+    animateModel: function () {
+        this.renderModel.animateAndRender();
+    }
 
 };
