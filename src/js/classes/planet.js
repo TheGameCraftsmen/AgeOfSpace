@@ -91,12 +91,15 @@ aos.Planet.prototype = {
         this.addResource('metal', 'storage', 20000);
         this.tiles = Array(12).join('x').split('x');
         this.renderModel = new aos.Polyhedron();
-        if (Math.random() < 0.333) {
+        const rng = Math.random();
+        if (rng < 0.25) {
             this.renderModel.initialize(8);
-        } else if (Math.random() < 0.5) {
+        } else if (rng < 0.5) {
             this.renderModel.initialize(12);
-        } else {
+        } else if (rng < 0.75) {
             this.renderModel.initialize(20);
+        } else {
+            this.renderModel.initialize(60);
         }
     },
 

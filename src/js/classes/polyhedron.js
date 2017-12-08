@@ -106,8 +106,10 @@ aos.Polyhedron.prototype = {
             this.generateD8();
         } else if (tileCount === 12) {
             this.generateD12();
-        } else {
+        } else if (tileCount === 20) {
             this.generateD20();
+        } else {
+            this.generateD60();
         }
     },
 
@@ -211,7 +213,7 @@ aos.Polyhedron.prototype = {
         //this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
-    generateD12: function () {
+    generateDodecaKleetope: function () {
         const invphi = 2 / (1 + Math.sqrt(5));
         this.vertices.push([1, invphi, 0]);    // 0
         this.vertices.push([1, -invphi, 0]);    // 1
@@ -272,11 +274,20 @@ aos.Polyhedron.prototype = {
                 }
             }, this);
         }, this);
+    },
 
-        //this.tessellatedTriangles = this.tessellate(this.triangles);
-        //const intermediate = this.tessellate(this.triangles);
-        //const intermediate2 = this.tessellate(intermediate);
-        //this.tessellatedTriangles = this.tessellate(intermediate);
+    generateD12: function () {
+        this.generateDodecaKleetope();
+        this.tessellatedTriangles = this.tessellate(this.triangles);
+    },
+
+    generateD60: function () {
+        this.generateDodecaKleetope();
+        this.triangles.forEach(function (tri, idx) {
+            this.triangles[idx][4] = idx;
+            this.triangles[idx][6] = true;
+            this.triangles[idx][8] = true;
+        }, this);
         this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
