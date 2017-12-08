@@ -33,7 +33,7 @@ aos.Polyhedron = function () {
 
 aos.Polyhedron.prototype = {
 
-    initialize: function () {
+    initialize: function (tileCount) {
         // ---
         // All matrix use the OpenGL / WebGL ordering of elements ("column major")
         // see : https://en.wikipedia.org/wiki/Row-_and_column-major_order
@@ -79,8 +79,8 @@ aos.Polyhedron.prototype = {
         this.cameraXrotate = 0;
 
         // these constants are used for planetary revolution along its polar axis (always Y, in the model space)
-        const cos1 = Math.cos(Math.PI / 500);
-        const sin1 = Math.sin(Math.PI / 500);
+        const cos1 = Math.cos(Math.PI / 400);
+        const sin1 = Math.sin(Math.PI / 400);
         this.rotateY1 = [
             cos1, 0, -sin1, 0,
             0, 1, 0, 0,
@@ -102,9 +102,13 @@ aos.Polyhedron.prototype = {
         const image = document.getElementById("resourceImg1");
         image.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCode);
 
-        this.generateD12();
-
-
+        if (tileCount === 8) {
+            this.generateD8();
+        } else if (tileCount === 12) {
+            this.generateD12();
+        } else {
+            this.generateD20();
+        }
     },
 
     tessellate: function (sourceTri) {
@@ -177,10 +181,10 @@ aos.Polyhedron.prototype = {
         this.triangles.push([3, 7, 11]); // ---
 
         this.applyPostGeneration();
-        const intermediate = this.tessellate(this.triangles);
+        //const intermediate = this.tessellate(this.triangles);
         //const intermediate2 = this.tessellate(intermediate);
-        this.tessellatedTriangles = this.tessellate(intermediate);
-        //this.tessellatedTriangles = this.tessellate(this.triangles);
+        //this.tessellatedTriangles = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
     generateD8: function () {
@@ -202,8 +206,8 @@ aos.Polyhedron.prototype = {
 
         this.applyPostGeneration();
         const intermediate = this.tessellate(this.triangles);
-        const intermediate2 = this.tessellate(intermediate);
-        this.tessellatedTriangles = this.tessellate(intermediate2);
+        //const intermediate2 = this.tessellate(intermediate);
+        this.tessellatedTriangles = this.tessellate(intermediate);
         //this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
@@ -295,7 +299,7 @@ aos.Polyhedron.prototype = {
                     1, 0, 0, 0,
                     0, 1, 0, 0,
                     0, 0, 1, 0,
-                    tx, ty, tz, 1
+                    0, 0, 6, 1
                     ];
                 }
             }
@@ -349,16 +353,23 @@ aos.Polyhedron.prototype = {
 
         ctx.clearRect(-1, -1, 2, 2);
 
+        //let minZ = 10;
+        //let maxZ = -10;
+        //let avgZ = 0;
         const screenPoints = [];
         this.vertices.forEach(function (vec3) {
             const screenPoint = aos.Math.transformVector3(vec3, pvm);
+            //minZ = Math.min(minZ, screenPoint[2]);
+            //maxZ = Math.max(maxZ, screenPoint[2]);
+            //avgZ += screenPoint[2];
             screenPoints.push(screenPoint);
-            const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
-            vec3[3] = (6 - modelPoint[2]) * (6 - modelPoint[2]) + (this.cameraXrotate - modelPoint[1]) * (this.cameraXrotate - modelPoint[1]);
+            //const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
+            //vec3[3] = (6 - modelPoint[2]) * (6 - modelPoint[2]) + (this.cameraXrotate - modelPoint[1]) * (this.cameraXrotate - modelPoint[1]);
         }, this);
-        //document.getElementById('debug').innerHTML = '' + maxX;
+        //document.getElementById('debug').innerHTML = '' + (avgZ / this.vertices.length);
         this.tessellatedTriangles.forEach(function (tri) {
-            tri[3] = this.vertices[tri[0]][3] + this.vertices[tri[1]][3] + this.vertices[tri[2]][3];
+            //tri[3] = this.vertices[tri[0]][3] + this.vertices[tri[1]][3] + this.vertices[tri[2]][3];
+            tri[3] = screenPoints[tri[0]][2] + screenPoints[tri[1]][2] + screenPoints[tri[2]][2];
         }, this);
         this.tessellatedTriangles.sort(function (a, b) {
             return a[3] - b[3];
@@ -374,8 +385,11 @@ aos.Polyhedron.prototype = {
                 selectedTriangle = tri[4];
             }
         }, this);
+        //let triCount = 0;
         this.tessellatedTriangles.forEach(function (tri, idx) {
-            if (idx >= this.tessellatedTriangles.length * 0.5) {
+            //if (idx >= this.tessellatedTriangles.length * 0.5) {
+            if (tri[3] > 4.08) {
+                //triCount++;
                 const parentTri = this.triangles[tri[4]];
                 let triColor = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
                 triColor = tri[4] % 2 === 0 ? '#640' : '#00b';
@@ -445,12 +459,8 @@ aos.Polyhedron.prototype = {
         //    }
         //}, this);
 
-
+        //document.getElementById('debug').innerHTML = '' + triCount;
         ctx.restore();
-
-        //const image = document.getElementById("resourceImg1");
-        //ctx.drawImage(image, 100, 100, 150, 150);
-
-    }
+    },
 
 };
