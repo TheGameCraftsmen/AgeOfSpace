@@ -54,7 +54,6 @@ aos.Orchestrator.prototype = {
         this.renderPie(document.getElementById('airPie'), 'Air', 'air');
         this.renderPie(document.getElementById('liquidPie'), 'Ocean', 'liquid');
         this.renderPie(document.getElementById('groundPie'), 'Soil', 'ground');
-        this.renderPieGroundWater(document.getElementById('repartitionPie'));
 
         aos.resources.forEach(function (resource, i) {
             this.renderBar(document.getElementById('res' + i + 'Storage'), resource, i, true);
@@ -120,18 +119,6 @@ aos.Orchestrator.prototype = {
         this.pies.push(chart);
     },
 
-    renderPieGroundWater: function (elem) {
-        const chart = new aos.PieChart();
-        chart.htmlElement = elem;
-        chart.innerText = "Planet";
-        chart.content = [];
-        const colors = ['#060', '#066'];
-        chart.content.push({ label: 'ground', value: 0, color: colors[0] });
-        chart.content.push({ label: 'water', value: 1, color: colors[1] });
-        chart.render();
-        this.pies.push(chart);
-    },
-
     renderBar: function (elem, res, idx, isStorage) {
         const bar = new aos.Resource();
         bar.htmlElement = elem;
@@ -193,7 +180,8 @@ aos.Orchestrator.prototype = {
             for (let itBuilding = 0 ; itBuilding < this.selectedStar.selectedPlanet.buildings.length ; itBuilding++) {
                 buildingTypeCount[this.selectedStar.selectedPlanet.buildings[itBuilding].builtOn] += 1;
             }
-            var buildingMaxBuilding = { 'ground': Math.floor((this.selectedStar.selectedPlanet.size + 10) * this.selectedStar.selectedPlanet.landSize / 100), 'water': Math.floor((this.selectedStar.selectedPlanet.size + 10) * ((100 - this.selectedStar.selectedPlanet.landSize) / 100)) }
+            const landTileCount = Math.floor(this.selectedStar.selectedPlanet.size * this.selectedStar.selectedPlanet.landSize);
+            var buildingMaxBuilding = { 'ground': landTileCount, 'water': this.selectedStar.selectedPlanet.size - landTileCount }
             if (buildingTypeCount['ground'] >= buildingMaxBuilding['ground']) {
                 document.getElementById('nbBuildingOnGround').innerHTML = "<font color='red'>" + buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'] + "</font>";
             } else {
@@ -545,16 +533,6 @@ aos.Orchestrator.prototype = {
             document.getElementById('contextualBlock').style.display = 'none';
             this.pies[2].setWantContextual(false);
         }.bind(this), false);
-        document.getElementById('repartitionPie').addEventListener('mouseover', function (e) {
-            document.getElementById('contextualBlock').style.display = 'block';
-            document.getElementById('contextualTitle').innerHTML = 'Planet repartition' + '<br><em>&nbsp;</em>';
-            this.pies[3].setWantContextual(true);
-        }.bind(this), false);
-        document.getElementById('repartitionPie').addEventListener('mouseout', function (e) {
-            document.getElementById('contextualBlock').style.display = 'none';
-            this.pies[3].setWantContextual(false);
-        }.bind(this), false);
-
         //#endregion
 
         document.getElementById('miniatureTabs').addEventListener('click', function (e) {

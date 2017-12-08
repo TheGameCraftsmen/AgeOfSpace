@@ -86,35 +86,51 @@ aos.Planet.prototype = {
     },
 
     generate: function () {
+        const rng = Math.random();
+        if (rng < 0.25) {
+            this.size = 8;
+        } else if (rng < 0.5) {
+            this.size = 12;
+        } else if (rng < 0.75) {
+            this.size = 20;
+        } else {
+            this.size = 60;
+        }
+
         this.generateEarth();
 
         this.addResource('metal', 'storage', 20000);
-        this.tiles = Array(12).join('x').split('x');
         this.renderModel = new aos.Polyhedron();
-        const rng = Math.random();
-        if (rng < 0.25) {
-            this.renderModel.initialize(8);
-        } else if (rng < 0.5) {
-            this.renderModel.initialize(12);
-        } else if (rng < 0.75) {
-            this.renderModel.initialize(20);
-        } else {
-            this.renderModel.initialize(60);
-        }
+        this.renderModel.initialize(this.size);
+    },
+
+    buildTiles: function () {
+        const landTilesCount = Math.floor(this.size * this.landSize);
+        const loop = new Array(this.size).join(' ').split(' ');
+        loop.forEach(function (item, idx) {
+            this.tiles.push({
+                'rng': Math.random(),
+                'isLand': idx < landTilesCount,
+                'color': idx < landTilesCount ? '#860' : '#04b',
+                'buildingName': ''
+            });
+        }, this);
+        this.tiles.sort(function (a, b) {
+            return a.rng - b.rng;
+        });
     },
 
     generateRandom: function () {
-        this.size = Math.floor(Math.random() * 5 + 1);
-        this.landSize = 5 * Math.floor(Math.random() * 21);
+        this.landSize = Math.random();
+        this.buildTiles();
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
     },
 
     generateEarth: function () {
-        this.size = 10;
-        this.landSize = 5 * 6;
-
+        this.landSize = 0.30; // (percent)
+        this.buildTiles();
         aos.resources.forEach(function (resource, i) {
             this.addResource(resource.name, 'storage', 0);
             this.addResource(resource.name, 'planet', 0);
@@ -396,20 +412,14 @@ aos.Planet.prototype = {
 
     updatePies: function () {
         aos.game.pies.forEach(function (pie, i) {
-            if (pie.innerText !== "Planet") {
-                pie.content.forEach(function (res, j) {
-                    const label = res.label;
-                    this.resources.forEach(function (resource, i) {
-                        if (resource.name === label) {
-                            res.value = resource.quantity;
-                        }
-                    }, this);
+            pie.content.forEach(function (res, j) {
+                const label = res.label;
+                this.resources.forEach(function (resource, i) {
+                    if (resource.name === label) {
+                        res.value = resource.quantity;
+                    }
                 }, this);
-            } else {
-                pie.content[0].value = this.landSize;
-                pie.content[1].value = 100 - this.landSize;
-            }
-
+            }, this);
             pie.update();
         }, this);
     },
@@ -445,7 +455,7 @@ aos.Planet.prototype = {
     },
 
     animateModel: function () {
-        this.renderModel.animateAndRender();
+        this.renderModel.animateAndRender(this.tiles);
     }
 
 };

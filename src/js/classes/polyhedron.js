@@ -291,7 +291,7 @@ aos.Polyhedron.prototype = {
         this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
-    animateAndRender: function () {
+    animateAndRender: function (tiles) {
         const canvas = document.getElementById('planetModelCanvas');
         const ctx = canvas.getContext("2d");
 
@@ -364,36 +364,29 @@ aos.Polyhedron.prototype = {
 
         ctx.clearRect(-1, -1, 2, 2);
 
-        //let minZ = 10;
-        //let maxZ = -10;
-        //let avgZ = 0;
         const screenPoints = [];
         this.vertices.forEach(function (vec3) {
             const screenPoint = aos.Math.transformVector3(vec3, pvm);
-            //minZ = Math.min(minZ, screenPoint[2]);
-            //maxZ = Math.max(maxZ, screenPoint[2]);
-            //avgZ += screenPoint[2];
             screenPoints.push(screenPoint);
-            //const modelPoint = aos.Math.transformVector3(vec3, this.modelMatrix);
-            //vec3[3] = (6 - modelPoint[2]) * (6 - modelPoint[2]) + (this.cameraXrotate - modelPoint[1]) * (this.cameraXrotate - modelPoint[1]);
         }, this);
         //document.getElementById('debug').innerHTML = '' + (avgZ / this.vertices.length);
         this.tessellatedTriangles.forEach(function (tri) {
-            //tri[3] = this.vertices[tri[0]][3] + this.vertices[tri[1]][3] + this.vertices[tri[2]][3];
             tri[3] = screenPoints[tri[0]][2] + screenPoints[tri[1]][2] + screenPoints[tri[2]][2];
         }, this);
         this.tessellatedTriangles.sort(function (a, b) {
             return a[3] - b[3];
         });
-        let selectedTriangle = -1;
+        let hoverTriangle = -1;
         this.tessellatedTriangles.forEach(function (tri) {
-            ctx.beginPath();
-            ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-            ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-            ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-            ctx.closePath();
-            if (!this.rotates && ctx.isPointInPath(this.mousePosition[0], this.mousePosition[1])) {
-                selectedTriangle = tri[4];
+            if (tri[3] > 4.08) {
+                ctx.beginPath();
+                ctx.moveTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
+                ctx.lineTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
+                ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
+                ctx.closePath();
+                if (!this.rotates && ctx.isPointInPath(this.mousePosition[0], this.mousePosition[1])) {
+                    hoverTriangle = tri[4];
+                }
             }
         }, this);
         //let triCount = 0;
@@ -402,10 +395,9 @@ aos.Polyhedron.prototype = {
             if (tri[3] > 4.08) {
                 //triCount++;
                 const parentTri = this.triangles[tri[4]];
-                let triColor = 'rgb(' + (parentTri[1] * 20) + ', ' + (parentTri[0] * 20) + ', ' + (parentTri[2] * 20) + ')';
-                triColor = tri[4] % 2 === 0 ? '#640' : '#00b';
-                if (selectedTriangle === tri[4]) {
-                    triColor = '#600';
+                let triColor = tiles[tri[4]].color;
+                if (hoverTriangle === tri[4]) {
+                    triColor = '#400';
                 }
                 ctx.beginPath();
                 ctx.fillStyle = triColor;
