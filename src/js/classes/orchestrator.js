@@ -31,6 +31,7 @@ aos.Orchestrator = function () {
     this.pies = [];
     this.shipResourceBars = [];
     this.planetResourceBars = [];
+    this.buildingButtons = [];
 };
 
 aos.Orchestrator.prototype = {
@@ -60,47 +61,9 @@ aos.Orchestrator.prototype = {
             this.renderBar(document.getElementById('res' + i + 'Ship'), resource, i, false);
         }, this);
 
-        aos.buildings.forEach(function (b, i) {
-            const building = new aos.Building();
-            building.construct(b.name);
-            for (let itLocation = 0 ; itLocation < b.location.length; itLocation++) {
-                const table = document.getElementById(building.location[itLocation].name + "Buildings");
-                const row = table.insertRow();
-                const cell1 = row.insertCell();
-                cell1.innerHTML = building.name;
-                cell1.addEventListener('mouseover', function (e) {
-                    building.renderContextual();
-                }.bind(this), false);
-                cell1.addEventListener('mouseout', function (e) {
-                    document.getElementById('contextualTxt').innerHTML = "";
-                    document.getElementById('contextualBlock').style.display = 'None';
-                }.bind(this), false);
-                const cell2 = row.insertCell();
-                const cell3 = row.insertCell();
-                const cell4 = row.insertCell();
-                const cell5 = row.insertCell();
-                const cell6 = row.insertCell();
-                cell6.innerHTML = "+"
-                cell6.addEventListener('click', function (e) {
-                    if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-                        let planet = this.selectedStar.selectedPlanet;
-                        planet.removeBuilding(building.name);
-                    }
-
-                }.bind(this), false);
-                cell5.innerHTML = "-";
-                // fixing closure in IE
-                const blocation = building.location[itLocation];
-                cell5.addEventListener('click', function (e) {
-                    if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-                        let planet = this.selectedStar.selectedPlanet;
-                        planet.addBuilding(building.name, blocation.name);
-                    }
-
-                }.bind(this), false);
-            }
+        Object.keys(aos.buildingTemplates).forEach(function (key, i) {
+            this.renderBuildingButton(document.getElementById('building' + i + 'Build'), key);
         }, this);
-
 
     },
 
@@ -109,14 +72,22 @@ aos.Orchestrator.prototype = {
         chart.htmlElement = elem;
         chart.innerText = txt;
         chart.content = [];
-        const colors = ['#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606', '#600', '#660', '#060', '#066', '#006', '#606'];
         aos.resources.forEach(function (resource, i) {
             if (resource.category === category) {
-                chart.content.push({ label: resource.name, value: i + 1, color: resource.color === undefined ? colors[i] : resource.color });
+                chart.content.push({ label: resource.name, value: i + 1, color: resource.color });
             }
         }, this);
         chart.render();
         this.pies.push(chart);
+        elem.addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = '' + txt + ' composition' + '<br><em>&nbsp;</em>';
+            chart.setWantContextual(true);
+        }.bind(this), false);
+        elem.addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            chart.setWantContextual(false);
+        }.bind(this), false);
     },
 
     renderBar: function (elem, res, idx, isStorage) {
@@ -163,6 +134,22 @@ aos.Orchestrator.prototype = {
             bar.setWantContextual(false);
         }.bind(this), false);
     },
+
+    renderBuildingButton: function (elem, templateName) {
+        const button = new aos.BuildingButton();
+        button.buildingTemplate = templateName;
+        button.htmlElement = elem;
+        button.render();
+        this.buildingButtons.push(button);
+        elem.addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            button.setWantContextual(true);
+        }.bind(this), false);
+        elem.addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+            button.setWantContextual(false);
+        }.bind(this), false);
+    },
     //#endregion
 
     setGameSpeed: function (newSpeed) { // expects newSpeed = 0, 1 or 2
@@ -171,62 +158,6 @@ aos.Orchestrator.prototype = {
         document.getElementById('speed1').style.border = '';
         document.getElementById('speed2').style.border = '';
         document.getElementById('speed' + newSpeed).style.border = '4px solid #f00';
-    },
-
-    updateBuildingsAdd: function () {
-
-        if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
-            var buildingTypeCount = { 'ground': 0, 'water': 0 };
-            for (let itBuilding = 0 ; itBuilding < this.selectedStar.selectedPlanet.buildings.length ; itBuilding++) {
-                buildingTypeCount[this.selectedStar.selectedPlanet.buildings[itBuilding].builtOn] += 1;
-            }
-            const landTileCount = Math.floor(this.selectedStar.selectedPlanet.size * this.selectedStar.selectedPlanet.landSize);
-            var buildingMaxBuilding = { 'ground': landTileCount, 'water': this.selectedStar.selectedPlanet.size - landTileCount }
-            if (buildingTypeCount['ground'] >= buildingMaxBuilding['ground']) {
-                document.getElementById('nbBuildingOnGround').innerHTML = "<font color='red'>" + buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'] + "</font>";
-            } else {
-                document.getElementById('nbBuildingOnGround').innerHTML = buildingTypeCount['ground'] + " / " + buildingMaxBuilding['ground'];
-            }
-            if (buildingTypeCount['water'] >= buildingMaxBuilding['water']) {
-                document.getElementById('nbBuildingOnWater').innerHTML = "<font color='red'>" + buildingTypeCount['water'] + " / " + buildingMaxBuilding['water'] + "</font>";
-            } else {
-                document.getElementById('nbBuildingOnWater').innerHTML = buildingTypeCount['water'] + " / " + buildingMaxBuilding['water'];
-            }
-            for (let i = 0 ; i < aos.buildings.length ; i++) {
-                for (let itLocation = 0 ; itLocation < aos.buildings[i].location.length ; itLocation++) {
-                    let table = document.getElementById(aos.buildings[i].location[itLocation].name + "Buildings");
-
-                    let nbRows = table.rows.length;
-                    let found = null;
-                    for (let itRow = 0 ; itRow < nbRows ; itRow++) {
-                        if (table.rows[itRow].cells[0].innerHTML == aos.buildings[i].name) {
-                            found = table.rows[itRow];
-                            break;
-                        }
-                    }
-                    if (found !== null) {
-                        if (buildingMaxBuilding[aos.buildings[i].location[itLocation].name] > buildingTypeCount[aos.buildings[i].location[itLocation].name]) {
-                            var requireOk = true;
-                            for (let itRequire = 0 ; itRequire < aos.buildings[i].constructionCost.length ; itRequire++) {
-
-                                var qty = this.selectedStar.selectedPlanet.removeResource(aos.buildings[i].constructionCost[itRequire].name, aos.buildings[i].constructionCost[itRequire].quantity, false, true);
-                                if (qty != aos.buildings[i].constructionCost[itRequire].quantity) {
-                                    requireOk = false;
-                                }
-                            }
-                            if (requireOk) {
-                                found.cells[4].innerHTML = "+";
-                            } else {
-                                found.cells[4].innerHTML = "<font color='red'>No</font>";
-                            }
-                        } else {
-                            found.cells[4].innerHTML = "<font color='red'>No</font>";
-                        }
-
-                    }
-                }
-            }
-        }
     },
 
     setSelectedStar: function (star) {
@@ -455,23 +386,23 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
 
         document.getElementById('closeStarSystem').addEventListener('click', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            e.preventDefault();
             this.setSelectedStar(null);
         }.bind(this), false);
         document.getElementById('closeShip').addEventListener('click', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            e.preventDefault();
             this.setSelectedStar(null);
         }.bind(this), false);
         document.getElementById('speed0').addEventListener('click', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            e.preventDefault();
             this.setGameSpeed(0);
         }.bind(this), false);
         document.getElementById('speed1').addEventListener('click', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            e.preventDefault();
             this.setGameSpeed(1);
         }.bind(this), false);
         document.getElementById('speed2').addEventListener('click', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            e.preventDefault();
             this.setGameSpeed(2);
         }.bind(this), false);
 
@@ -505,36 +436,6 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
         //#endregion
 
-        //#region Pies help
-        document.getElementById('airPie').addEventListener('mouseover', function (e) {
-            document.getElementById('contextualBlock').style.display = 'block';
-            document.getElementById('contextualTitle').innerHTML = 'Air composition' + '<br><em>&nbsp;</em>';
-            this.pies[0].setWantContextual(true);
-        }.bind(this), false);
-        document.getElementById('airPie').addEventListener('mouseout', function (e) {
-            document.getElementById('contextualBlock').style.display = 'none';
-            this.pies[0].setWantContextual(false);
-        }.bind(this), false);
-        document.getElementById('liquidPie').addEventListener('mouseover', function (e) {
-            document.getElementById('contextualBlock').style.display = 'block';
-            document.getElementById('contextualTitle').innerHTML = 'Ocean composition' + '<br><em>&nbsp;</em>';
-            this.pies[1].setWantContextual(true);
-        }.bind(this), false);
-        document.getElementById('liquidPie').addEventListener('mouseout', function (e) {
-            document.getElementById('contextualBlock').style.display = 'none';
-            this.pies[1].setWantContextual(false);
-        }.bind(this), false);
-        document.getElementById('groundPie').addEventListener('mouseover', function (e) {
-            document.getElementById('contextualBlock').style.display = 'block';
-            document.getElementById('contextualTitle').innerHTML = 'Soil composition' + '<br><em>&nbsp;</em>';
-            this.pies[2].setWantContextual(true);
-        }.bind(this), false);
-        document.getElementById('groundPie').addEventListener('mouseout', function (e) {
-            document.getElementById('contextualBlock').style.display = 'none';
-            this.pies[2].setWantContextual(false);
-        }.bind(this), false);
-        //#endregion
-
         document.getElementById('miniatureTabs').addEventListener('click', function (e) {
             e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
             let clickedElem = e.target;
@@ -553,6 +454,8 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
         document.getElementById('planetModelCanvas').addEventListener('mouseout', function (e) {
             if (this.selectedStar !== null) {
+                const mouseY = this.selectedStar.selectedPlanet.renderModel.mousePosition[1];
+                this.selectedStar.selectedPlanet.renderModel.mousePosition = [250, mouseY];
                 this.selectedStar.selectedPlanet.renderModel.rotates = true;
             }
         }.bind(this), false);
@@ -562,6 +465,12 @@ aos.Orchestrator.prototype = {
             const y = e.offsetY * 500 / document.getElementById('planetModelCanvas').offsetWidth;
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.renderModel.mousePosition = [x, y];
+            }
+        }.bind(this), false);
+        document.getElementById('planetModelCanvas').addEventListener('click', function (e) {
+            e.preventDefault();
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.renderModel.wantSelectedTile = true;
             }
         }.bind(this), false);
 
@@ -580,14 +489,17 @@ aos.Orchestrator.prototype = {
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.showStats();
                 this.selectedStar.showShip();
-                this.updateBuildingsAdd();
             }
         }.bind(this), false);
         window.addEventListener('animationTick', function (e) {
             if (this.selectedStar !== null) {
+                const wantRefresh = this.selectedStar.selectedPlanet.renderModel.wantSelectedTile;
                 this.selectedStar.animateLargeStar();
                 this.selectedStar.selectedPlanet.animateModel();
                 //this.selectedStar.animateShip();
+                if (wantRefresh) {
+                    this.emitEvent('requestUiSlowRefresh', {});
+                }
             }
         }.bind(this), false);
 

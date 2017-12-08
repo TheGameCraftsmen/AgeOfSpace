@@ -33,7 +33,7 @@ aos.Ship.prototype = {
     init: function () {
         aos.resources.forEach(function (resource, i) {
             const res = new aos.Resource();
-            res.construct(resource.name);
+            res.constructResource(resource.name);
             res.quantity = 0;
             this.storedResources.push(res);
         }, this);

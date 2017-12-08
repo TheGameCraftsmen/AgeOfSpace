@@ -19,7 +19,7 @@ var aos = aos || {};
  * @class
  */
 aos.Planet = function () {
-    /** @type {String} */
+    /** @type {string} */
     this.id = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
     /** @type {number}
      * in Million km2
@@ -37,7 +37,7 @@ aos.Planet = function () {
     this.tiles = [];
     /** @type {number}*/
     this.luminosity = 70;
-
+    /** @type {aos.Polyhedron} */
     this.renderModel = null;
 };
 
@@ -76,7 +76,7 @@ aos.Planet.prototype = {
         if (resFound == null) {
 
             resFound = new aos.Resource();
-            resFound.construct(res);
+            resFound.constructResource(res);
             resFound.name = res;
             resFound.quantity = quant;
             storage.push(resFound);
@@ -108,12 +108,10 @@ aos.Planet.prototype = {
         const landTilesCount = Math.floor(this.size * this.landSize);
         const loop = new Array(this.size).join(' ').split(' ');
         loop.forEach(function (item, idx) {
-            this.tiles.push({
-                'rng': Math.random(),
-                'isLand': idx < landTilesCount,
-                'color': idx < landTilesCount ? '#860' : '#04b',
-                'buildingName': ''
-            });
+            const t = new aos.Tile();
+            t.isLand = idx < landTilesCount;
+            t.color = idx < landTilesCount ? '#860' : '#04b';
+            this.tiles.push(t);
         }, this);
         this.tiles.sort(function (a, b) {
             return a.rng - b.rng;
@@ -158,9 +156,8 @@ aos.Planet.prototype = {
     },
 
     addBuilding: function (name, location) {
-        let _location = location || "ground";
-        let b = new aos.Building();
-        b.construct(name);
+        const _location = location || "ground";
+        const b = aos.buildingTemplates[name];
         var constructOk = true;
         for (let i = 0; i < b.constructionCost.length; i++) {
             var qty = this.removeResource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, true);
@@ -359,57 +356,6 @@ aos.Planet.prototype = {
         this.runPopulation();
     },
 
-
-    showBuildings: function () {
-        let buildingCount = {};
-        for (var i = 0 ; i < this.buildings.length ; i++) {
-            if (typeof buildingCount[this.buildings[i].name] === "undefined") {
-                buildingCount[this.buildings[i].name] = { "building": this.buildings[i], "count": 1 };
-            } else {
-                buildingCount[this.buildings[i].name].count += 1;
-            }
-        }
-
-        aos.buildings.forEach(function (building, i) {
-            for (let itLocation = 0 ; itLocation < building.location.length ; itLocation++) {
-                const table = document.getElementById(building.location[itLocation].name + "Buildings");
-                [].forEach.call(table.rows, function (row, i) {
-                    if (i > 0) {
-                        row.cells[1].innerHTML = "";
-                        row.cells[2].innerHTML = "";
-                        row.cells[3].innerHTML = "";
-                        row.cells[5].innerHTML = "";
-                    }
-                });
-            }
-        }, this);
-
-        for (let elt in this.buildings) {
-            let table = document.getElementById(this.buildings[elt].builtOn + "Buildings");
-            let nbRows = table.rows.length;
-            let found = null;
-            for (let i = 0 ; i < nbRows ; i++) {
-                if (table.rows[i].cells[0].innerHTML == this.buildings[elt].name) {
-                    found = table.rows[i];
-                    break;
-                }
-            }
-            if (found) {
-                if (found.cells[1].innerHTML == "") {
-                    found.cells[1].innerHTML = 1;
-                    found.cells[5].innerHTML = "-";
-                } else {
-                    found.cells[1].innerHTML = parseInt(found.cells[1].innerHTML) + 1
-                }
-
-                found.cells[2].innerHTML = this.buildings[elt].functional ? "Enable" : "Disable";
-                found.cells[3].innerHTML = this.buildings[elt].produce.product[0].quantity;
-
-            }
-
-        }
-    },
-
     updatePies: function () {
         aos.game.pies.forEach(function (pie, i) {
             pie.content.forEach(function (res, j) {
@@ -442,10 +388,16 @@ aos.Planet.prototype = {
         }, this);
     },
 
+    updateBuildingButtons: function (){
+        aos.game.buildingButtons.forEach(function (button, i) {
+            button.update();
+        }, this);
+    },
+
     showStats: function () {
-        this.showBuildings();
         this.updatePies();
         this.updateBars();
+        this.updateBuildingButtons();
     },
 
     setupEvents: function () {

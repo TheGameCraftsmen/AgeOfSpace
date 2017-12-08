@@ -383,6 +383,16 @@ img {
     }
 }
 
+.buildingButton {
+    width: 64px;
+    height: 64px;
+    margin: 1px;
+}
+
+#planetRightColumn > div {
+    display: inline-block;
+}
+
 
 /* Animations */
 .blink_ {

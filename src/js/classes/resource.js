@@ -34,7 +34,7 @@ aos.Resource = function () {
 
 aos.Resource.prototype = {
 
-    construct: function (name) {
+    constructResource: function (name) {
         for (let itResource = 0; itResource < aos.resources.length; itResource++) {
             let res = aos.resources[itResource];
             if (res.name === name) {

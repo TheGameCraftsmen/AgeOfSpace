@@ -29,7 +29,7 @@ aos.PieChart.prototype = {
 
     render: function () {
         const total = this.calcRatio();
-        let svgCode = '<svg width="150" height="150" viewBox="-19 -19 38 38""><g transform="rotate(-90)">';
+        let svgCode = '<svg width="150" height="150" viewBox="-19 -19 38 38"><g transform="rotate(-90)">';
         this.content.forEach(function (chartSlice) {
             svgCode += '<circle cx="0" cy="0" r="15.9154943092" fill="transparent" stroke="' + chartSlice.color
                 + '" stroke-width="6" stroke-dasharray="0 ' + (chartSlice.offset / total) + ' ' + (chartSlice.value / total) + ' 100"></circle>';
@@ -78,7 +78,6 @@ aos.PieChart.prototype = {
             document.getElementById('contextualTxt').innerHTML = contextualTxt;
         } else {
         }
-
     },
 
 };

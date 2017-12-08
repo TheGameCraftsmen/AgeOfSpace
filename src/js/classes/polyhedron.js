@@ -28,6 +28,9 @@ aos.Polyhedron = function () {
     this.hoveredTriangle = -1;
     this.mousePosition = [0, 0];
     this.cameraXrotate = 0;
+
+    this.wantSelectedTile = false;
+    this.selectedTile = -1;
 };
 
 
@@ -96,7 +99,7 @@ aos.Polyhedron.prototype = {
 
         const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
             + '<g><path fill="{color}" d="'.replace('{color}', '#888')
-            + aos.buildings[0].svgCode
+            + aos.buildingTemplates["Metal mine"].svgCode
             + '"></path></g>'
             + '</svg>';
         const image = document.getElementById("resourceImg1");
@@ -299,7 +302,7 @@ aos.Polyhedron.prototype = {
         ctx.translate(250, 250);
         ctx.scale(250, 250);
 
-        if (this.rotates) {
+        if (this.rotates && this.selectedTile === -1) {
             const newModel = aos.Math.multiply4x4(this.rotateY1, this.modelMatrix);
             this.modelMatrix = newModel;
             if (this.cameraXrotate !== 0) {
@@ -386,6 +389,13 @@ aos.Polyhedron.prototype = {
                 ctx.closePath();
                 if (!this.rotates && ctx.isPointInPath(this.mousePosition[0], this.mousePosition[1])) {
                     hoverTriangle = tri[4];
+                    if (this.wantSelectedTile && this.selectedTile === tri[4]) {
+                        this.selectedTile = -1;
+                        this.wantSelectedTile = false;
+                    } else if (this.wantSelectedTile) {
+                        this.selectedTile = tri[4];
+                        this.wantSelectedTile = false;
+                    }
                 }
             }
         }, this);
@@ -396,7 +406,9 @@ aos.Polyhedron.prototype = {
                 //triCount++;
                 const parentTri = this.triangles[tri[4]];
                 let triColor = tiles[tri[4]].color;
-                if (hoverTriangle === tri[4]) {
+                if (this.selectedTile === tri[4]) {
+                    triColor = '#604';
+                } else if (hoverTriangle === tri[4]) {
                     triColor = '#400';
                 }
                 ctx.beginPath();
