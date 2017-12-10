@@ -337,3 +337,7 @@ aos.buildingTemplates = {
         "location": [{ "name": "ground" }]
     }
 };
+
+Object.keys(aos.buildingTemplates).forEach(function (key, i) {
+    aos.buildingTemplates[key].index = i;
+}, this);

@@ -110,7 +110,9 @@ aos.Planet.prototype = {
         loop.forEach(function (item, idx) {
             const t = new aos.Tile();
             t.isLand = idx < landTilesCount;
-            t.color = idx < landTilesCount ? '#860' : '#04b';
+            t.color = idx < landTilesCount ?
+                'hsl(' + (40 + Math.floor(10 * Math.random())) + ', ' + (30 + Math.floor(30 * Math.random())) + '%, ' + (25 + Math.floor(10 * Math.random())) + '%)' :
+                'hsl(' + (230 + Math.floor(20 * Math.random())) + ', ' + (60 + Math.floor(30 * Math.random())) + '%, ' + (25 + Math.floor(10 * Math.random())) + '%)';
             this.tiles.push(t);
         }, this);
         this.tiles.sort(function (a, b) {
@@ -388,7 +390,7 @@ aos.Planet.prototype = {
         }, this);
     },
 
-    updateBuildingButtons: function (){
+    updateBuildingButtons: function () {
         aos.game.buildingButtons.forEach(function (button, i) {
             button.update();
         }, this);
@@ -408,6 +410,13 @@ aos.Planet.prototype = {
 
     animateModel: function () {
         this.renderModel.animateAndRender(this.tiles);
-    }
+    },
+
+    onBuildingButtonClicked: function (templateName) {
+        if (this.renderModel.selectedTile !== -1) {
+            this.tiles[this.renderModel.selectedTile].buildingTemplate = templateName;
+            this.renderModel.selectedTile = -1;
+        }
+    },
 
 };

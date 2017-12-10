@@ -18,6 +18,7 @@ var aos = aos || {};
 aos.Polyhedron = function () {
     this.vertices = [];
     this.triangles = [];
+    this.areaCenter = [];
     this.tessellatedTriangles = [];
     this.modelMatrix = null;
     this.frustumMatrix = null;
@@ -97,14 +98,6 @@ aos.Polyhedron.prototype = {
             0, 0, 0, 1
         ];
 
-        const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
-            + '<g><path fill="{color}" d="'.replace('{color}', '#888')
-            + aos.buildingTemplates["Metal mine"].svgCode
-            + '"></path></g>'
-            + '</svg>';
-        const image = document.getElementById("resourceImg1");
-        image.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCode);
-
         if (tileCount === 8) {
             this.generateD8();
         } else if (tileCount === 12) {
@@ -119,28 +112,19 @@ aos.Polyhedron.prototype = {
     tessellate: function (sourceTri) {
         const destTri = [];
         sourceTri.forEach(function (tri, idx) {
-            // Triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent triangle, isCenter, has01Border, has12Border, has20Border]
+            // Triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent tile index]
             const v0 = this.vertices[tri[0]];
             const v1 = this.vertices[tri[1]];
             const v2 = this.vertices[tri[2]];
             this.vertices.push(aos.Math.normalizeVector3([(v0[0] + v1[0]) * 0.5, (v0[1] + v1[1]) * 0.5, (v0[2] + v1[2]) * 0.5]).concat(0));
             this.vertices.push(aos.Math.normalizeVector3([(v1[0] + v2[0]) * 0.5, (v1[1] + v2[1]) * 0.5, (v1[2] + v2[2]) * 0.5]).concat(0));
             this.vertices.push(aos.Math.normalizeVector3([(v2[0] + v0[0]) * 0.5, (v2[1] + v0[1]) * 0.5, (v2[2] + v0[2]) * 0.5]).concat(0));
-            destTri.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, tri[4], false, tri[6], false, tri[8]]);
-            destTri.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, tri[4], false, tri[6], false, tri[7]]);
-            destTri.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, tri[4], false, tri[7], false, tri[8]]);
-            destTri.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, tri[4], tri[5], false, false, false]);
+            destTri.push([tri[0], this.vertices.length - 3, this.vertices.length - 1, 0, tri[4]]);
+            destTri.push([tri[1], this.vertices.length - 3, this.vertices.length - 2, 0, tri[4]]);
+            destTri.push([tri[2], this.vertices.length - 2, this.vertices.length - 1, 0, tri[4]]);
+            destTri.push([this.vertices.length - 3, this.vertices.length - 2, this.vertices.length - 1, 0, tri[4]]);
         }, this);
         return destTri;
-    },
-
-    applyPostGeneration: function () {
-        this.vertices.forEach(function (v, idx) {
-            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
-        }, this);
-        this.triangles.forEach(function (tri, idx) {
-            this.triangles[idx] = tri.concat(0, idx, true, true, true, true);
-        }, this);
     },
 
     generateD20: function () {
@@ -162,7 +146,7 @@ aos.Polyhedron.prototype = {
         this.vertices.push([invphi, 0, -1]);    // 10
         this.vertices.push([-invphi, 0, -1]);    // 11
 
-        // Triangles arrays: [vertex1, vertex2, vertex3, average Zmodel, parent triangle, isCenter, has01Border, has12Border, has20Border]
+        // Triangles arrays: [vertex1, vertex2, vertex3, Z-buffer (distance to camera), parent tile index]
         // This array should not be sorted
         this.triangles.push([4, 5, 0]);
         this.triangles.push([4, 5, 2]);
@@ -184,8 +168,21 @@ aos.Polyhedron.prototype = {
         this.triangles.push([2, 5, 11]); // -+-
         this.triangles.push([3, 6, 9]); // --+
         this.triangles.push([3, 7, 11]); // ---
+        this.triangles.forEach(function (tri, idx) {
+            this.triangles[idx] = tri.concat(0, idx);
+        }, this);
 
-        this.applyPostGeneration();
+        this.triangles.forEach(function (tri, idx) {
+            const v1 = this.vertices[tri[0]];
+            const v2 = this.vertices[tri[1]];
+            const v3 = this.vertices[tri[2]];
+            this.vertices.push([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
+            this.areaCenter.push(this.vertices.length - 1);
+        }, this);
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
+        }, this);
+
         //const intermediate = this.tessellate(this.triangles);
         //const intermediate2 = this.tessellate(intermediate);
         //this.tessellatedTriangles = this.tessellate(intermediate);
@@ -208,8 +205,21 @@ aos.Polyhedron.prototype = {
         this.triangles.push([1, 2, 5]);
         this.triangles.push([1, 3, 4]);
         this.triangles.push([1, 3, 5]);
+        this.triangles.forEach(function (tri, idx) {
+            this.triangles[idx] = tri.concat(0, idx);
+        }, this);
 
-        this.applyPostGeneration();
+        this.triangles.forEach(function (tri, idx) {
+            const v1 = this.vertices[tri[0]];
+            const v2 = this.vertices[tri[1]];
+            const v3 = this.vertices[tri[2]];
+            this.vertices.push([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
+            this.areaCenter.push(this.vertices.length - 1);
+        }, this);
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
+        }, this);
+
         const intermediate = this.tessellate(this.triangles);
         //const intermediate2 = this.tessellate(intermediate);
         this.tessellatedTriangles = this.tessellate(intermediate);
@@ -258,9 +268,6 @@ aos.Polyhedron.prototype = {
             const v3 = this.vertices[tri[2]];
             this.vertices.push([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
         }, this);
-        this.vertices.forEach(function (v, idx) {
-            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
-        }, this);
 
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].forEach(function (num) {
             [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].forEach(function (other) {
@@ -269,7 +276,7 @@ aos.Polyhedron.prototype = {
                         if (ico1.indexOf(num) >= 0 && ico1.indexOf(other) >= 0) {
                             icosahedron.forEach(function (ico2, idx2) {
                                 if (idx2 > idx1 && ico2.indexOf(num) >= 0 && ico2.indexOf(other) >= 0) {
-                                    this.triangles.push([num, idx1 + 12, idx2 + 12, 0, num, false, false, true, false]);
+                                    this.triangles.push([num, idx1 + 12, idx2 + 12, 0, num]);
                                 }
                             }, this);
                         }
@@ -281,15 +288,30 @@ aos.Polyhedron.prototype = {
 
     generateD12: function () {
         this.generateDodecaKleetope();
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].forEach(function (num) {
+            this.areaCenter.push(num);
+        }, this);
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
+        }, this);
         this.tessellatedTriangles = this.tessellate(this.triangles);
     },
 
     generateD60: function () {
         this.generateDodecaKleetope();
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v);
+        }, this);
         this.triangles.forEach(function (tri, idx) {
             this.triangles[idx][4] = idx;
-            this.triangles[idx][6] = true;
-            this.triangles[idx][8] = true;
+            const v1 = this.vertices[tri[0]];
+            const v2 = this.vertices[tri[1]];
+            const v3 = this.vertices[tri[2]];
+            this.vertices.push([(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]);
+            this.areaCenter.push(this.vertices.length - 1);
+        }, this);
+        this.vertices.forEach(function (v, idx) {
+            this.vertices[idx] = aos.Math.normalizeVector3(v).concat(0);
         }, this);
         this.tessellatedTriangles = this.tessellate(this.triangles);
     },
@@ -444,6 +466,17 @@ aos.Polyhedron.prototype = {
                 //    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                 //    ctx.stroke();
                 //}
+            }
+        }, this);
+        this.areaCenter.forEach(function (vertidx, idx) {
+            const template = tiles[idx].buildingTemplate;
+            if (template !== '') {
+                const screenPoint = screenPoints[vertidx];
+                if (screenPoint[2] > 1.37) {
+                    const imgSize = 0.08 + 2.0 * (screenPoint[2] - 1.36);
+                    const image = document.getElementById("resourceImg" + aos.buildingTemplates[template].index);
+                    ctx.drawImage(image, screenPoint[0] - imgSize, screenPoint[1] - imgSize, 2 * imgSize, 2 * imgSize);
+                }
             }
         }, this);
         //this.tessellatedTriangles.forEach(function (tri, idx) {

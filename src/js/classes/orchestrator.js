@@ -63,6 +63,13 @@ aos.Orchestrator.prototype = {
 
         Object.keys(aos.buildingTemplates).forEach(function (key, i) {
             this.renderBuildingButton(document.getElementById('building' + i + 'Build'), key);
+            const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+                + '<path fill="{color}" d="'.replace('{color}', '#888')
+                + aos.buildingTemplates[key].svgCode
+                + '"></path>'
+                + '</svg>';
+            const image = document.getElementById("resourceImg" + i);
+            image.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCode);
         }, this);
 
     },
@@ -148,6 +155,11 @@ aos.Orchestrator.prototype = {
         elem.addEventListener('mouseout', function (e) {
             document.getElementById('contextualBlock').style.display = 'none';
             button.setWantContextual(false);
+        }.bind(this), false);
+        elem.addEventListener('click', function (e) {
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.onBuildingButtonClicked(button.buildingTemplate);
+            }
         }.bind(this), false);
     },
     //#endregion
