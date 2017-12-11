@@ -466,8 +466,6 @@ aos.Orchestrator.prototype = {
         }.bind(this), false);
         document.getElementById('planetModelCanvas').addEventListener('mouseout', function (e) {
             if (this.selectedStar !== null) {
-                const mouseY = this.selectedStar.selectedPlanet.renderModel.mousePosition[1];
-                this.selectedStar.selectedPlanet.renderModel.mousePosition = [250, mouseY];
                 this.selectedStar.selectedPlanet.renderModel.rotates = true;
             }
         }.bind(this), false);

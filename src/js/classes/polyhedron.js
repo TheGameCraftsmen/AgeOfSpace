@@ -352,7 +352,7 @@ aos.Polyhedron.prototype = {
                 const newModel2 = aos.Math.multiply4x4(this.rotateY1, newModel1);
                 this.modelMatrix = newModel2;
             } else if (this.mousePosition[0] < 340) {
-                // No rotation
+
             } else if (this.mousePosition[0] < 420) {
                 const newModel1 = aos.Math.multiply4x4(this.rotateY1r, this.modelMatrix);
                 const newModel2 = aos.Math.multiply4x4(this.rotateY1r, newModel1);
@@ -394,6 +394,17 @@ aos.Polyhedron.prototype = {
             const screenPoint = aos.Math.transformVector3(vec3, pvm);
             screenPoints.push(screenPoint);
         }, this);
+        if (this.selectedTile !== -1 && this.rotates) { 
+            const screenPoint = screenPoints[this.areaCenter[this.selectedTile]];
+            if (screenPoint[2] > 1.36) {
+                this.mousePosition[0] = screenPoint[0] * 2500 + 250;
+                this.mousePosition[1] = screenPoint[1] * 250 + 250;
+            } else {
+                this.mousePosition[0] = 0;
+                this.mousePosition[1] = 250;
+            }
+        }
+
         //document.getElementById('debug').innerHTML = '' + (avgZ / this.vertices.length);
         this.tessellatedTriangles.forEach(function (tri) {
             tri[3] = screenPoints[tri[0]][2] + screenPoints[tri[1]][2] + screenPoints[tri[2]][2];
@@ -445,27 +456,6 @@ aos.Polyhedron.prototype = {
                 // we have to stroke because:
                 // https://stackoverflow.com/questions/19319963/how-to-avoid-seams-between-filled-areas-in-canvas
                 ctx.stroke();
-
-                //ctx.strokeStyle = '#000';
-                //ctx.lineWidth = 0.009; // 0.004 space units = 1 px on screen
-                //if (tri[6]) {
-                //    ctx.beginPath();
-                //    ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                //    ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                //    ctx.stroke();
-                //}
-                //if (tri[7]) {
-                //    ctx.beginPath();
-                //    ctx.moveTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                //    ctx.lineTo(screenPoints[tri[1]][0], screenPoints[tri[1]][1]);
-                //    ctx.stroke();
-                //}
-                //if (tri[8]) {
-                //    ctx.beginPath();
-                //    ctx.moveTo(screenPoints[tri[0]][0], screenPoints[tri[0]][1]);
-                //    ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
-                //    ctx.stroke();
-                //}
             }
         }, this);
         this.areaCenter.forEach(function (vertidx, idx) {
