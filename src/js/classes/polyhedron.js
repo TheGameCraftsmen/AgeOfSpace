@@ -474,7 +474,7 @@ aos.Polyhedron.prototype = {
                 const screenPoint = screenPoints[vertidx];
                 if (screenPoint[2] > 1.37) {
                     const imgSize = 0.08 + 2.0 * (screenPoint[2] - 1.36);
-                    const image = document.getElementById("resourceImg" + aos.buildingTemplates[template].index);
+                    const image = document.getElementById('resourceImg' + aos.buildingTemplates[template].index);
                     ctx.drawImage(image, screenPoint[0] - imgSize, screenPoint[1] - imgSize, 2 * imgSize, 2 * imgSize);
                 }
             }

@@ -156,21 +156,6 @@ aos.Planet.prototype = {
 
     },
 
-    removeBuilding: function (name) {
-        let findBuildingIndex = -1;
-        for (let it = 0 ; it < this.buildings.length && findBuildingIndex == -1 ; it++) {
-            if (this.buildings[it].name === name) {
-                findBuildingIndex = it;
-                if (this.buildings[it].type === 'ship') {
-                    aos.game.selectedStar.hasShip = false;
-                }
-
-            }
-        }
-        this.buildings.splice(findBuildingIndex, 1);
-        aos.game.emitEvent('requestUiSlowRefresh', {});
-    },
-
     generateAir: function () {
         var compositionPercent = 0;
         for (let i = 0 ; i < aos.resources.length ; i++) {
@@ -368,6 +353,11 @@ aos.Planet.prototype = {
         aos.game.buildingButtons.forEach(function (button, i) {
             button.update();
         }, this);
+        if (this.renderModel.selectedTile !== -1 && this.tiles[this.renderModel.selectedTile].buildingTemplate !== '') {
+            document.getElementById('removeBuilding').style.display = 'inline-block';
+        } else {
+            document.getElementById('removeBuilding').style.display = 'none';
+        }
     },
 
     showStats: function () {
@@ -414,6 +404,14 @@ aos.Planet.prototype = {
                     aos.game.emitEvent('requestUiSlowRefresh', {});
                 }
             }
+        }
+    },
+
+    onRemoveButtonClicked: function () {
+        if (this.renderModel.selectedTile !== -1 && this.tiles[this.renderModel.selectedTile].buildingTemplate !== '') {
+            this.tiles[this.renderModel.selectedTile].buildingTemplate = '';
+            this.renderModel.selectedTile = -1;
+            aos.game.emitEvent('requestUiSlowRefresh', {});
         }
     },
 

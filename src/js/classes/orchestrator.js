@@ -486,6 +486,20 @@ aos.Orchestrator.prototype = {
             }
         }.bind(this), false);
 
+        document.getElementById('removeBuilding').addEventListener('mouseover', function (e) {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Destroy building' + '<br><em>' + '&nbsp;' + '</em>';
+            document.getElementById('contextualTxt').innerHTML = '';
+        }.bind(this), false);
+        document.getElementById('removeBuilding').addEventListener('mouseout', function (e) {
+            document.getElementById('contextualBlock').style.display = 'none';
+        }.bind(this), false);
+        document.getElementById('removeBuilding').addEventListener('click', function (e) {
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.onRemoveButtonClicked();
+            }
+        }.bind(this), false);
+
         window.setInterval(function () {
             this.emitEvent('requestUiFastRefresh', {});
         }.bind(this), 130);
