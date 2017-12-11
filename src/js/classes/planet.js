@@ -74,7 +74,6 @@ aos.Planet.prototype = {
             }
         }
         if (resFound == null) {
-
             resFound = new aos.Resource();
             resFound.constructResource(res);
             resFound.name = res;
@@ -155,31 +154,6 @@ aos.Planet.prototype = {
         this.addResource('virus', 'storage', 1000);
         this.addResource('machines', 'storage', 1000);
 
-    },
-
-    addBuilding: function (name, location) {
-        const _location = location || "ground";
-        const b = aos.buildingTemplates[name];
-        var constructOk = true;
-        for (let i = 0; i < b.constructionCost.length; i++) {
-            var qty = this.removeResource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, true);
-            if (qty != b.constructionCost[i].quantity) constructOk = false;
-        }
-        if (constructOk) {
-            for (let i = 0; i < b.constructionCost.length; i++) {
-                var qty = this.removeResource(b.constructionCost[i].name, b.constructionCost[i].quantity, false, false);
-            }
-            b.builtOn = _location;
-            this.buildings.push(b);
-            if (b.type === 'ship') {
-                aos.game.selectedStar.hasShip = true;
-                aos.game.selectedStar.ship = new aos.Ship();
-                aos.game.selectedStar.ship.init();
-                aos.game.selectedStar.ship.storedResources[7].quantity = 2000; // oxygen
-
-            }
-        }
-        aos.game.emitEvent('requestUiSlowRefresh', {});
     },
 
     removeBuilding: function (name) {
@@ -414,8 +388,32 @@ aos.Planet.prototype = {
 
     onBuildingButtonClicked: function (templateName) {
         if (this.renderModel.selectedTile !== -1) {
-            this.tiles[this.renderModel.selectedTile].buildingTemplate = templateName;
-            this.renderModel.selectedTile = -1;
+            const tile = this.tiles[this.renderModel.selectedTile];
+            const building = aos.buildingTemplates[templateName];
+            if ((tile.isLand && building.buildOnLand) || (!tile.isLand && building.buildOnWater)) {
+                let constructOk = true;
+                building.constructionCost.forEach(function (cost, i) {
+                    const qty = this.removeResource(cost.name, cost.quantity, false, true);
+                    if (qty != cost.quantity) {
+                        constructOk = false;
+                    }
+                }, this);
+                if (constructOk) {
+                    building.constructionCost.forEach(function (cost, i) {
+                        this.removeResource(cost.name, cost.quantity, false, false);
+                    }, this);
+                    if (building.type === 'ship') {
+                        aos.game.selectedStar.hasShip = true;
+                        aos.game.selectedStar.ship = new aos.Ship();
+                        aos.game.selectedStar.ship.init();
+                        aos.game.selectedStar.ship.storedResources[7].quantity = 2000; // oxygen
+                    } else {
+                        tile.buildingTemplate = templateName;
+                    }
+                    this.renderModel.selectedTile = -1;
+                    aos.game.emitEvent('requestUiSlowRefresh', {});
+                }
+            }
         }
     },
 
