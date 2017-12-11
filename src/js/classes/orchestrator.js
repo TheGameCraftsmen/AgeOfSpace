@@ -64,7 +64,7 @@ aos.Orchestrator.prototype = {
         Object.keys(aos.buildingTemplates).forEach(function (key, i) {
             this.renderBuildingButton(document.getElementById('building' + i + 'Build'), key);
             const fullSvgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
-                + '<path fill="{color}" d="'.replace('{color}', '#888')
+                + '<path fill="{color}" d="'.replace('{color}', 'hsl(0, 0%, 80%)')
                 + aos.buildingTemplates[key].svgCode
                 + '"></path>'
                 + '</svg>';

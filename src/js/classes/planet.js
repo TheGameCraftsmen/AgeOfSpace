@@ -254,37 +254,36 @@ aos.Planet.prototype = {
                 }
             }
         }
-
         return result;
     },
 
     produce: function () {
-        this.buildings.forEach(function (building, i) {
-
-            building.functional = true;
-            if (typeof building.produce.conditions !== "undefined") {
-                for (let itCondition = 0 ; itCondition < building.produce.conditions.length ; itCondition++) {
-                    building.functional = building.functional && this.checkCondition(building.produce.conditions[itCondition]);
+        this.tiles.forEach(function (tile, i) {
+            if (tile.buildingTemplate !== '') {
+                tile.functional = true;
+                const building = aos.buildingTemplates[tile.buildingTemplate];
+                if (typeof building.produce.conditions !== 'undefined') {
+                    building.produce.conditions.forEach(function (condition, i) {
+                        tile.functional = tile.functional && this.checkCondition(condition);
+                    }, this);
                 }
-            }
-
-            if (typeof building.produce.require !== "undefined" && building.functional) {
-                for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
-                    let removeRes = this.removeResource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetResource, true);
-                    if (removeRes != building.produce.require[itProd].quantity) {
-                        building.functional = false;
-                        break;
+                if (typeof building.produce.require !== 'undefined' && tile.functional) {
+                    building.produce.require.forEach(function (req, i) {
+                        const removeRes = this.removeResource(req.name, req.quantity, req.planetResource, true);
+                        if (removeRes !== req.quantity) {
+                            tile.functional = false;
+                        }
+                    }, this);
+                    if (tile.functional) {
+                        building.produce.require.forEach(function (req, i) {
+                            this.removeResource(req.name, req.quantity, req.planetResource, false);
+                        }, this);
                     }
                 }
-                if (building.functional) {
-                    for (let itProd = 0 ; itProd < building.produce.require.length ; itProd++) {
-                        this.removeResource(building.produce.require[itProd].name, building.produce.require[itProd].quantity, building.produce.require[itProd].planetResource, false);
-                    }
-                }
-            }
-            if (building.functional) {
-                for (let itProd = 0 ; itProd < building.produce.product.length ; itProd++) {
-                    this.addResource(building.produce.product[itProd].name, building.produce.product[itProd].to, building.produce.product[itProd].quantity);
+                if (tile.functional) {
+                    building.produce.product.forEach(function (prod, i) {
+                        this.addResource(prod.name, prod.to, prod.quantity);
+                    }, this);
                 }
             }
         }, this);

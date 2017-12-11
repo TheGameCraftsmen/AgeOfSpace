@@ -479,33 +479,6 @@ aos.Polyhedron.prototype = {
                 }
             }
         }, this);
-        //this.tessellatedTriangles.forEach(function (tri, idx) {
-        //    if (idx >= this.tessellatedTriangles.length * 0.6) {
-        //        if (tri[5]) { // isCenter
-        //            const v1 = this.vertices[tri[0]];
-        //            const v2 = this.vertices[tri[1]];
-        //            const v3 = this.vertices[tri[2]];
-        //            const v123 = [(v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3]; // We do NOT normalize here because we want the point to be at the center of the tri, not on the bounding sphere
-        //            const screenPoint = aos.Math.transformVector3(v123, pvm);
-        //            //if (tri[4] === 7) {
-        //            if (true) {
-        //                // Heron's formula
-        //                const point0 = screenPoints[tri[0]];
-        //                const point1 = screenPoints[tri[1]];
-        //                const point2 = screenPoints[tri[2]];
-        //                const da = Math.sqrt((point0[0] - point1[0]) * (point0[0] - point1[0]) + (point0[1] - point1[1]) * (point0[1] - point1[1]));
-        //                const db = Math.sqrt((point2[0] - point1[0]) * (point2[0] - point1[0]) + (point2[1] - point1[1]) * (point2[1] - point1[1]));
-        //                const dc = Math.sqrt((point0[0] - point2[0]) * (point0[0] - point2[0]) + (point0[1] - point2[1]) * (point0[1] - point2[1]));
-        //                const heronP = 0.5 * (da + db + dc);
-        //                const heronS = 0.03 + 1.6 * Math.sqrt(heronP * (heronP - da) * (heronP - db) * (heronP - dc));
-        //                if (heronS > 0.04) {
-        //                    const image = document.getElementById("resourceImg1");
-        //                    ctx.drawImage(image, screenPoint[0] - heronS, screenPoint[1] - heronS, 2 * heronS, 2 * heronS);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}, this);
 
         //document.getElementById('debug').innerHTML = '' + triCount;
         ctx.restore();
