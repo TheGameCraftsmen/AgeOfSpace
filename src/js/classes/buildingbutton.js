@@ -18,6 +18,7 @@ var aos = aos || {};
  */
 aos.BuildingButton = function () {
     this.buildingTemplate = '';
+    this.itemCount = 0;
     this.htmlElement = null;
     this.wantContextual = false;
 };
@@ -32,12 +33,13 @@ aos.BuildingButton.prototype = {
             + aos.buildingTemplates[this.buildingTemplate].svgCode
             + '"></path>'
             + '</svg>'
+            + '<div>0</div>'
             + '</div>';
         this.htmlElement.innerHTML = fullSvgCode;
     },
 
-    update: function () {
-        // TODO
+    update: function (counterDictionary) {
+        this.htmlElement.firstChild.lastChild.textContent = (typeof counterDictionary[this.buildingTemplate] === 'undefined') ? '0' : counterDictionary[this.buildingTemplate];
         if (this.wantContextual) {
             this.renderContextual();
         }

@@ -349,8 +349,17 @@ aos.Planet.prototype = {
     },
 
     updateBuildingButtons: function () {
+        const counterDictionary = {};
+        this.tiles.forEach(function (tile, i) {
+            if (tile.buildingTemplate !== '') {
+                if (typeof counterDictionary[tile.buildingTemplate] === 'undefined') {
+                    counterDictionary[tile.buildingTemplate] = 0;
+                }
+                counterDictionary[tile.buildingTemplate] += 1;
+            }
+        }, this);
         aos.game.buildingButtons.forEach(function (button, i) {
-            button.update();
+            button.update(counterDictionary);
         }, this);
         if (this.renderModel.selectedTile !== -1 && this.tiles[this.renderModel.selectedTile].buildingTemplate !== '') {
             document.getElementById('removeBuilding').style.display = 'inline-block';
