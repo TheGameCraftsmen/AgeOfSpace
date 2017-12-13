@@ -87,7 +87,7 @@ img {
 
 #gameTime {
     border: 1px solid #444;
-    width: 100px;
+    width: 65px;
     text-align: right;
     position: relative;
     top: -3px;
@@ -394,7 +394,7 @@ img {
     }
 
     .buildingButton > div {
-        padding: 3px 0 0 6px;
+        padding: 4px 0 0 1px;
         background-color: hsl(350, 80%, 20%);
         border-radius: 10px;
         position: relative;
