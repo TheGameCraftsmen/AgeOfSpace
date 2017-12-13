@@ -440,9 +440,9 @@ aos.Polyhedron.prototype = {
                 const parentTri = this.triangles[tri[4]];
                 let triColor = tiles[tri[4]].color;
                 if (this.selectedTile === tri[4]) {
-                    triColor = '#604';
+                    triColor = 'hsl(350, 80%, 20%)';
                 } else if (hoverTriangle === tri[4]) {
-                    triColor = '#400';
+                    triColor = '#404';
                 }
                 ctx.beginPath();
                 ctx.fillStyle = triColor;
