@@ -262,12 +262,7 @@ aos.Planet.prototype = {
             if (tile.buildingTemplate !== '') {
                 tile.functional = true;
                 const building = aos.buildingTemplates[tile.buildingTemplate];
-                if (typeof building.produce.conditions !== 'undefined') {
-                    building.produce.conditions.forEach(function (condition, i) {
-                        tile.functional = tile.functional && this.checkCondition(condition);
-                    }, this);
-                }
-                if (typeof building.produce.require !== 'undefined' && tile.functional) {
+                if (typeof building.produce.require !== 'undefined') {
                     building.produce.require.forEach(function (req, i) {
                         const removeRes = this.removeResource(req.name, req.quantity, req.planetResource, true);
                         if (removeRes !== req.quantity) {

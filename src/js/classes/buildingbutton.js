@@ -77,16 +77,6 @@ aos.BuildingButton.prototype = {
                     ctext += "<tr><td>" + template.produce.require[i].name + "</td><td width='10px'>:</Td><td>" + template.produce.require[i].quantity + "</td></tr>";
                 }
             }
-            if (typeof template.produce.conditions !== "undefined") {
-                for (let i = 0; i < template.produce.conditions.length; i++) {
-                    if (typeof template.produce.conditions[i].quantity !== "undefined") {
-                        ctext += "<tr><td>" + template.produce.conditions[i].name + "</Td><td width='10px'>:</Td><td>" + template.produce.conditions[i].quantity + "</td></tr>";
-                    } else {
-                        ctext += "<tr><td>" + template.produce.conditions[i].name + "</Td><td width='10px'>:</Td><td>" + template.produce.conditions[i].percent + " %</td></tr>";
-                    }
-                }
-
-            }
             ctext += "</table>";
             Ctxt.innerHTML = ctext;
         } else {

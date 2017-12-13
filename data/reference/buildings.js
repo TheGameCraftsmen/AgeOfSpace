@@ -453,13 +453,6 @@ aos.buildingTemplates = {
                     "planetResource": true,
                     "remove": true
                 }
-            ],
-            "conditions": [
-                {
-                    "name": "oxygen",
-                    "percent": 70,
-                    "planetResource": true
-                }
             ]
         },
         "buildOnLand": true,
