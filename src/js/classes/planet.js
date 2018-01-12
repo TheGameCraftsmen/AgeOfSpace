@@ -36,7 +36,7 @@ aos.Planet = function () {
     /** @type {Array.<string>} */
     this.tiles = [];
     /** @type {number}*/
-    this.luminosity = 70;
+    this.irradiance = 30;
     /** @type {aos.Polyhedron} */
     this.renderModel = null;
 };
@@ -147,7 +147,7 @@ aos.Planet.prototype = {
         this.addResource('fissile material', 'planet', 10000);
         this.addResource('ground pollution', 'planet', 1000);
 
-        //this.addResource('bacteria', 'storage', 1000);
+        this.addResource('bacteria', 'storage', 1000);
         this.addResource('flora', 'storage', 1000);
         this.addResource('fauna', 'storage', 1000);
         this.addResource('humans', 'storage', 1000);
@@ -241,22 +241,6 @@ aos.Planet.prototype = {
         return qtyRemoved;
     },
 
-    checkCondition: function (condition) {
-        var result = true;
-        if (condition.planetResource) {
-            for (let itPlanetRes = 0 ; itPlanetRes < this.resources.length ; itPlanetRes++) {
-                if (this.resources[itPlanetRes].name == condition.name) {
-                    if (typeof condition.quantity === "undefined") {
-                        result = this.resources[itPlanetRes].percent >= condition.percent;
-                    } else {
-                        result = this.resources[itPlanetRes].quantity >= condition.quantity;
-                    }
-                }
-            }
-        }
-        return result;
-    },
-
     produce: function () {
         this.tiles.forEach(function (tile, i) {
             if (tile.buildingTemplate !== '') {
@@ -285,25 +269,115 @@ aos.Planet.prototype = {
     },
 
     runPopulation: function () {
-        for (let itPopulation = 0; itPopulation < this.storedResources.length; itPopulation++) {
-            let popResource = this.storedResources[itPopulation];
-            if (popResource.type == "population") {
-                if (popResource.name === "bacteria") {
-                    let oxoCarbonFound = null;
-                    for (let itResource = 0 ; itResource < this.resources.length ; itResource++) {
-                        let res = this.resources[itResource];
-                        if (res.name === "oxocarbon" && res.quantity > 1000) {
-                            oxoCarbonFound = res;
-                            break;
+        aos.resources.forEach(function (template, idx) {
+            if (template.category === 'population' && typeof (aos.populations[template.name]) !== 'undefined') {
+                const populationName = template.name;
+                const populationRules = aos.populations[populationName];
+                const storage = this.storedResources[idx];
+
+                // check environment
+                let environmentOk = true;
+                populationRules.environment.forEach(function (rule, i) {
+                    environmentOk = environmentOk && this.checkEnvironmentRule(rule);
+                }, this);
+
+                // decay
+                storage.quantity -= 20;
+                if (environmentOk) {
+                    storage.quantity *= populationRules.naturalDecay;
+                } else {
+                    storage.quantity *= populationRules.hostileDecay;
+                }
+                if (storage.quantity < 0) {
+                    storage.quantity = 0;
+                }
+                if (environmentOk && populationRules.spontaneousBirth) {
+                    storage.quantity += 10;
+                }
+
+                // food / yield
+                if (storage.quantity > 0) {
+                    // food
+                    const foodIntake = storage.quantity * populationRules.foodIntake;
+                    let totalConsumedFood = 0;
+                    populationRules.food.forEach(function (rule, i) {
+                        let checkedValue = {};
+                        if (typeof rule.resource !== 'undefined') {
+                            checkedValue = this.resources[aos.resourcesIndex[rule.resource]];
+                        } else if (typeof rule.population !== 'undefined') {
+                            checkedValue = this.storedResources[aos.resourcesIndex[rule.resource]];
+                        } else {
+                            // TODO ?
                         }
-                    }
-                    if (oxoCarbonFound !== null) {
-                        oxoCarbonFound.quantity = oxoCarbonFound.quantity > 1000 ? oxoCarbonFound.quantity - 1000 : 0;
-                        this.addResource("oxygen", "planet", popResource.quantity * 0.1);
+                        const wishedQuantity = foodIntake * rule.ratio;
+                        const availableQuantity = checkedValue.quantity * rule.limit;
+                        const consumed = Math.min(wishedQuantity, availableQuantity);
+                        checkedValue.quantity -= consumed;
+                        totalConsumedFood += consumed;
+                    }, this);
+                    populationRules.yield.forEach(function (rule, i) {
+                        let checkedValue = {};
+                        if (typeof rule.resource !== 'undefined') {
+                            checkedValue = this.resources[aos.resourcesIndex[rule.resource]];
+                        } else if (typeof rule.population !== 'undefined') {
+                            checkedValue = this.storedResources[aos.resourcesIndex[rule.resource]];
+                        } else {
+                            // TODO ?
+                        }
+                        const yieldQty = totalConsumedFood * rule.ratio;
+                        checkedValue.quantity += yieldQty;
+                    }, this);
+                }
+
+                // growth
+                if (storage.quantity > 0) {
+                    const growthFactor1 = this.evalFactors(populationRules.growthFactor1);
+                    const growthFactor2 = this.evalFactors(populationRules.growthFactor2);
+                    const growthFactor = growthFactor1 + growthFactor2;
+                    storage.quantity *= growthFactor;
+                    const habitatSize1 = this.evalFactors(populationRules.habitatSize1);
+                    const habitatSize2 = this.evalFactors(populationRules.habitatSize2);
+                    const habitatSize3 = this.evalFactors(populationRules.habitatSize3);
+                    const habitatSize = habitatSize1 + habitatSize2 + habitatSize3;
+                    if (storage.quantity > habitatSize) {
+                        storage.quantity = habitatSize;
                     }
                 }
+
+            }
+        }, this);
+
+    },
+
+    checkEnvironmentRule: function (rule) {
+        let checkedValueCategory = '';
+        let checkedValueQuantity = 0;
+        if (typeof rule.resource !== 'undefined') {
+            const checkedValue = this.resources[aos.resourcesIndex[rule.resource]];
+            checkedValueCategory = checkedValue.type;
+            checkedValueQuantity = checkedValue.quantity;
+        } else if (typeof rule.group !== 'undefined') {
+            if (rule.group === 'water') {
+                checkedValueCategory = 'liquid';
+                checkedValueQuantity = this.resources[aos.resourcesIndex['fresh water']].quantity + this.resources[aos.resourcesIndex['salt water']].quantity;
             }
         }
+        if (typeof rule.minQuantity !== 'undefined' && checkedValueQuantity < rule.minQuantity) {
+            return false;
+        } else if (typeof rule.maxQuantity !== 'undefined' && checkedValueQuantity > rule.maxQuantity) {
+            return false;
+        } else if (typeof rule.minPercent !== 'undefined') {
+            const sumFromCategory = this.resources.filter(function (r) { return r.type === checkedValueCategory; }).reduce(function (a, b) { return a.quantity + b.quantity; }, 0.1);
+            if (checkedValueQuantity / sumFromCategory < rule.minPercent) {
+                return false;
+            }
+        } else if (typeof rule.maxPercent !== 'undefined') {
+            const sumFromCategory = this.resources.filter(function (r) { return r.type === checkedValueCategory; }).reduce(function (a, b) { return a.quantity + b.quantity; }, 0.1);
+            if (checkedValueQuantity / sumFromCategory > rule.maxPercent) {
+                return false;
+            }
+        }
+        return true;
     },
 
     run: function () {
@@ -418,4 +492,38 @@ aos.Planet.prototype = {
         }
     },
 
+    getAttribute: function (rule) {
+        if (rule.attribute === 'emptyOceanTilesCount') {
+            return this.tiles.filter(function (t) { return !t.isLand && t.buildingTemplate === ''; }).length;
+        } else if (rule.attribute === 'buildingCount') {
+            return this.tiles.filter(function (t) { return t.buildingTemplate === rule.buildingName; }).length;
+        } else {
+            return this[rule.attribute];
+        }
+    },
+
+    evalFactors: function (factorArray) {
+        let ret = 1;
+        factorArray.forEach(function (factor) {
+            ret *= this.evalFactor(factor);
+        }, this);
+        return ret;
+    },
+
+    evalFactor: function (factor) {
+        if (typeof (factor.constant) !== 'undefined') {
+            return factor.constant;
+        } else if (typeof (factor.attribute) !== 'undefined') {
+            return this.getAttribute(factor);
+        } else if (typeof factor.group !== 'undefined') {
+            if (factor.group === 'water') {
+                return this.resources[aos.resourcesIndex['fresh water']].quantity
+                    + this.resources[aos.resourcesIndex['salt water']].quantity;
+            } else {
+                throw 'unexpected group factor in aos.populations';
+            }
+        } else {
+            throw 'unexpected factor in aos.populations';
+        }
+    },
 };

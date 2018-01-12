@@ -72,7 +72,7 @@ aos.PieChart.prototype = {
             const total = this.calcRatio();
             let contextualTxt = '<div><table><tr><th>Resource</th><th>Quantity</th><th>Percent</th></tr>';
             this.content.forEach(function (res, i) {
-                contextualTxt += '<tr><td style="background-color:' + res.color + '">' + res.label + '</td><td>' + res.value + '</td><td>' + (res.value / total).toFixed(1) + '%</td></tr>';
+                contextualTxt += '<tr><td style="background-color:' + res.color + '">' + res.label + '</td><td>' + res.value.toFixed(1) + '</td><td>' + (res.value / total).toFixed(1) + '%</td></tr>';
             }, this);
             contextualTxt += '</table></div>';
             document.getElementById('contextualTxt').innerHTML = contextualTxt;

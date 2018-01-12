@@ -140,11 +140,11 @@ aos.Resource.prototype = {
             document.getElementById('contextualTxt').innerHTML = '';
             if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null) {
                 document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'Storage quantity' + '</dt><dd>' + aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity + '</dd></dl>';
+                    '<dl><dt>' + 'Storage quantity' + '</dt><dd>' + Math.floor(aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity) + '</dd></dl>';
             }
             if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null && aos.game.selectedStar.hasShip) {
                 document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'Ship quantity' + '</dt><dd>' + aos.game.selectedStar.ship.storedResources[this.index].quantity + '</dd></dl>';
+                    '<dl><dt>' + 'Ship quantity' + '</dt><dd>' + Math.floor(aos.game.selectedStar.ship.storedResources[this.index].quantity) + '</dd></dl>';
             }
         } else {
         }

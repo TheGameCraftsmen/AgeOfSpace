@@ -48,3 +48,8 @@ aos.unusedResources =
     ];
 
 aos.volumeResources = { "air": 1000, "liquid": 10000, "ground": 10000 };
+
+aos.resourcesIndex = {};
+aos.resources.forEach(function (resource, i) {
+    aos.resourcesIndex[resource.name] = i;
+}, this);

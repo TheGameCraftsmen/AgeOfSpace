@@ -1,39 +1,33 @@
 var aos = aos || {};
 
-aos.population =
-[
-    //{
-    //    "name": "bacteria",
-    //    "population": 1000,
-    //    "food": [{ "name": "oxocarbon", "quantity": 500, "planetResource": true }],
-    //    "yield": [{ "name": "oxygen", "quantity": 1000, "to": "planet" }],
-    //    "survival": [{ "name": "fresh water", "quantity": 300, "planetResource": true }],
-    //    "growth": [{ "name": "luminosity", "quantity": 70, "planetResource": true }]
-    //},
-    {
-        "name": "bacteria",
+aos.populations =
+{
+    "bacteria": {
+        "spontaneousBirth": true,
         "environment": [
             { "group": "water", "minQuantity": 10000 },
-            { "resource": "toxic waste", "maxPercent": 10 }],
-        "isPhotosynthetic": true,
+            { "resource": "toxic waste", "maxPercent": 0.1 }],
+        "naturalDecay": 0.999,
+        "hostileDecay": 0.900,
+        "foodIntake": 0.001,
         "food": [
             { "resource": "oxocarbon", "ratio": 0.99, "limit": 0.9 },
             { "resource": "toxic waste", "ratio": 0.01, "limit": 0.1 }],
         "yield": [
             { "resource": "oxygen", "ratio": 1 }],
         "growthFactor1": [
-            { "constant": 1.03 }],
+            { "constant": 1.01 }],
         "growthFactor2": [
             { "attribute": "irradiance" },
-            { "constant": 0.01 }],
+            { "constant": 0.001 }],
         "habitatSize1": [
             { "group": "water" },
-            { "constant": 0.1 }],
+            { "constant": 0.01 }],
         "habitatSize2": [
-            { "attribute": "oceanTilesCount" },
+            { "attribute": "emptyOceanTilesCount" },
             { "constant": 10000 }],
         "habitatSize3": [
-            { "attribute": "incubatorCount" },
+            { "attribute": "buildingCount", "buildingName": "Incubator" },
             { "constant": 100000 }],
     }
-];
+};
