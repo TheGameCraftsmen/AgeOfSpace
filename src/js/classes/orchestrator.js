@@ -24,6 +24,7 @@ aos.Orchestrator = function () {
     this.lastGameplayTick = 0; // dispatches an update event every x milliseconds in game time (x = 1000?)
     this.lastAnimationFrame = 0; // time interval counter
 
+    this.mousePosition = { x: 0, y: 0 };
     this.isDragging = false;
     this.dragStart = null;
     this.dragEnd = null;
@@ -32,6 +33,8 @@ aos.Orchestrator = function () {
     this.shipResourceBars = [];
     this.planetResourceBars = [];
     this.buildingButtons = [];
+
+    this.transits = [];
 };
 
 aos.Orchestrator.prototype = {
@@ -188,167 +191,185 @@ aos.Orchestrator.prototype = {
         }
     },
 
-    setupEvents: function () {
-        document.getElementById('galaxyOverlayCanvas').addEventListener('mousemove', function (e) {
-            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
-            const galaxyCoordX = e.offsetX * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 600;
-            const galaxyCoordY = e.offsetY * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 450;
-            //document.getElementById('debug').innerHTML = '' + galaxyCoordX + '/' + galaxyCoordY + '/' + '<br/>';
-            document.getElementById('galaxyOverlayCanvas').style.cursor = 'default';
-            document.getElementById('contextualBlock').style.display = 'none';
+    refreshGalaxyOverlay: function () {
+        const galaxyCoordX = this.mousePosition.x;
+        const galaxyCoordY = this.mousePosition.y;
 
-            const canvas = document.getElementById('galaxyOverlayCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 1200, 900);
-            const constellationId = this.galaxy.getConstellationId(galaxyCoordX, galaxyCoordY);
-            this.galaxy.constellations.forEach(function (c, i) {
-                c.render(i === constellationId);
-            });
-            this.dragEnd = null;
-            if (this.isDragging) {
-                this.galaxy.stars.forEach(function (star) {
-                    if (this.dragStart === star) {
-                        const deltaX = star.x - galaxyCoordX;
-                        const deltaY = star.y - galaxyCoordY;
-                        const dist = deltaX * deltaX + deltaY * deltaY;
-                        const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
-                        if (dist > radius) {
-                            ctx.beginPath();
-                            ctx.lineWidth = 2;
-                            ctx.moveTo(600 + star.x, 450 + star.y);
-                            let lineDrawn = false;
-                            this.galaxy.stars.forEach(function (target) {
-                                const deltaX1 = target.x - galaxyCoordX;
-                                const deltaY1 = target.y - galaxyCoordY;
-                                const dist1 = deltaX1 * deltaX1 + deltaY1 * deltaY1;
-                                const radius1 = target.isNotable ? 225.0 : 100.0; // 15² , 10²
-                                if (dist1 < radius1) {
-                                    ctx.strokeStyle = '#066';
-                                    ctx.lineTo(600 + target.x, 450 + target.y);
-                                    lineDrawn = true;
-                                    this.dragEnd = target;
-                                }
-                            }, this);
-                            if (!lineDrawn) {
-                                ctx.strokeStyle = '#600';
-                                ctx.lineTo(600 + galaxyCoordX, 450 + galaxyCoordY);
+        document.getElementById('galaxyOverlayCanvas').style.cursor = 'default';
+        document.getElementById('contextualBlock').style.display = 'none';
+
+        const canvas = document.getElementById('galaxyOverlayCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 1200, 900);
+        const constellationId = this.galaxy.getConstellationId(galaxyCoordX, galaxyCoordY);
+        this.galaxy.constellations.forEach(function (c, i) {
+            c.render(i === constellationId);
+        });
+        this.dragEnd = null;
+        this.transits.forEach(function (transit) {
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#06f';
+            ctx.moveTo(600 + transit.from.x, 450 + transit.from.y);
+            ctx.lineTo(600 + transit.to.x, 450 + transit.to.y);
+            ctx.stroke();
+        });
+
+        if (this.isDragging) {
+            this.galaxy.stars.forEach(function (star) {
+                if (this.dragStart === star) {
+                    const deltaX = star.x - galaxyCoordX;
+                    const deltaY = star.y - galaxyCoordY;
+                    const dist = deltaX * deltaX + deltaY * deltaY;
+                    const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
+                    if (dist > radius) {
+                        ctx.beginPath();
+                        ctx.lineWidth = 2;
+                        ctx.moveTo(600 + star.x, 450 + star.y);
+                        let lineDrawn = false;
+                        this.galaxy.stars.forEach(function (target) {
+                            const deltaX1 = target.x - galaxyCoordX;
+                            const deltaY1 = target.y - galaxyCoordY;
+                            const dist1 = deltaX1 * deltaX1 + deltaY1 * deltaY1;
+                            const radius1 = target.isNotable ? 225.0 : 100.0; // 15² , 10²
+                            if (dist1 < radius1) {
+                                ctx.strokeStyle = '#066';
+                                ctx.lineTo(600 + target.x, 450 + target.y);
+                                lineDrawn = true;
+                                this.dragEnd = target;
                             }
-                            ctx.stroke();
+                        }, this);
+                        if (!lineDrawn) {
+                            ctx.strokeStyle = '#600';
+                            ctx.lineTo(600 + galaxyCoordX, 450 + galaxyCoordY);
                         }
+                        ctx.stroke();
                     }
-                }, this);
+                }
+            }, this);
+        }
+        if (constellationId === 0) {
+            //ctx.beginPath();
+            //ctx.strokeStyle = '#600';
+            //ctx.lineWidth = 2;
+            //ctx.arc(600, 450, 100, 0, 2 * Math.PI);
+            //ctx.stroke();
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = 'Galactic Core' +
+                '<br><em>&nbsp;</em>';
+            document.getElementById('contextualTxt').innerHTML = '';
+            document.getElementById('contextualTxt').innerHTML +=
+                '<div>DANGER<br><br>Black hole<br><br>Don\'t come close !</div>';
+        }
+        else {
+            document.getElementById('contextualBlock').style.display = 'block';
+            document.getElementById('contextualTitle').innerHTML = '' + this.galaxy.constellations[constellationId].reference.name +
+                '<br><em>Constellation</em>';
+            document.getElementById('contextualTxt').innerHTML = '';
+            {
+                let radical = this.galaxy.constellations[constellationId].loreStarCount;
+                let power = 8;
+                while (radical > 10.0) {
+                    radical /= 10.0;
+                    power++;
+                }
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Stars (total)' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup></dd></dl>';
             }
-            if (constellationId === 0) {
-                //ctx.beginPath();
-                //ctx.strokeStyle = '#600';
-                //ctx.lineWidth = 2;
-                //ctx.arc(600, 450, 100, 0, 2 * Math.PI);
-                //ctx.stroke();
+            const constellationStars = this.galaxy.constellations[constellationId].stars;
+            document.getElementById('contextualTxt').innerHTML +=
+                '<dl><dt>' + 'Notable stars' + '</dt><dd>' + constellationStars.length + '</dd></dl>';
+            document.getElementById('contextualTxt').innerHTML +=
+                '<dl><dt>' + 'Stars with at least' + '</dt><dd>' + '</dd></dl>';
+            document.getElementById('contextualTxt').innerHTML +=
+                '<dl><dt>' + 'one planet in the' + '</dt><dd>' + constellationStars.filter(function (star) {
+                    return star.isNotable;
+                }).length + '</dd></dl>';
+            document.getElementById('contextualTxt').innerHTML +=
+                '<dl><dt>' + 'habitable zone' + '</dt><dd>' + '</dd></dl>';
+        }
+
+        //document.getElementById('debug').innerHTML = '' + constellationId + '/' + '<br/>';
+
+        this.galaxy.constellations[constellationId].stars.forEach(function (star) {
+            const deltaX = star.x - galaxyCoordX;
+            const deltaY = star.y - galaxyCoordY;
+            const dist = deltaX * deltaX + deltaY * deltaY;
+            const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
+            const label = star.isNotable ? 'Star' : 'Star';
+            if (dist < radius) { // sqrt(dist) < 20.0
+                document.getElementById('galaxyOverlayCanvas').style.cursor = 'pointer';
                 document.getElementById('contextualBlock').style.display = 'block';
-                document.getElementById('contextualTitle').innerHTML = 'Galactic Core' +
-                    '<br><em>&nbsp;</em>';
+                document.getElementById('contextualTitle').innerHTML = '' +
+                    star.greekLetter.name.charAt(0).toUpperCase() + star.greekLetter.name.slice(1) + ' ' +
+                    this.galaxy.constellations[constellationId].reference.gen +
+                '<br><em>' + label + '</em>';
                 document.getElementById('contextualTxt').innerHTML = '';
                 document.getElementById('contextualTxt').innerHTML +=
-                    '<div>DANGER<br><br>Black hole<br><br>Don\'t come close !</div>';
-            }
-            else {
-                document.getElementById('contextualBlock').style.display = 'block';
-                document.getElementById('contextualTitle').innerHTML = '' + this.galaxy.constellations[constellationId].reference.name +
-                    '<br><em>Constellation</em>';
-                document.getElementById('contextualTxt').innerHTML = '';
+                    '<dl><dt>' + 'Proper name' + '</dt><dd>' + star.properName.name + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Type' + '</dt><dd>' +
+                    (star.spectralClass === 'M' ? 'Red dwarf' :
+                    star.spectralClass === 'K' ? 'Orange dwarf' :
+                    star.spectralClass === 'G' ? 'Yellow dwarf' :
+                    star.spectralClass === 'F' ? 'Yellow-white dwarf' :
+                    star.spectralClass === 'A' ? 'White main sequence' :
+                    star.spectralClass === 'B' ? 'Blue subgiant' : 'Blue giant') + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Spectral class' + '</dt><dd>' + star.spectralClass + star.subSpectral + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Luminosity class' + '</dt><dd>' + star.luminosityClass + '</dd></dl>';
+                document.getElementById('contextualTxt').innerHTML +=
+                    '<dl><dt>' + 'Surface temperature' + '</dt><dd>' + 100 * Math.floor(star.temperature / 100) + ' K</dd></dl>';
                 {
-                    let radical = this.galaxy.constellations[constellationId].loreStarCount;
+                    let radical = star.mass;
+                    let power = 29;
+                    while (radical > 10.0) {
+                        radical /= 10.0;
+                        power++;
+                    }
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Mass' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> kg</dd></dl>';
+                }
+                {
+                    let radical = star.radius;
                     let power = 8;
                     while (radical > 10.0) {
                         radical /= 10.0;
                         power++;
                     }
                     document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Stars (total)' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup></dd></dl>';
+                        '<dl><dt>' + 'Radius' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> m</dd></dl>';
                 }
-                const constellationStars = this.galaxy.constellations[constellationId].stars;
-                document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'Notable stars' + '</dt><dd>' + constellationStars.length + '</dd></dl>';
-                document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'Stars with at least' + '</dt><dd>' + '</dd></dl>';
-                document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'one planet in the' + '</dt><dd>' + constellationStars.filter(function (star) {
-                        return star.isNotable;
-                    }).length + '</dd></dl>';
-                document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'habitable zone' + '</dt><dd>' + '</dd></dl>';
+                {
+                    let radical = star.bolometricLuminosity;
+                    let power = 22;
+                    while (radical > 10.0) {
+                        radical /= 10.0;
+                        power++;
+                    }
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Bolometric luminosity' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> W</dd></dl>';
+                }
+                {
+                    const mbol = -2.5 * Math.log(star.bolometricLuminosity / 4000.0) * Math.LOG10E + 5;
+                    document.getElementById('contextualTxt').innerHTML +=
+                        '<dl><dt>' + 'Absolute magnitude' + '</dt><dd>' + mbol.toFixed(1) + '</dd></dl>';
+                }
             }
+            //document.getElementById('debug').innerHTML += dist + '<br/>';
+        }, this);
+    },
 
-            //document.getElementById('debug').innerHTML = '' + constellationId + '/' + '<br/>';
+    setupEvents: function () {
+        document.getElementById('galaxyOverlayCanvas').addEventListener('mousemove', function (e) {
+            e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+            const galaxyCoordX = e.offsetX * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 600;
+            const galaxyCoordY = e.offsetY * 1200 / document.getElementById('galaxyOverlayCanvas').offsetWidth - 450;
+            //document.getElementById('debug').innerHTML = '' + galaxyCoordX + '/' + galaxyCoordY + '/' + '<br/>';
+            this.mousePosition.x = galaxyCoordX;
+            this.mousePosition.y = galaxyCoordY;
 
-            this.galaxy.constellations[constellationId].stars.forEach(function (star) {
-                const deltaX = star.x - galaxyCoordX;
-                const deltaY = star.y - galaxyCoordY;
-                const dist = deltaX * deltaX + deltaY * deltaY;
-                const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
-                const label = star.isNotable ? 'Star' : 'Star';
-                if (dist < radius) { // sqrt(dist) < 20.0
-                    document.getElementById('galaxyOverlayCanvas').style.cursor = 'pointer';
-                    document.getElementById('contextualBlock').style.display = 'block';
-                    document.getElementById('contextualTitle').innerHTML = '' +
-                        star.greekLetter.name.charAt(0).toUpperCase() + star.greekLetter.name.slice(1) + ' ' +
-                        this.galaxy.constellations[constellationId].reference.gen +
-                    '<br><em>' + label + '</em>';
-                    document.getElementById('contextualTxt').innerHTML = '';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Proper name' + '</dt><dd>' + star.properName.name + '</dd></dl>';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Type' + '</dt><dd>' +
-                        (star.spectralClass === 'M' ? 'Red dwarf' :
-                        star.spectralClass === 'K' ? 'Orange dwarf' :
-                        star.spectralClass === 'G' ? 'Yellow dwarf' :
-                        star.spectralClass === 'F' ? 'Yellow-white dwarf' :
-                        star.spectralClass === 'A' ? 'White main sequence' :
-                        star.spectralClass === 'B' ? 'Blue subgiant' : 'Blue giant') + '</dd></dl>';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Spectral class' + '</dt><dd>' + star.spectralClass + star.subSpectral + '</dd></dl>';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Luminosity class' + '</dt><dd>' + star.luminosityClass + '</dd></dl>';
-                    document.getElementById('contextualTxt').innerHTML +=
-                        '<dl><dt>' + 'Surface temperature' + '</dt><dd>' + 100 * Math.floor(star.temperature / 100) + ' K</dd></dl>';
-                    {
-                        let radical = star.mass;
-                        let power = 29;
-                        while (radical > 10.0) {
-                            radical /= 10.0;
-                            power++;
-                        }
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Mass' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> kg</dd></dl>';
-                    }
-                    {
-                        let radical = star.radius;
-                        let power = 8;
-                        while (radical > 10.0) {
-                            radical /= 10.0;
-                            power++;
-                        }
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Radius' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> m</dd></dl>';
-                    }
-                    {
-                        let radical = star.bolometricLuminosity;
-                        let power = 22;
-                        while (radical > 10.0) {
-                            radical /= 10.0;
-                            power++;
-                        }
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Bolometric luminosity' + '</dt><dd>' + radical.toFixed(1) + ' × 10<sup>' + power + '</sup> W</dd></dl>';
-                    }
-                    {
-                        const mbol = -2.5 * Math.log(star.bolometricLuminosity / 4000.0) * Math.LOG10E + 5;
-                        document.getElementById('contextualTxt').innerHTML +=
-                            '<dl><dt>' + 'Absolute magnitude' + '</dt><dd>' + mbol.toFixed(1) + '</dd></dl>';
-                    }
-                }
-                //document.getElementById('debug').innerHTML += dist + '<br/>';
-            }, this);
         }.bind(this), false);
 
         document.getElementById('galaxyOverlayCanvas').addEventListener('mousedown', function (e) {
@@ -363,8 +384,10 @@ aos.Orchestrator.prototype = {
                 const dist = deltaX * deltaX + deltaY * deltaY;
                 const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
                 if (dist < radius) {
-                    this.isDragging = true;
                     this.dragStart = star;
+                    if (star.hasShip) {
+                        this.isDragging = true;
+                    }
                 }
             }, this);
         }.bind(this), false);
@@ -380,12 +403,20 @@ aos.Orchestrator.prototype = {
                 const deltaY = star.y - galaxyCoordY;
                 const dist = deltaX * deltaX + deltaY * deltaY;
                 const radius = star.isNotable ? 225.0 : 100.0; // 15² , 10²
-                if (dist < radius && this.isDragging && this.dragStart === star) {
+                if (dist < radius && this.dragStart === star) {
                     this.setSelectedStar(star);
                     this.isDragging = false;
-                } else if (this.dragEnd !== null) {
-                    document.getElementById('galaxyBlock').style.display = 'none';
-                    document.getElementById('shipBlock').style.display = 'block';
+                } else if (this.isDragging && this.dragEnd !== null && this.dragStart.hasShip) {
+                    //document.getElementById('galaxyBlock').style.display = 'none';
+                    //document.getElementById('shipBlock').style.display = 'block';
+                    const shipInTransit = this.dragStart.ship;
+                    shipInTransit.from = this.dragStart;
+                    shipInTransit.to = this.dragEnd;
+                    shipInTransit.startTick = this.gameTime;
+                    shipInTransit.endtTick = this.gameTime + 10000;
+                    this.transits.push(shipInTransit);
+                    this.dragStart.hasShip = false;
+                    this.dragStart.ship = null;
                 }
             }, this);
             this.isDragging = false;
@@ -524,6 +555,8 @@ aos.Orchestrator.prototype = {
                 if (wantRefresh) {
                     this.emitEvent('requestUiSlowRefresh', {});
                 }
+            } else {
+                this.refreshGalaxyOverlay();
             }
         }.bind(this), false);
 

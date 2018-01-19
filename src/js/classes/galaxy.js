@@ -678,5 +678,11 @@ aos.Galaxy.prototype = {
         }
     },
 
+    getStarById: function (id) {
+        const ret = this.stars.filter(function (star) {
+            return star.id === id;
+        });
+        return ret[0];
+    },
 };
 

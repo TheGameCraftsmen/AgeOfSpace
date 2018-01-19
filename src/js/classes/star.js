@@ -16,6 +16,9 @@ var aos = aos || {};
  * @class
  */
 aos.Star = function () {
+    /** @type {string} */
+    this.id = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+
     // general data, relative to galaxy
     this.x = 0; // coordinates relative to the galaxy
     this.y = 0;
