@@ -338,7 +338,8 @@ aos.Planet.prototype = {
                     const habitatSize1 = this.evalFactors(populationRules.habitatSize1);
                     const habitatSize2 = this.evalFactors(populationRules.habitatSize2);
                     const habitatSize3 = this.evalFactors(populationRules.habitatSize3);
-                    const habitatSize = habitatSize1 + habitatSize2 + habitatSize3;
+                    const habitatSize4 = this.evalFactors(populationRules.habitatSize4);
+                    const habitatSize = habitatSize1 + habitatSize2 + habitatSize3 + habitatSize4;
                     if (storage.quantity > habitatSize) {
                         storage.quantity = habitatSize;
                     }
@@ -495,6 +496,8 @@ aos.Planet.prototype = {
     getAttribute: function (rule) {
         if (rule.attribute === 'emptyOceanTilesCount') {
             return this.tiles.filter(function (t) { return !t.isLand && t.buildingTemplate === ''; }).length;
+        } else if (rule.attribute === 'emptyTilesCount') {
+            return this.tiles.filter(function (t) { return t.buildingTemplate === ''; }).length;
         } else if (rule.attribute === 'buildingCount') {
             return this.tiles.filter(function (t) { return t.buildingTemplate === rule.buildingName; }).length;
         } else {
@@ -522,6 +525,9 @@ aos.Planet.prototype = {
             } else {
                 throw 'unexpected group factor in aos.populations';
             }
+        } else if (typeof factor.resource !== 'undefined') {
+            return this.resources[aos.resourcesIndex[factor.resource]].quantity;
+
         } else {
             throw 'unexpected factor in aos.populations';
         }
