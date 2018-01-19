@@ -206,14 +206,39 @@ aos.Orchestrator.prototype = {
             c.render(i === constellationId);
         });
         this.dragEnd = null;
+
+        // Transit render
         this.transits.forEach(function (transit) {
+            const lerpRatio = (this.gameTime - transit.startTick) / (transit.endTick - transit.startTick);
+            const shipX = transit.from.x + lerpRatio * (transit.to.x - transit.from.x);
+            const shipY = transit.from.y + lerpRatio * (transit.to.y - transit.from.y);
+
             ctx.beginPath();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#06f';
+            ctx.strokeStyle = '#066';
+            ctx.arc(600 + shipX, 450 + shipY, 5, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            ctx.setLineDash([2, 5]);
             ctx.moveTo(600 + transit.from.x, 450 + transit.from.y);
             ctx.lineTo(600 + transit.to.x, 450 + transit.to.y);
             ctx.stroke();
-        });
+            ctx.setLineDash([]);
+        }, this);
+
+        // End of transit operations (adding ship to target star)
+        const endOfTransit = this.transits.filter(function (transit) {
+            return transit.endTick <= this.gameTime;
+        }, this);
+        endOfTransit.forEach(function (transit) {
+            transit.to.hasShip = true;
+            transit.to.ship = transit;
+            transit.from = null;
+            transit.to = null;
+        }, this);
+        this.transits = this.transits.filter(function (transit) {
+            return transit.endTick > this.gameTime;
+        }, this);
 
         if (this.isDragging) {
             this.galaxy.stars.forEach(function (star) {
@@ -413,7 +438,7 @@ aos.Orchestrator.prototype = {
                     shipInTransit.from = this.dragStart;
                     shipInTransit.to = this.dragEnd;
                     shipInTransit.startTick = this.gameTime;
-                    shipInTransit.endtTick = this.gameTime + 10000;
+                    shipInTransit.endTick = this.gameTime + 10000;
                     this.transits.push(shipInTransit);
                     this.dragStart.hasShip = false;
                     this.dragStart.ship = null;

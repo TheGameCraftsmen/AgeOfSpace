@@ -84,7 +84,7 @@ aos.Constellation.prototype = {
         // circle around main stars
         // green for notable (15px radius)
         // red for common (10px radius)
-        if (highlight) {
+        if (/*highlight*/ true) {
             this.stars.forEach(function (star) {
                 ctx.beginPath();
                 if (star.hasShip) {

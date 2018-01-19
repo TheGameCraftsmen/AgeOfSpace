@@ -17,7 +17,7 @@ var aos = aos || {};
  */
 aos.Ship = function () {
     this.startTick = 0;
-    this.endtTick = 0;
+    this.endTick = 0;
     this.from = 0; // ID of the the planet where the ship starts
     this.to = 0; // ID of the planet where the ship ends
 
