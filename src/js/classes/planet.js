@@ -37,6 +37,9 @@ aos.Planet = function () {
     this.tiles = [];
     /** @type {number}*/
     this.irradiance = 30;
+
+    this.totalConsumedFood = 0;
+    this.availableFoodRatio = 0;
     /** @type {aos.Polyhedron} */
     this.renderModel = null;
 };
@@ -296,16 +299,17 @@ aos.Planet.prototype = {
                 }
 
                 // food / yield
+                this.totalConsumedFood = 0;
+                this.availableFoodRatio = 0;
                 if (storage.quantity > 0) {
                     // food
                     const foodIntake = storage.quantity * populationRules.foodIntake;
-                    let totalConsumedFood = 0;
                     populationRules.food.forEach(function (rule, i) {
                         let checkedValue = {};
                         if (typeof rule.resource !== 'undefined') {
                             checkedValue = this.resources[aos.resourcesIndex[rule.resource]];
                         } else if (typeof rule.population !== 'undefined') {
-                            checkedValue = this.storedResources[aos.resourcesIndex[rule.resource]];
+                            checkedValue = this.storedResources[aos.resourcesIndex[rule.population]];
                         } else {
                             // TODO ?
                         }
@@ -313,20 +317,21 @@ aos.Planet.prototype = {
                         const availableQuantity = checkedValue.quantity * rule.limit;
                         const consumed = Math.min(wishedQuantity, availableQuantity);
                         checkedValue.quantity -= consumed;
-                        totalConsumedFood += consumed;
+                        this.totalConsumedFood += consumed;
                     }, this);
                     populationRules.yield.forEach(function (rule, i) {
                         let checkedValue = {};
                         if (typeof rule.resource !== 'undefined') {
                             checkedValue = this.resources[aos.resourcesIndex[rule.resource]];
                         } else if (typeof rule.population !== 'undefined') {
-                            checkedValue = this.storedResources[aos.resourcesIndex[rule.resource]];
+                            checkedValue = this.storedResources[aos.resourcesIndex[rule.population]];
                         } else {
                             // TODO ?
                         }
-                        const yieldQty = totalConsumedFood * rule.ratio;
+                        const yieldQty = this.totalConsumedFood * rule.ratio;
                         checkedValue.quantity += yieldQty;
                     }, this);
+                    this.availableFoodRatio = this.totalConsumedFood / foodIntake;
                 }
 
                 // growth
@@ -496,6 +501,8 @@ aos.Planet.prototype = {
     getAttribute: function (rule) {
         if (rule.attribute === 'emptyOceanTilesCount') {
             return this.tiles.filter(function (t) { return !t.isLand && t.buildingTemplate === ''; }).length;
+        } else if (rule.attribute === 'emptyLandTilesCount') {
+            return this.tiles.filter(function (t) { return t.isLand && t.buildingTemplate === ''; }).length;
         } else if (rule.attribute === 'emptyTilesCount') {
             return this.tiles.filter(function (t) { return t.buildingTemplate === ''; }).length;
         } else if (rule.attribute === 'buildingCount') {

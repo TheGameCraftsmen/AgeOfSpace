@@ -65,5 +65,69 @@ aos.populations =
         "habitatSize4": [
             { "attribute": "buildingCount", "buildingName": "Greenhouse" },
             { "constant": 25000 }],
+    },
+    "fauna": {
+        "spontaneousBirth": false,
+        "environment": [
+            { "group": "water", "minQuantity": 10000 },
+            { "resource": "oxygen", "minQuantity": 1000 },
+            { "resource": "toxic waste", "maxPercent": 0.1 },
+            { "resource": "acid cloud", "maxPercent": 0.1 },
+            { "resource": "ground pollution", "maxPercent": 0.1 }],
+        "naturalDecay": 0.999,
+        "hostileDecay": 0.900,
+        "foodIntake": 0.001,
+        "food": [
+            { "population": "flora", "ratio": 0.45, "limit": 0.1 },
+            { "population": "fauna", "ratio": 0.05, "limit": 0.1 },
+            { "resource": "oxygen", "ratio": 0.50, "limit": 0.1 }],
+        "yield": [
+            { "resource": "oxocarbon", "ratio": 1 }],
+        "growthFactor1": [
+            { "constant": 1 }],
+        "growthFactor2": [
+            { "attribute": "availableFoodRatio" },
+            { "constant": 0.04 }],
+        "habitatSize1": [
+            { "group": "water" },
+            { "constant": 0.005 }],
+        "habitatSize2": [],
+        "habitatSize3": [
+            { "attribute": "emptyTilesCount" },
+            { "constant": 5000 }],
+        "habitatSize4": [
+            { "attribute": "buildingCount", "buildingName": "Greenhouse" },
+            { "constant": 25000 }],
+    },
+    "humans": {
+        "spontaneousBirth": false,
+        "environment": [
+            { "group": "water", "minQuantity": 10000 },
+            { "resource": "oxygen", "minQuantity": 20000 },
+            { "resource": "toxic waste", "maxPercent": 0.1 },
+            { "resource": "acid cloud", "maxPercent": 0.1 },
+            { "resource": "ground pollution", "maxPercent": 0.1 }],
+        "naturalDecay": 0.999,
+        "hostileDecay": 0.900,
+        "foodIntake": 0.001,
+        "food": [
+            { "population": "flora", "ratio": 0.30, "limit": 0.1 },
+            { "population": "fauna", "ratio": 0.20, "limit": 0.1 },
+            { "resource": "oxygen", "ratio": 0.50, "limit": 0.1 }],
+        "yield": [
+            { "resource": "oxocarbon", "ratio": 1 }],
+        "growthFactor1": [
+            { "constant": 1 }],
+        "growthFactor2": [
+            { "attribute": "availableFoodRatio" },
+            { "constant": 0.03 }],
+        "habitatSize1": [],
+        "habitatSize2": [],
+        "habitatSize3": [
+            { "attribute": "emptyLandTilesCount" },
+            { "constant": 10000 }],
+        "habitatSize4": [
+            { "attribute": "buildingCount", "buildingName": "Geodesic Dome" },
+            { "constant": 100000 }],
     }
 };
