@@ -129,5 +129,52 @@ aos.populations =
         "habitatSize4": [
             { "attribute": "buildingCount", "buildingName": "Geodesic Dome" },
             { "constant": 100000 }],
+    },
+    "virus": {
+        "spontaneousBirth": true,
+        "environment": [],
+        "naturalDecay": 0.999,
+        "hostileDecay": 0.900,
+        "foodIntake": 0.001,
+        "food": [
+            { "resource": "acid cloud", "ratio": 0.40, "limit": 0.1 },
+            { "resource": "toxic waste", "ratio": 0.30, "limit": 0.1 },
+            { "resource": "ground pollution", "ratio": 0.30, "limit": 0.1 }],
+        "yield": [
+            { "resource": "acid cloud", "ratio": 1 }],
+        "growthFactor1": [
+            { "constant": 1 }],
+        "growthFactor2": [
+            { "attribute": "availableFoodRatio" },
+            { "constant": 0.002 }],
+        "habitatSize1": [
+            { "constant": 300000 }],
+        "habitatSize2": [],
+        "habitatSize3": [
+            { "attribute": "buildingCount", "buildingName": "Incubator" },
+            { "constant": -100000 }],
+        "habitatSize4": [],
+    },
+    "machines": {
+        "spontaneousBirth": false,
+        "environment": [
+            { "resource": "metal", "minQuantity": 20000 }],
+        "naturalDecay": 0.999,
+        "hostileDecay": 0.900,
+        "foodIntake": 0.001,
+        "food": [
+            { "resource": "metal", "ratio": 1, "limit": 0.1 }],
+        "yield": [
+            { "resource": "ground pollution", "ratio": 1 }],
+        "growthFactor1": [
+            { "constant": 1.01 }],
+        "growthFactor2": [
+            { "attribute": "availableFoodRatio" },
+            { "constant": 0.0 }],
+        "habitatSize1": [],
+        "habitatSize2": [],
+        "habitatSize3": [
+            { "constant": 1000000 }],
+        "habitatSize4": [],
     }
 };

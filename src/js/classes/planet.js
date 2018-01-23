@@ -278,6 +278,10 @@ aos.Planet.prototype = {
                 const populationRules = aos.populations[populationName];
                 const storage = this.storedResources[idx];
 
+                //if (populationName === 'virus') {
+                //    const cccc = 1;
+                //}
+
                 // check environment
                 let environmentOk = true;
                 populationRules.environment.forEach(function (rule, i) {
@@ -285,7 +289,7 @@ aos.Planet.prototype = {
                 }, this);
 
                 // decay
-                storage.quantity -= 20;
+                storage.quantity -= 10;
                 if (environmentOk) {
                     storage.quantity *= populationRules.naturalDecay;
                 } else {
