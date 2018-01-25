@@ -106,6 +106,7 @@ aos.Orchestrator.prototype = {
         bar.name = res.name;
         bar.svgCode = res.svgCode;
         bar.color = res.color;
+        bar.type = res.category;
         bar.index = idx;
         bar.render(isStorage);
         if (isStorage) {

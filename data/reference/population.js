@@ -174,7 +174,9 @@ aos.populations =
         "habitatSize1": [],
         "habitatSize2": [],
         "habitatSize3": [
-            { "constant": 1000000 }],
-        "habitatSize4": [],
+            { "constant": 10000 }],
+        "habitatSize4": [
+            { "attribute": "buildingCount", "buildingName": "Motherboard" },
+            { "constant": 100000 }],
     }
 };

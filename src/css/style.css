@@ -336,6 +336,10 @@ img {
         /* background-color: #088; */
     }
 
+    .resourceBar > .halfWidthIcon {
+        width: 15px;
+    }
+
     .resourceBar > .onTop {
         position: absolute;
     }
@@ -372,6 +376,10 @@ img {
     .resourceBar > .resourceIcon {
         width: calc(((100vh - 144px) / 18) - 2px);
         height: calc(((100vh - 144px) / 18) - 2px);
+    }
+
+    .resourceBar > .halfWidthIcon {
+        width: calc((((100vh - 144px) / 18) - 2px) / 2);
     }
 
     .resourceBar > .resourceOuterBlock {

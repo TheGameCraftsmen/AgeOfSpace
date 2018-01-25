@@ -90,8 +90,11 @@ aos.Resource.prototype = {
 
 
         } else {
-            code += '<div class="resourceIcon">';
-            code += '</div>';
+            code += '<div class="resourceIcon onTop"></div>';
+            code += '<div class="resourceIcon onTop"></div>';
+            code += '<div class="resourceIcon onTop"></div>';
+            code += '<div class="resourceIcon onTop"></div>';
+            code += '<div class="resourceIcon"></div>';
         }
 
         code += '<div class="resourceOuterBlock"><div></div>';
@@ -104,6 +107,25 @@ aos.Resource.prototype = {
         }
         code += '</div>';
 
+        if (withIcon && this.type !== 'population' && this.type !== 'energy') {
+            code += '<div class="resourceIcon halfWidthIcon"></div>';
+            code += '<div class="resourceIcon onTop">';
+            code += '<svg viewBox="0 0 512 512">'
+                + '<path d="M212 128l0 256l128 -128z" fill="#888"></path>'
+                + '</svg>';
+            code += '</div>';
+            code += '<div class="resourceIcon">';
+            code += '<svg viewBox="0 0 512 512">'
+                + '<path d="M256 8C-75 8 -75 504 256 504" fill="#000" stroke="#444" stroke-width="16"></path>'
+                + '<path d="M256 8C587 8 587 504 256 504" fill="#000" stroke="#444" stroke-width="16"></path>'
+                + '</svg>';
+            code += '</div>';
+        } else {
+            code += '<div class="resourceIcon halfWidthIcon"></div>';
+            code += '<div class="resourceIcon onTop"></div>';
+            code += '<div class="resourceIcon"></div>';
+        }
+
         code += '</div>';
         this.htmlElement.innerHTML = code;
     },
@@ -115,11 +137,11 @@ aos.Resource.prototype = {
         //    this.htmlElement.style.display = 'block';
         //}
         const percent = 100.0 * (Math.log(this.quantity + 1200.0) - 7) / 13.0;
-        this.htmlElement.firstChild.lastChild.firstChild.style.width = '' + percent + '%';
+        this.htmlElement.firstChild.childNodes[5].firstChild.style.width = '' + percent + '%';
         if (this.quantity === 0) {
-            this.htmlElement.firstChild.lastChild.firstChild.style.width = '0';
+            this.htmlElement.firstChild.childNodes[5].firstChild.style.width = '0';
         }
-        [].forEach.call(this.htmlElement.firstChild.lastChild.childNodes, function (arrow, i) {
+        [].forEach.call(this.htmlElement.firstChild.childNodes[5].childNodes, function (arrow, i) {
             if (i !== 0) {
                 arrow.style.display = 'none';
             }
