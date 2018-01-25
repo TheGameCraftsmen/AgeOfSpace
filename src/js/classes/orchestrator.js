@@ -133,6 +133,17 @@ aos.Orchestrator.prototype = {
                     }
                 }
             }.bind(this), false);
+            elem.firstChild.childNodes[7].addEventListener('click', function (e) {
+                e.preventDefault();
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
+                    if (this.selectedStar.selectedPlanet.storedResources[bar.index].quantity > 0) {
+                        const transferAmount = Math.min(10000, this.selectedStar.selectedPlanet.storedResources[bar.index].quantity);
+                        this.selectedStar.selectedPlanet.storedResources[bar.index].quantity -= transferAmount;
+                        this.selectedStar.selectedPlanet.resources[bar.index].quantity += transferAmount;
+                        this.emitEvent('requestUiSlowRefresh', {});
+                    }
+                }
+            }.bind(this), false);
         } else {
             this.shipResourceBars.push(bar);
         }
