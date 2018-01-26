@@ -292,7 +292,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "fresh water",
+                    "name": "Fresh water",
                     "quantity": 900,
                     "to": "storage"
                 },
@@ -309,7 +309,7 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "salt water",
+                    "name": "Salt water",
                     "quantity": 1000,
                     "planetResource": true
                 }
@@ -371,7 +371,7 @@ aos.buildingTemplates = {
             ],
             "require": [
                 {
-                    "name": "fresh water",
+                    "name": "Fresh water",
                     "quantity": 1000,
                     "planetResource": true
                 },

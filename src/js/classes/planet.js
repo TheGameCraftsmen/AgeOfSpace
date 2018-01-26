@@ -142,9 +142,9 @@ aos.Planet.prototype = {
         this.addResource('inert gases', 'planet', 790000);
         this.addResource('oxocarbon', 'planet', 400);
         this.addResource('acid cloud', 'planet', 0);
-        this.addResource('salt water', 'planet', 9750000);
-        this.addResource('fresh water', 'planet', 250000);
-        this.addResource('toxic waste', 'planet', 0);
+        this.addResource('Salt water', 'planet', 9750000);
+        this.addResource('Fresh water', 'planet', 250000);
+        this.addResource('Toxic waste', 'planet', 0);
         this.addResource('mineral', 'planet', 9700000);
         this.addResource('metal', 'planet', 200000);
         this.addResource('fissile material', 'planet', 10000);
@@ -369,7 +369,7 @@ aos.Planet.prototype = {
         } else if (typeof rule.group !== 'undefined') {
             if (rule.group === 'water') {
                 checkedValueCategory = 'liquid';
-                checkedValueQuantity = this.resources[aos.resourcesIndex['fresh water']].quantity + this.resources[aos.resourcesIndex['salt water']].quantity;
+                checkedValueQuantity = this.resources[aos.resourcesIndex['Fresh water']].quantity + this.resources[aos.resourcesIndex['Salt water']].quantity;
             }
         }
         if (typeof rule.minQuantity !== 'undefined' && checkedValueQuantity < rule.minQuantity) {
@@ -535,8 +535,8 @@ aos.Planet.prototype = {
             return this.getAttribute(factor);
         } else if (typeof factor.group !== 'undefined') {
             if (factor.group === 'water') {
-                return this.resources[aos.resourcesIndex['fresh water']].quantity
-                    + this.resources[aos.resourcesIndex['salt water']].quantity;
+                return this.resources[aos.resourcesIndex['Fresh water']].quantity
+                    + this.resources[aos.resourcesIndex['Salt water']].quantity;
             } else {
                 throw 'unexpected group factor in aos.populations';
             }

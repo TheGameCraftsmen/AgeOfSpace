@@ -205,6 +205,14 @@ img {
         border: 1px solid #444;
     }
 
+    #contextualTxt .resourceLink {
+        display: inline-block;
+        background-color: hsl(282, 50%, 15%);
+        border-radius: 2px;
+        padding: 2px;
+        border: 1px solid #444;
+    }
+
 #galaxyBlock, #starSystemBlock, #shipBlock {
     position: relative;
     overflow-y: auto;

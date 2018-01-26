@@ -6,13 +6,13 @@ aos.populations =
         "spontaneousBirth": true,
         "environment": [
             { "group": "water", "minQuantity": 10000 },
-            { "resource": "toxic waste", "maxPercent": 0.1 }],
+            { "resource": "Toxic waste", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
         "hostileDecay": 0.900,
         "foodIntake": 0.001,
         "food": [
             { "resource": "oxocarbon", "ratio": 0.99, "limit": 0.9 },
-            { "resource": "toxic waste", "ratio": 0.01, "limit": 0.1 }],
+            { "resource": "Toxic waste", "ratio": 0.01, "limit": 0.1 }],
         "yield": [
             { "resource": "oxygen", "ratio": 1 }],
         "growthFactor1": [
@@ -37,7 +37,7 @@ aos.populations =
             { "group": "water", "minQuantity": 10000 },
             { "resource": "oxygen", "minQuantity": 1000 },
             { "resource": "mineral", "minPercent": 0.5 },
-            { "resource": "toxic waste", "maxPercent": 0.1 },
+            { "resource": "Toxic waste", "maxPercent": 0.1 },
             { "resource": "acid cloud", "maxPercent": 0.1 },
             { "resource": "ground pollution", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
@@ -45,7 +45,7 @@ aos.populations =
         "foodIntake": 0.001,
         "food": [
             { "resource": "oxocarbon", "ratio": 0.99, "limit": 0.9 },
-            { "resource": "toxic waste", "ratio": 0.01, "limit": 0.1 }],
+            { "resource": "Toxic waste", "ratio": 0.01, "limit": 0.1 }],
         "yield": [
             { "resource": "oxygen", "ratio": 1 }],
         "growthFactor1": [
@@ -71,7 +71,7 @@ aos.populations =
         "environment": [
             { "group": "water", "minQuantity": 10000 },
             { "resource": "oxygen", "minQuantity": 1000 },
-            { "resource": "toxic waste", "maxPercent": 0.1 },
+            { "resource": "Toxic waste", "maxPercent": 0.1 },
             { "resource": "acid cloud", "maxPercent": 0.1 },
             { "resource": "ground pollution", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
@@ -104,7 +104,7 @@ aos.populations =
         "environment": [
             { "group": "water", "minQuantity": 10000 },
             { "resource": "oxygen", "minQuantity": 20000 },
-            { "resource": "toxic waste", "maxPercent": 0.1 },
+            { "resource": "Toxic waste", "maxPercent": 0.1 },
             { "resource": "acid cloud", "maxPercent": 0.1 },
             { "resource": "ground pollution", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
@@ -138,7 +138,7 @@ aos.populations =
         "foodIntake": 0.001,
         "food": [
             { "resource": "acid cloud", "ratio": 0.40, "limit": 0.1 },
-            { "resource": "toxic waste", "ratio": 0.30, "limit": 0.1 },
+            { "resource": "Toxic waste", "ratio": 0.30, "limit": 0.1 },
             { "resource": "ground pollution", "ratio": 0.30, "limit": 0.1 }],
         "yield": [
             { "resource": "acid cloud", "ratio": 1 }],
