@@ -22,6 +22,8 @@ aos.Resource = function () {
     this.type = '';
     /** @type {String} */
     this.name = '';
+    /** @type {String} */
+    this.contextualTip = '';
     /** @type {number} */
     this.quantity = 0;
     /** @type {number} */
@@ -90,10 +92,10 @@ aos.Resource.prototype = {
 
 
         } else {
-            code += '<div class="resourceIcon onTop"></div>';
-            code += '<div class="resourceIcon onTop"></div>';
-            code += '<div class="resourceIcon onTop"></div>';
-            code += '<div class="resourceIcon onTop"></div>';
+            code += '<div class=""></div>';
+            code += '<div class=""></div>';
+            code += '<div class=""></div>';
+            code += '<div class=""></div>';
             code += '<div class="resourceIcon"></div>';
         }
 
@@ -121,9 +123,9 @@ aos.Resource.prototype = {
                 + '</svg>';
             code += '</div>';
         } else {
-            code += '<div class="resourceIcon halfWidthIcon"></div>';
-            code += '<div class="resourceIcon onTop"></div>';
-            code += '<div class="resourceIcon"></div>';
+            code += '<div class=""></div>';
+            code += '<div class=""></div>';
+            code += '<div class=""></div>';
         }
 
         code += '</div>';
@@ -158,16 +160,33 @@ aos.Resource.prototype = {
 
     renderContextual: function () {
         if (this.wantContextual) {
-            document.getElementById('contextualTitle').innerHTML = '' + this.name + '<br><em>Resource</em>';
-            document.getElementById('contextualTxt').innerHTML = '';
+            document.getElementById('contextualTitle').innerHTML =
+                ''
+                + this.name
+                + '<br><em>'
+                    + (this.type === 'population' ? 'Population' : ('Resource (' + this.type + ')'))
+                + '</em>';
+            let newContextualTxt = '';            
             if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null) {
-                document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'Storage quantity' + '</dt><dd>' + Math.floor(aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity) + '</dd></dl>';
+                newContextualTxt +=
+                    '<dl><dt>'
+                    + (this.type === 'population' ? 'On planet' : 'In storage')
+                    + '</dt><dd>'
+                    + Math.floor(aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity)
+                    + '</dd></dl>';
             }
             if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null && aos.game.selectedStar.hasShip) {
-                document.getElementById('contextualTxt').innerHTML +=
-                    '<dl><dt>' + 'Ship quantity' + '</dt><dd>' + Math.floor(aos.game.selectedStar.ship.storedResources[this.index].quantity) + '</dd></dl>';
+                newContextualTxt +=
+                    '<dl><dt>'
+                    + (this.type === 'population' ? 'On ship' : 'On ship')
+                    + '</dt><dd>'
+                    + Math.floor(aos.game.selectedStar.ship.storedResources[this.index].quantity)
+                    + '</dd></dl>';
             }
+            newContextualTxt +=
+                '<br/><br/><br/>'
+                + this.contextualTip;
+            document.getElementById('contextualTxt').innerHTML = newContextualTxt;
         } else {
         }
 

@@ -107,6 +107,7 @@ aos.Orchestrator.prototype = {
         bar.svgCode = res.svgCode;
         bar.color = res.color;
         bar.type = res.category;
+        bar.contextualTip = res.contextualTip;
         bar.index = idx;
         bar.render(isStorage);
         if (isStorage) {
