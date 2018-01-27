@@ -167,20 +167,28 @@ aos.Resource.prototype = {
                     + (this.type === 'population' ? 'Population' : ('Resource (' + this.type + ')'))
                 + '</em>';
             let newContextualTxt = '';            
+            if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null && aos.game.selectedStar.hasShip) {
+                newContextualTxt +=
+                    '<dl><dt>'
+                    + (this.type === 'population' ? 'Count (ship)' : 'On ship')
+                    + '</dt><dd>'
+                    + Math.floor(aos.game.selectedStar.ship.storedResources[this.index].quantity)
+                    + '</dd></dl>';
+            }
             if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null) {
                 newContextualTxt +=
                     '<dl><dt>'
-                    + (this.type === 'population' ? 'On planet' : 'In storage')
+                    + (this.type === 'population' ? 'Count (planet)' : 'In storage')
                     + '</dt><dd>'
                     + Math.floor(aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity)
                     + '</dd></dl>';
             }
-            if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null && aos.game.selectedStar.hasShip) {
+            if (aos.game.selectedStar !== null && aos.game.selectedStar.selectedPlanet !== null && this.type !== 'population') {
                 newContextualTxt +=
                     '<dl><dt>'
-                    + (this.type === 'population' ? 'On ship' : 'On ship')
+                    + 'On planet'
                     + '</dt><dd>'
-                    + Math.floor(aos.game.selectedStar.ship.storedResources[this.index].quantity)
+                    + Math.floor(aos.game.selectedStar.selectedPlanet.resources[this.index].quantity)
                     + '</dd></dl>';
             }
             newContextualTxt +=
