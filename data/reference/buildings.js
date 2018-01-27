@@ -115,7 +115,7 @@ aos.buildingTemplates = {
                     "to": "storage"
                 },
                 {
-                    "name": "oxocarbon",
+                    "name": "Oxocarbon",
                     "quantity": 100,
                     "to": "planet"
                 }
@@ -153,7 +153,7 @@ aos.buildingTemplates = {
                     "to": "storage"
                 },
                 {
-                    "name": "oxocarbon",
+                    "name": "Oxocarbon",
                     "quantity": 100,
                     "to": "planet"
                 }
@@ -191,7 +191,7 @@ aos.buildingTemplates = {
                     "to": "storage"
                 },
                 {
-                    "name": "oxocarbon",
+                    "name": "Oxocarbon",
                     "quantity": 100,
                     "to": "planet"
                 }
@@ -397,7 +397,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "oxygen",
+                    "name": "Oxygen",
                     "quantity": 300,
                     "to": "planet"
                 }
@@ -409,7 +409,7 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "oxocarbon",
+                    "name": "Oxocarbon",
                     "quantity": 50,
                     "planetResource": true
                 }
@@ -435,7 +435,7 @@ aos.buildingTemplates = {
                     "to": "planet"
                 },
                 {
-                    "name": "oxocarbon",
+                    "name": "Oxocarbon",
                     "quantity": 500,
                     "to": "planet"
                 }
@@ -475,7 +475,7 @@ aos.buildingTemplates = {
                     "to": "planet"
                 },
                 {
-                    "name": "oxocarbon",
+                    "name": "Oxocarbon",
                     "quantity": 500,
                     "to": "planet"
                 }

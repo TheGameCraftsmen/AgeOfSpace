@@ -53,7 +53,7 @@ aos.Planet.prototype = {
      *         -- to pass argument resource as a string, type & quantity are mandatory in this case
      *
      * Argument to if passed define which store is concerned by the resource :
-     *         -- "planet" : to add resource to planet (water, oxygen, ...)
+     *         -- "planet" : to add resource to planet (water, Oxygen, ...)
      *         -- "storage"  : to add resource to stored resource by the player (metal, food, ...)
      */
     addResource: function (resource, to, quantity) {
@@ -138,9 +138,9 @@ aos.Planet.prototype = {
             this.addResource(resource.name, 'planet', 0);
         }, this);
 
-        this.addResource('oxygen', 'planet', 210000);
+        this.addResource('Oxygen', 'planet', 210000);
         this.addResource('inert gases', 'planet', 790000);
-        this.addResource('oxocarbon', 'planet', 400);
+        this.addResource('Oxocarbon', 'planet', 400);
         this.addResource('acid cloud', 'planet', 0);
         this.addResource('Salt water', 'planet', 9750000);
         this.addResource('Fresh water', 'planet', 250000);
@@ -484,10 +484,11 @@ aos.Planet.prototype = {
                         this.removeResource(cost.name, cost.quantity, false, false);
                     }, this);
                     if (building.type === 'ship') {
-                        aos.game.selectedStar.hasShip = true;
-                        aos.game.selectedStar.ship = new aos.Ship();
-                        aos.game.selectedStar.ship.init();
-                        aos.game.selectedStar.ship.storedResources[7].quantity = 2000; // oxygen
+                        if (!aos.game.selectedStar.hasShip) {
+                            aos.game.selectedStar.hasShip = true;
+                            aos.game.selectedStar.ship = new aos.Ship();
+                            aos.game.selectedStar.ship.init();
+                        }
                     } else {
                         tile.buildingTemplate = templateName;
                     }
