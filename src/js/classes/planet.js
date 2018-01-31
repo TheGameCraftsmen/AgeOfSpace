@@ -53,7 +53,7 @@ aos.Planet.prototype = {
      *         -- to pass argument resource as a string, type & quantity are mandatory in this case
      *
      * Argument to if passed define which store is concerned by the resource :
-     *         -- "planet" : to add resource to planet (water, Oxygen, ...)
+     *         -- "planet" : to add resource to planet (Water, Oxygen, ...)
      *         -- "storage"  : to add resource to stored resource by the player (metal, food, ...)
      */
     addResource: function (resource, to, quantity) {
@@ -141,17 +141,17 @@ aos.Planet.prototype = {
         this.addResource('Oxygen', 'planet', 210000);
         this.addResource('inert gases', 'planet', 790000);
         this.addResource('Oxocarbon', 'planet', 400);
-        this.addResource('acid cloud', 'planet', 0);
+        this.addResource('Acid cloud', 'planet', 0);
         this.addResource('Salt water', 'planet', 9750000);
         this.addResource('Fresh water', 'planet', 250000);
         this.addResource('Toxic waste', 'planet', 0);
-        this.addResource('mineral', 'planet', 9700000);
+        this.addResource('Mineral', 'planet', 9700000);
         this.addResource('metal', 'planet', 200000);
         this.addResource('fissile material', 'planet', 10000);
-        this.addResource('ground pollution', 'planet', 1000);
+        this.addResource('Ground pollution', 'planet', 1000);
 
-        this.addResource('bacteria', 'storage', 1000);
-        this.addResource('flora', 'storage', 1000);
+        this.addResource('Bacteria', 'storage', 1000);
+        this.addResource('Plants', 'storage', 1000);
         this.addResource('fauna', 'storage', 1000);
         this.addResource('humans', 'storage', 1000);
         this.addResource('virus', 'storage', 1000);
@@ -367,7 +367,7 @@ aos.Planet.prototype = {
             checkedValueCategory = checkedValue.type;
             checkedValueQuantity = checkedValue.quantity;
         } else if (typeof rule.group !== 'undefined') {
-            if (rule.group === 'water') {
+            if (rule.group === 'Water') {
                 checkedValueCategory = 'liquid';
                 checkedValueQuantity = this.resources[aos.resourcesIndex['Fresh water']].quantity + this.resources[aos.resourcesIndex['Salt water']].quantity;
             }
@@ -535,7 +535,7 @@ aos.Planet.prototype = {
         } else if (typeof (factor.attribute) !== 'undefined') {
             return this.getAttribute(factor);
         } else if (typeof factor.group !== 'undefined') {
-            if (factor.group === 'water') {
+            if (factor.group === 'Water') {
                 return this.resources[aos.resourcesIndex['Fresh water']].quantity
                     + this.resources[aos.resourcesIndex['Salt water']].quantity;
             } else {

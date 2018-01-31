@@ -2,10 +2,10 @@ var aos = aos || {};
 
 aos.populations =
 {
-    "bacteria": {
+    "Bacteria": {
         "spontaneousBirth": true,
         "environment": [
-            { "group": "water", "minQuantity": 10000 },
+            { "group": "Water", "minQuantity": 10000 },
             { "resource": "Toxic waste", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
         "hostileDecay": 0.900,
@@ -21,7 +21,7 @@ aos.populations =
             { "attribute": "irradiance" },
             { "constant": 0.001 }],
         "habitatSize1": [
-            { "group": "water" },
+            { "group": "Water" },
             { "constant": 0.01 }],
         "habitatSize2": [
             { "attribute": "emptyOceanTilesCount" },
@@ -31,15 +31,15 @@ aos.populations =
             { "constant": 100000 }],
         "habitatSize4": [],
     },
-    "flora": {
+    "Plants": {
         "spontaneousBirth": false,
         "environment": [
-            { "group": "water", "minQuantity": 10000 },
+            { "group": "Water", "minQuantity": 10000 },
             { "resource": "Oxygen", "minQuantity": 1000 },
-            { "resource": "mineral", "minPercent": 0.5 },
+            { "resource": "Mineral", "minPercent": 0.5 },
             { "resource": "Toxic waste", "maxPercent": 0.1 },
-            { "resource": "acid cloud", "maxPercent": 0.1 },
-            { "resource": "ground pollution", "maxPercent": 0.1 }],
+            { "resource": "Acid cloud", "maxPercent": 0.1 },
+            { "resource": "Ground pollution", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
         "hostileDecay": 0.900,
         "foodIntake": 0.001,
@@ -54,10 +54,10 @@ aos.populations =
             { "attribute": "irradiance" },
             { "constant": 0.001 }],
         "habitatSize1": [
-            { "group": "water" },
+            { "group": "Water" },
             { "constant": 0.005 }],
         "habitatSize2": [
-            { "resource": "mineral" },
+            { "resource": "Mineral" },
             { "constant": 0.005 }],
         "habitatSize3": [
             { "attribute": "emptyTilesCount" },
@@ -69,16 +69,16 @@ aos.populations =
     "fauna": {
         "spontaneousBirth": false,
         "environment": [
-            { "group": "water", "minQuantity": 10000 },
+            { "group": "Water", "minQuantity": 10000 },
             { "resource": "Oxygen", "minQuantity": 1000 },
             { "resource": "Toxic waste", "maxPercent": 0.1 },
-            { "resource": "acid cloud", "maxPercent": 0.1 },
-            { "resource": "ground pollution", "maxPercent": 0.1 }],
+            { "resource": "Acid cloud", "maxPercent": 0.1 },
+            { "resource": "Ground pollution", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
         "hostileDecay": 0.900,
         "foodIntake": 0.001,
         "food": [
-            { "population": "flora", "ratio": 0.45, "limit": 0.1 },
+            { "population": "Plants", "ratio": 0.45, "limit": 0.1 },
             { "population": "fauna", "ratio": 0.05, "limit": 0.1 },
             { "resource": "Oxygen", "ratio": 0.50, "limit": 0.1 }],
         "yield": [
@@ -89,7 +89,7 @@ aos.populations =
             { "attribute": "availableFoodRatio" },
             { "constant": 0.04 }],
         "habitatSize1": [
-            { "group": "water" },
+            { "group": "Water" },
             { "constant": 0.005 }],
         "habitatSize2": [],
         "habitatSize3": [
@@ -102,16 +102,16 @@ aos.populations =
     "humans": {
         "spontaneousBirth": false,
         "environment": [
-            { "group": "water", "minQuantity": 10000 },
+            { "group": "Water", "minQuantity": 10000 },
             { "resource": "Oxygen", "minQuantity": 20000 },
             { "resource": "Toxic waste", "maxPercent": 0.1 },
-            { "resource": "acid cloud", "maxPercent": 0.1 },
-            { "resource": "ground pollution", "maxPercent": 0.1 }],
+            { "resource": "Acid cloud", "maxPercent": 0.1 },
+            { "resource": "Ground pollution", "maxPercent": 0.1 }],
         "naturalDecay": 0.999,
         "hostileDecay": 0.900,
         "foodIntake": 0.001,
         "food": [
-            { "population": "flora", "ratio": 0.30, "limit": 0.1 },
+            { "population": "Plants", "ratio": 0.30, "limit": 0.1 },
             { "population": "fauna", "ratio": 0.20, "limit": 0.1 },
             { "resource": "Oxygen", "ratio": 0.50, "limit": 0.1 }],
         "yield": [
@@ -137,11 +137,11 @@ aos.populations =
         "hostileDecay": 0.900,
         "foodIntake": 0.001,
         "food": [
-            { "resource": "acid cloud", "ratio": 0.40, "limit": 0.1 },
+            { "resource": "Acid cloud", "ratio": 0.40, "limit": 0.1 },
             { "resource": "Toxic waste", "ratio": 0.30, "limit": 0.1 },
-            { "resource": "ground pollution", "ratio": 0.30, "limit": 0.1 }],
+            { "resource": "Ground pollution", "ratio": 0.30, "limit": 0.1 }],
         "yield": [
-            { "resource": "acid cloud", "ratio": 1 }],
+            { "resource": "Acid cloud", "ratio": 1 }],
         "growthFactor1": [
             { "constant": 1 }],
         "growthFactor2": [
@@ -165,7 +165,7 @@ aos.populations =
         "food": [
             { "resource": "metal", "ratio": 1, "limit": 0.1 }],
         "yield": [
-            { "resource": "ground pollution", "ratio": 1 }],
+            { "resource": "Ground pollution", "ratio": 1 }],
         "growthFactor1": [
             { "constant": 1.01 }],
         "growthFactor2": [

@@ -61,7 +61,7 @@ aos.buildingTemplates = {
                     "to": "planet"
                 },
                 {
-                    "name": "ground pollution",
+                    "name": "Ground pollution",
                     "quantity": 50,
                     "to": "planet"
                 }
@@ -110,7 +110,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "mineral",
+                    "name": "Mineral",
                     "quantity": 1000,
                     "to": "storage"
                 },
@@ -127,7 +127,7 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "mineral",
+                    "name": "Mineral",
                     "quantity": 1000,
                     "planetResource": true
                 }
@@ -225,7 +225,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "water",
+                    "name": "Water",
                     "quantity": 1000,
                     "to": "storage"
                 }
@@ -237,7 +237,7 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "water",
+                    "name": "Water",
                     "quantity": 1000,
                     "planetResource": true
                 }
@@ -297,7 +297,7 @@ aos.buildingTemplates = {
                     "to": "storage"
                 },
                 {
-                    "name": "mineral",
+                    "name": "Mineral",
                     "quantity": 100,
                     "to": "storage"
                 }
@@ -364,7 +364,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "bacteria",
+                    "name": "Bacteria",
                     "quantity": 1000,
                     "to": "storage"
                 }
@@ -376,7 +376,7 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "mineral",
+                    "name": "Mineral",
                     "quantity": 1000,
                     "planetResource": true
                 }
