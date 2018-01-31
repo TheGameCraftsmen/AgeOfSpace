@@ -468,9 +468,9 @@ aos.Planet.prototype = {
     },
 
     onBuildingButtonClicked: function (templateName) {
-        if (this.renderModel.selectedTile !== -1) {
-            const tile = this.tiles[this.renderModel.selectedTile];
-            const building = aos.buildingTemplates[templateName];
+        const building = aos.buildingTemplates[templateName];
+        const tile = (this.renderModel.selectedTile === -1 ? {isLand : true} : this.tiles[this.renderModel.selectedTile]);
+        if (building.type === 'ship' || this.renderModel.selectedTile !== -1) {
             if ((tile.isLand && building.buildOnLand) || (!tile.isLand && building.buildOnWater)) {
                 let constructOk = true;
                 building.constructionCost.forEach(function (cost, i) {

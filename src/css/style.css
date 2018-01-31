@@ -402,7 +402,18 @@ img {
         }
 
 /* Populations */
-#res1Storage > .resourceBar > div > div:first-child, #res2Storage > .resourceBar > div > div:first-child, #res3Storage > .resourceBar > div > div:first-child, #res4Storage > .resourceBar > div > div:first-child, #res5Storage > .resourceBar > div > div:first-child, #res6Storage > .resourceBar > div > div:first-child {
+#res1Storage > .resourceBar > div > div:first-child,
+#res2Storage > .resourceBar > div > div:first-child,
+#res3Storage > .resourceBar > div > div:first-child,
+#res4Storage > .resourceBar > div > div:first-child,
+#res5Storage > .resourceBar > div > div:first-child,
+#res6Storage > .resourceBar > div > div:first-child,
+#res1Ship > .resourceBar > div > div:first-child,
+#res2Ship > .resourceBar > div > div:first-child,
+#res3Ship > .resourceBar > div > div:first-child,
+#res4Ship > .resourceBar > div > div:first-child,
+#res5Ship > .resourceBar > div > div:first-child,
+#res6Ship > .resourceBar > div > div:first-child {
     background-color: hsl(163, 50%, 15%);
 }
 
