@@ -430,7 +430,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "humans",
+                    "name": "Humans",
                     "quantity": 100,
                     "to": "planet"
                 },
@@ -470,7 +470,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "humans",
+                    "name": "Humans",
                     "quantity": 100,
                     "to": "planet"
                 },

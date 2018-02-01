@@ -152,10 +152,10 @@ aos.Planet.prototype = {
 
         this.addResource('Bacteria', 'storage', 1000);
         this.addResource('Plants', 'storage', 1000);
-        this.addResource('fauna', 'storage', 1000);
-        this.addResource('humans', 'storage', 1000);
-        this.addResource('virus', 'storage', 1000);
-        this.addResource('machines', 'storage', 1000);
+        this.addResource('Animals', 'storage', 1000);
+        this.addResource('Humans', 'storage', 1000);
+        this.addResource('Machines', 'storage', 1000);
+        this.addResource('Virus', 'storage', 1000);
 
     },
 

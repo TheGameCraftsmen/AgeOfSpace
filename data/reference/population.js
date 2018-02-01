@@ -66,7 +66,7 @@ aos.populations =
             { "attribute": "buildingCount", "buildingName": "Greenhouse" },
             { "constant": 25000 }],
     },
-    "fauna": {
+    "Animals": {
         "spontaneousBirth": false,
         "environment": [
             { "group": "Water", "minQuantity": 10000 },
@@ -79,7 +79,7 @@ aos.populations =
         "foodIntake": 0.001,
         "food": [
             { "population": "Plants", "ratio": 0.45, "limit": 0.1 },
-            { "population": "fauna", "ratio": 0.05, "limit": 0.1 },
+            { "population": "Animals", "ratio": 0.05, "limit": 0.1 },
             { "resource": "Oxygen", "ratio": 0.50, "limit": 0.1 }],
         "yield": [
             { "resource": "Oxocarbon", "ratio": 1 }],
@@ -99,7 +99,7 @@ aos.populations =
             { "attribute": "buildingCount", "buildingName": "Greenhouse" },
             { "constant": 25000 }],
     },
-    "humans": {
+    "Humans": {
         "spontaneousBirth": false,
         "environment": [
             { "group": "Water", "minQuantity": 10000 },
@@ -112,7 +112,7 @@ aos.populations =
         "foodIntake": 0.001,
         "food": [
             { "population": "Plants", "ratio": 0.30, "limit": 0.1 },
-            { "population": "fauna", "ratio": 0.20, "limit": 0.1 },
+            { "population": "Animals", "ratio": 0.20, "limit": 0.1 },
             { "resource": "Oxygen", "ratio": 0.50, "limit": 0.1 }],
         "yield": [
             { "resource": "Oxocarbon", "ratio": 1 }],
@@ -130,7 +130,7 @@ aos.populations =
             { "attribute": "buildingCount", "buildingName": "Geodesic Dome" },
             { "constant": 100000 }],
     },
-    "virus": {
+    "Virus": {
         "spontaneousBirth": true,
         "environment": [],
         "naturalDecay": 0.999,
@@ -155,7 +155,7 @@ aos.populations =
             { "constant": -100000 }],
         "habitatSize4": [],
     },
-    "machines": {
+    "Machines": {
         "spontaneousBirth": false,
         "environment": [
             { "resource": "metal", "minQuantity": 20000 }],
