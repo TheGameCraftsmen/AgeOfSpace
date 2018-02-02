@@ -213,6 +213,12 @@ img {
         border: 1px solid #444;
     }
 
+    #contextualTxt .tooltipSendTo {
+        font-style: italic;
+        font-weight: bold;
+        color: #aaa;
+    }
+
 #galaxyBlock, #starSystemBlock, #shipBlock {
     position: relative;
     overflow-y: auto;

@@ -32,6 +32,9 @@ aos.Resource = function () {
     this.htmlElement = null;
     this.index = 0;
     this.wantContextual = false;
+    this.flagToShip = false;
+    this.flagToStorage = false;
+    this.flagToPlanet = false;
 };
 
 aos.Resource.prototype = {
@@ -158,6 +161,13 @@ aos.Resource.prototype = {
         this.renderContextual();
     },
 
+    setTooltipFlag: function (toShip, toStorage, toPlanet, transferAmount) {
+        this.flagToShip = toShip;
+        this.flagToStorage = toStorage;
+        this.flagToPlanet = toPlanet;
+        this.renderContextual();
+    },
+
     renderContextual: function () {
         if (this.wantContextual) {
             document.getElementById('contextualTitle').innerHTML =
@@ -191,9 +201,17 @@ aos.Resource.prototype = {
                     + Math.floor(aos.game.selectedStar.selectedPlanet.resources[this.index].quantity)
                     + '</dd></dl>';
             }
-            newContextualTxt +=
-                '<br/><br/><br/>'
-                + this.contextualTip;
+            if (this.flagToShip) {
+                newContextualTxt += '<br/><br/><br/><span class=\'tooltipSendTo\'>Click to send from storage to ship.</span>';
+            } else if (this.flagToStorage) {
+                newContextualTxt += '<br/><br/><br/><span class=\'tooltipSendTo\'>Click to send from ship to storage.</span>';
+            } else if (this.flagToPlanet) {
+                newContextualTxt += '<br/><br/><br/><span class=\'tooltipSendTo\'>Click to send from storage to planet.</span>';
+            } else {
+                newContextualTxt +=
+                    '<br/><br/><br/>'
+                    + this.contextualTip;
+            }
             document.getElementById('contextualTxt').innerHTML = newContextualTxt;
         } else {
         }

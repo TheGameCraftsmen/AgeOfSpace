@@ -123,6 +123,17 @@ aos.Orchestrator.prototype = {
                     }
                 }
             }.bind(this), false);
+            elem.firstChild.childNodes[0].addEventListener('mouseover', function (e) {
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null && this.selectedStar.hasShip) {
+                    if (this.selectedStar.selectedPlanet.storedResources[bar.index].quantity > 0) {
+                        bar.setTooltipFlag(true, false, false);
+                    }
+                }
+            }.bind(this), false);
+            elem.firstChild.childNodes[0].addEventListener('mouseout', function (e) {
+                bar.setTooltipFlag(false, false, false);
+            }.bind(this), false);
+
             elem.firstChild.childNodes[3].addEventListener('click', function (e) {
                 e.preventDefault();
                 if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null && this.selectedStar.hasShip) {
@@ -134,6 +145,17 @@ aos.Orchestrator.prototype = {
                     }
                 }
             }.bind(this), false);
+            elem.firstChild.childNodes[3].addEventListener('mouseover', function (e) {
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null && this.selectedStar.hasShip) {
+                    if (this.selectedStar.ship.storedResources[bar.index].quantity > 0) {
+                        bar.setTooltipFlag(false, true, false);
+                    }
+                }
+            }.bind(this), false);
+            elem.firstChild.childNodes[3].addEventListener('mouseout', function (e) {
+                bar.setTooltipFlag(false, false, false);
+            }.bind(this), false);
+
             elem.firstChild.childNodes[7].addEventListener('click', function (e) {
                 e.preventDefault();
                 if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
@@ -144,6 +166,16 @@ aos.Orchestrator.prototype = {
                         this.emitEvent('requestUiSlowRefresh', {});
                     }
                 }
+            }.bind(this), false);
+            elem.firstChild.childNodes[7].addEventListener('mouseover', function (e) {
+                if (this.selectedStar !== null && this.selectedStar.selectedPlanet !== null) {
+                    if (this.selectedStar.selectedPlanet.storedResources[bar.index].quantity > 0) {
+                        bar.setTooltipFlag(false, false, true);
+                    }
+                }
+            }.bind(this), false);
+            elem.firstChild.childNodes[7].addEventListener('mouseout', function (e) {
+                bar.setTooltipFlag(false, false, false);
             }.bind(this), false);
         } else {
             this.shipResourceBars.push(bar);
