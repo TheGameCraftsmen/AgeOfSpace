@@ -130,7 +130,31 @@ aos.populations =
             { "attribute": "buildingCount", "buildingName": "Geodesic Dome" },
             { "constant": 100000 }],
     },
-    "Virus": {
+    "Machines": {
+        "spontaneousBirth": false,
+        "environment": [
+            { "resource": "Metal", "minQuantity": 20000 }],
+        "naturalDecay": 0.999,
+        "hostileDecay": 0.900,
+        "foodIntake": 0.001,
+        "food": [
+            { "resource": "Metal", "ratio": 1, "limit": 0.1 }],
+        "yield": [
+            { "resource": "Ground pollution", "ratio": 1 }],
+        "growthFactor1": [
+            { "constant": 1.01 }],
+        "growthFactor2": [
+            { "attribute": "availableFoodRatio" },
+            { "constant": 0.0 }],
+        "habitatSize1": [],
+        "habitatSize2": [],
+        "habitatSize3": [
+            { "constant": 10000 }],
+        "habitatSize4": [
+            { "attribute": "buildingCount", "buildingName": "Motherboard" },
+            { "constant": 100000 }],
+    },
+    "Viruses": {
         "spontaneousBirth": true,
         "environment": [],
         "naturalDecay": 0.999,
@@ -150,33 +174,7 @@ aos.populations =
         "habitatSize1": [
             { "constant": 300000 }],
         "habitatSize2": [],
-        "habitatSize3": [
-            { "attribute": "buildingCount", "buildingName": "Incubator" },
-            { "constant": -100000 }],
+        "habitatSize3": [],
         "habitatSize4": [],
-    },
-    "Machines": {
-        "spontaneousBirth": false,
-        "environment": [
-            { "resource": "metal", "minQuantity": 20000 }],
-        "naturalDecay": 0.999,
-        "hostileDecay": 0.900,
-        "foodIntake": 0.001,
-        "food": [
-            { "resource": "metal", "ratio": 1, "limit": 0.1 }],
-        "yield": [
-            { "resource": "Ground pollution", "ratio": 1 }],
-        "growthFactor1": [
-            { "constant": 1.01 }],
-        "growthFactor2": [
-            { "attribute": "availableFoodRatio" },
-            { "constant": 0.0 }],
-        "habitatSize1": [],
-        "habitatSize2": [],
-        "habitatSize3": [
-            { "constant": 10000 }],
-        "habitatSize4": [
-            { "attribute": "buildingCount", "buildingName": "Motherboard" },
-            { "constant": 100000 }],
     }
 };

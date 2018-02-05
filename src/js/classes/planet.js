@@ -54,7 +54,7 @@ aos.Planet.prototype = {
      *
      * Argument to if passed define which store is concerned by the resource :
      *         -- "planet" : to add resource to planet (Water, Oxygen, ...)
-     *         -- "storage"  : to add resource to stored resource by the player (metal, food, ...)
+     *         -- "storage"  : to add resource to stored resource by the player (Metal, food, ...)
      */
     addResource: function (resource, to, quantity) {
         let res = resource;
@@ -101,7 +101,7 @@ aos.Planet.prototype = {
 
         this.generateEarth();
 
-        this.addResource('metal', 'storage', 20000);
+        this.addResource('Metal', 'storage', 20000); // TODO remove this
         this.renderModel = new aos.Polyhedron();
         this.renderModel.initialize(this.size);
     },
@@ -139,15 +139,15 @@ aos.Planet.prototype = {
         }, this);
 
         this.addResource('Oxygen', 'planet', 210000);
-        this.addResource('inert gases', 'planet', 790000);
+        this.addResource('Inert gases', 'planet', 790000);
         this.addResource('Oxocarbon', 'planet', 400);
         this.addResource('Acid cloud', 'planet', 0);
         this.addResource('Salt water', 'planet', 9750000);
         this.addResource('Fresh water', 'planet', 250000);
         this.addResource('Toxic waste', 'planet', 0);
         this.addResource('Mineral', 'planet', 9700000);
-        this.addResource('metal', 'planet', 200000);
-        this.addResource('fissile material', 'planet', 10000);
+        this.addResource('Metal', 'planet', 200000);
+        this.addResource('Fissile material', 'planet', 10000);
         this.addResource('Ground pollution', 'planet', 1000);
 
         this.addResource('Bacteria', 'storage', 1000);
@@ -155,7 +155,7 @@ aos.Planet.prototype = {
         this.addResource('Animals', 'storage', 1000);
         this.addResource('Humans', 'storage', 1000);
         this.addResource('Machines', 'storage', 1000);
-        this.addResource('Virus', 'storage', 1000);
+        this.addResource('Viruses', 'storage', 1000);
 
     },
 
@@ -278,7 +278,7 @@ aos.Planet.prototype = {
                 const populationRules = aos.populations[populationName];
                 const storage = this.storedResources[idx];
 
-                //if (populationName === 'virus') {
+                //if (populationName === 'Viruses') {
                 //    const cccc = 1;
                 //}
 

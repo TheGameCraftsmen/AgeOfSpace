@@ -7,7 +7,7 @@ aos.ships = [
         "cargoSize": 0,
         "constructionCost": [
             {
-                "name": "metal",
+                "name": "Metal",
                 "quantity": 100
             }
         ]
@@ -22,7 +22,7 @@ aos.ships = [
         "cargoSize": 2,
         "constructionCost": [
             {
-                "name": "metal",
+                "name": "Metal",
                 "quantity": 100
             }
         ]
@@ -34,7 +34,7 @@ aos.ships = [
         "cargoSize": 6,
         "constructionCost": [
             {
-                "name": "metal",
+                "name": "Metal",
                 "quantity": 100
             }
         ]
