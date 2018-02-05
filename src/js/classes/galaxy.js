@@ -619,9 +619,9 @@ aos.Galaxy.prototype = {
             c.loreStarCount = Math.random() * Math.random() * 1000.0;
             c.computeEdges();
             c.kruskal();
-            c.stars.forEach(function (star) {
+            c.stars.forEach(function (star, starIdx) {
                 star.group = Math.random();
-                star.generate();
+                star.generate((starIdx === 0) && (i === 1));
                 this.stars.push(star);
             }, this);
             const sortedStars = c.stars.slice()

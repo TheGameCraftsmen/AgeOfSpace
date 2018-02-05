@@ -87,7 +87,7 @@ aos.Planet.prototype = {
         }
     },
 
-    generate: function () {
+    generate: function (wantSolar, planetId) {
         const rng = Math.random();
         if (rng < 0.25) {
             this.size = 8;
@@ -99,7 +99,11 @@ aos.Planet.prototype = {
             this.size = 60;
         }
 
-        this.generateEarth();
+        if (wantSolar && planetId === 2) {
+            this.generateEarth();
+        } else {
+            this.generateRandom();
+        }
 
         this.addResource('Metal', 'storage', 20000); // TODO remove this
         this.renderModel = new aos.Polyhedron();
@@ -125,6 +129,11 @@ aos.Planet.prototype = {
     generateRandom: function () {
         this.landSize = Math.random();
         this.buildTiles();
+        aos.resources.forEach(function (resource, i) {
+            this.addResource(resource.name, 'storage', 0);
+            this.addResource(resource.name, 'planet', 0);
+        }, this);
+
         this.generateAir();
         this.generateGround();
         this.generateLiquid();
@@ -175,7 +184,7 @@ aos.Planet.prototype = {
                     resource.percent = itAirPrcent;
                     compositionPercent += itAirPrcent;
                 }
-                this.resources.push(resource);
+                this.addResource(resource.name, 'planet', resource.quantity);
             }
         }
     },
@@ -196,7 +205,7 @@ aos.Planet.prototype = {
                     resource.percent = itPrcent;
                     compositionPercent += itPrcent;
                 }
-                this.resources.push(resource);
+                this.addResource(resource.name, 'planet', resource.quantity);
             }
         }
     },
@@ -211,16 +220,14 @@ aos.Planet.prototype = {
                 if (i == (aos.resources.length - 1)) {
                     resource.percent = 100 - compositionPercent;
                     resource.quantity = resource.percent * this.size * aos.volumeResources[resource.type];
-                    this.resources.push(resource);
                 } else {
                     let itPrcent = Math.floor(Math.random() * (100 - compositionPercent))
                     resource.percent = itPrcent;
                     resource.quantity = itPrcent * this.size * aos.volumeResources[resource.type];
-                    this.resources.push(resource);
                     compositionPercent += itPrcent;
                 }
+                this.addResource(resource.name, 'planet', resource.quantity);
             }
-
         }
     },
 
@@ -469,7 +476,7 @@ aos.Planet.prototype = {
 
     onBuildingButtonClicked: function (templateName) {
         const building = aos.buildingTemplates[templateName];
-        const tile = (this.renderModel.selectedTile === -1 ? {isLand : true} : this.tiles[this.renderModel.selectedTile]);
+        const tile = (this.renderModel.selectedTile === -1 ? { isLand: true } : this.tiles[this.renderModel.selectedTile]);
         if (building.type === 'ship' || this.renderModel.selectedTile !== -1) {
             if ((tile.isLand && building.buildOnLand) || (!tile.isLand && building.buildOnWater)) {
                 let constructOk = true;

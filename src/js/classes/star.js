@@ -58,7 +58,7 @@ aos.Star = function () {
 
 aos.Star.prototype = {
 
-    generate: function () {
+    generate: function (wantSolar) {
         // we only generate main sequence stars because they represent more than 90% of the galaxy
         // source: https://astronomy.stackexchange.com/questions/13165/what-is-the-frequency-distribution-for-luminosity-classes-in-the-milky-way-galax
         if (this.isNotable) {
@@ -67,11 +67,18 @@ aos.Star.prototype = {
         } else {
             this.sizeRatio = 7.0 * Math.random() * Math.random(); // squared because low energy stars are supposed to be more common in a real-world galaxy
         }
-        for (let nbPlanets = 1 + Math.floor((10 - this.sizeRatio) * Math.random()) ; nbPlanets > 0 ; nbPlanets--) {
+        let nbPlanets = 1 + Math.floor((10 - this.sizeRatio) * Math.random());
+        if (wantSolar) {
+            nbPlanets = 8;
+            this.hasShip = true;
+            this.ship = new aos.Ship();
+            this.ship.init();
+        }
+        for (; nbPlanets > 0 ; nbPlanets--) {
             this.planets.push(new aos.Planet());
         }
-        this.planets.forEach(function (planet) {
-            planet.generate();
+        this.planets.forEach(function (planet, idx) {
+            planet.generate(wantSolar, idx);
             planet.setupEvents();
         }, this);
         //#region Lore
@@ -206,7 +213,7 @@ aos.Star.prototype = {
         this.selectedPlanetIndex = planetId;
         this.selectedPlanet = this.planets[planetId];
         //this.selectedPlanet.renderModel.selectedTile = -1;
-        //this.selectedPlanet.addResource('metal', 'storage', 20000);
+        //this.selectedPlanet.addResource('Metal', 'storage', 20000);
         [].forEach.call(document.getElementById('miniatureTabs').childNodes, function (li) {
             if (+li.dataset.index === planetId) {
                 li.className = 'active';
