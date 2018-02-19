@@ -178,7 +178,7 @@ aos.Planet.prototype = {
 
             this.addResource('Mineral', 'planet', 0);
             this.addResource('Metal', 'planet', 0);
-            this.addResource('Fissile material', 'planet', 0);
+            this.addResource('Fissile material', 'planet', 10000);
             this.addResource('Ground pollution', 'planet', 0);
         } else if (planetId === 1) { // Venus
             this.addResource('Oxygen', 'planet', 0);
@@ -190,9 +190,9 @@ aos.Planet.prototype = {
             this.addResource('Fresh water', 'planet', 0);
             this.addResource('Toxic waste', 'planet', 0);
 
-            this.addResource('Mineral', 'planet', 0);
-            this.addResource('Metal', 'planet', 0);
-            this.addResource('Fissile material', 'planet', 0);
+            this.addResource('Mineral', 'planet', 9700000);
+            this.addResource('Metal', 'planet', 200000);
+            this.addResource('Fissile material', 'planet', 10000);
             this.addResource('Ground pollution', 'planet', 0);
         } else if (planetId === 3) { // Mars
             this.addResource('Oxygen', 'planet', 0);
@@ -200,12 +200,12 @@ aos.Planet.prototype = {
             this.addResource('Oxocarbon', 'planet', 960000);
             this.addResource('Acid cloud', 'planet', 0);
 
-            this.addResource('Salt water', 'planet', 0);
+            this.addResource('Salt water', 'planet', 10000);
             this.addResource('Fresh water', 'planet', 0);
             this.addResource('Toxic waste', 'planet', 0);
 
-            this.addResource('Mineral', 'planet', 0);
-            this.addResource('Metal', 'planet', 0);
+            this.addResource('Mineral', 'planet', 9700000);
+            this.addResource('Metal', 'planet', 200000);
             this.addResource('Fissile material', 'planet', 0);
             this.addResource('Ground pollution', 'planet', 0);
         } else if (planetId === 4) { // Jupiter
@@ -351,30 +351,39 @@ aos.Planet.prototype = {
     },
 
     produce: function () {
-        this.tiles.forEach(function (tile, i) {
-            if (tile.buildingTemplate !== '') {
-                tile.functional = true;
-                const building = aos.buildingTemplates[tile.buildingTemplate];
-                if (typeof building.produce.require !== 'undefined') {
-                    building.produce.require.forEach(function (req, i) {
-                        const removeRes = this.removeResource(req.name, req.quantity, req.planetResource, true);
-                        if (removeRes !== req.quantity) {
-                            tile.functional = false;
-                        }
-                    }, this);
-                    if (tile.functional) {
-                        building.produce.require.forEach(function (req, i) {
-                            this.removeResource(req.name, req.quantity, req.planetResource, false);
-                        }, this);
+        this.storedResources[0].quantity = 0;
+        this.tiles.filter(function (t) { return t.buildingTemplate !== '' && aos.buildingTemplates[t.buildingTemplate].type === 'Power Plant' }).forEach(function (tile) {
+            this.produceTile(tile);
+        }, this);
+        this.resources[0].quantity = this.storedResources[0].quantity;
+        this.tiles.filter(function (t) { return t.buildingTemplate !== '' && aos.buildingTemplates[t.buildingTemplate].type !== 'Power Plant' }).forEach(function (tile) {
+            this.produceTile(tile);
+        }, this);
+    },
+
+    produceTile: function (tile) {
+        if (tile.buildingTemplate !== '') {
+            tile.functional = true;
+            const building = aos.buildingTemplates[tile.buildingTemplate];
+            if (typeof building.produce.require !== 'undefined') {
+                building.produce.require.forEach(function (req) {
+                    const removeRes = this.removeResource(req.name, req.quantity, req.planetResource, true);
+                    if (removeRes !== req.quantity) {
+                        tile.functional = false;
                     }
-                }
+                }, this);
                 if (tile.functional) {
-                    building.produce.product.forEach(function (prod, i) {
-                        this.addResource(prod.name, prod.to, prod.quantity);
+                    building.produce.require.forEach(function (req) {
+                        this.removeResource(req.name, req.quantity, req.planetResource, false);
                     }, this);
                 }
             }
-        }, this);
+            if (tile.functional) {
+                building.produce.product.forEach(function (prod) {
+                    this.addResource(prod.name, prod.to, prod.quantity);
+                }, this);
+            }
+        }
     },
 
     runPopulation: function () {

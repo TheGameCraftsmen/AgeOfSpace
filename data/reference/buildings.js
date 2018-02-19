@@ -16,7 +16,7 @@ aos.buildingTemplates = {
                 {
                     "name": "Energy",
                     "quantity": 50,
-                    "to": "planet"
+                    "to": "storage"
                 }
             ]
         },
@@ -37,7 +37,7 @@ aos.buildingTemplates = {
                 {
                     "name": "Energy",
                     "quantity": 50,
-                    "to": "planet"
+                    "to": "storage"
                 }
             ]
         },
@@ -58,7 +58,7 @@ aos.buildingTemplates = {
                 {
                     "name": "Energy",
                     "quantity": 200,
-                    "to": "planet"
+                    "to": "storage"
                 },
                 {
                     "name": "Ground pollution",
@@ -90,7 +90,7 @@ aos.buildingTemplates = {
                 {
                     "name": "Energy",
                     "quantity": 200,
-                    "to": "planet"
+                    "to": "storage"
                 }
             ]
         },

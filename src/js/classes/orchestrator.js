@@ -73,6 +73,13 @@ aos.Orchestrator.prototype = {
                 + '</svg>';
             const image = document.getElementById("resourceImg" + i);
             image.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCode);
+            const fullSvgCodeDisabled = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+                + '<path fill="{color}" d="'.replace('{color}', 'hsl(0, 80%, 50%)')
+                + aos.buildingTemplates[key].svgCode
+                + '"></path>'
+                + '</svg>';
+            const imageDisabled = document.getElementById("resourceDisabled" + i);
+            imageDisabled.src = 'data:image/svg+xml,' + encodeURIComponent(fullSvgCodeDisabled);
         }, this);
 
     },
