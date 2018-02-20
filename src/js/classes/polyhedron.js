@@ -26,12 +26,12 @@ aos.Polyhedron = function () {
     this.rotateY1 = null;
     this.rotateY1r = null;
     this.rotates = true;
-    this.hoveredTriangle = -1;
     this.mousePosition = [0, 0];
     this.cameraXrotate = 0;
 
     this.wantSelectedTile = false;
     this.selectedTile = -1;
+    this.hoverTile = -1;
 };
 
 
@@ -412,7 +412,7 @@ aos.Polyhedron.prototype = {
         this.tessellatedTriangles.sort(function (a, b) {
             return a[3] - b[3];
         });
-        let hoverTriangle = -1;
+        this.hoverTile = -1;
         this.tessellatedTriangles.forEach(function (tri) {
             if (tri[3] > 4.08) {
                 ctx.beginPath();
@@ -421,7 +421,7 @@ aos.Polyhedron.prototype = {
                 ctx.lineTo(screenPoints[tri[2]][0], screenPoints[tri[2]][1]);
                 ctx.closePath();
                 if (!this.rotates && ctx.isPointInPath(this.mousePosition[0], this.mousePosition[1])) {
-                    hoverTriangle = tri[4];
+                    this.hoverTile = tri[4];
                     if (this.wantSelectedTile && this.selectedTile === tri[4]) {
                         this.selectedTile = -1;
                         this.wantSelectedTile = false;
@@ -441,7 +441,7 @@ aos.Polyhedron.prototype = {
                 let triColor = tiles[tri[4]].color;
                 if (this.selectedTile === tri[4]) {
                     triColor = 'hsl(350, 80%, 20%)';
-                } else if (hoverTriangle === tri[4]) {
+                } else if (this.hoverTile === tri[4]) {
                     triColor = '#404';
                 }
                 ctx.beginPath();

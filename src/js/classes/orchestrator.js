@@ -570,11 +570,15 @@ aos.Orchestrator.prototype = {
         document.getElementById('planetModelCanvas').addEventListener('mouseover', function (e) {
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.renderModel.rotates = false;
+                document.getElementById('contextualBlock').style.display = 'block';
+                this.selectedStar.selectedPlanet.setWantPolyhedronContextual(true);
             }
         }.bind(this), false);
         document.getElementById('planetModelCanvas').addEventListener('mouseout', function (e) {
             if (this.selectedStar !== null) {
                 this.selectedStar.selectedPlanet.renderModel.rotates = true;
+                document.getElementById('contextualBlock').style.display = 'none';
+                this.selectedStar.selectedPlanet.setWantPolyhedronContextual(false);
             }
         }.bind(this), false);
         document.getElementById('planetModelCanvas').addEventListener('mousemove', function (e) {
@@ -615,7 +619,9 @@ aos.Orchestrator.prototype = {
 
         window.addEventListener('requestUiFastRefresh', function (e) {
             document.getElementById('gameTime').textContent = (this.gameTime / 1000.0).toFixed(1);
-            //document.getElementById('debug').innerHTML = JSON.stringify(this.pies[0].content);
+            if (this.selectedStar !== null) {
+                this.selectedStar.selectedPlanet.showStatsFast();
+            }
         }.bind(this), false);
         window.addEventListener('requestUiSlowRefresh', function (e) {
             if (this.selectedStar !== null) {

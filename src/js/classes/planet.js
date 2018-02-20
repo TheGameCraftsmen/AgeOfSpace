@@ -42,6 +42,8 @@ aos.Planet = function () {
     this.availableFoodRatio = 0;
     /** @type {aos.Polyhedron} */
     this.renderModel = null;
+
+    this.wantPolyhedronContextual = false;
 };
 
 aos.Planet.prototype = {
@@ -572,6 +574,12 @@ aos.Planet.prototype = {
         this.updateBuildingButtons();
     },
 
+    showStatsFast: function () {
+        if (this.wantPolyhedronContextual) {
+            this.renderPolyhedronContextual();
+        }
+    },
+
     setupEvents: function () {
         window.addEventListener('gameplayTick', function (e) {
             this.run();
@@ -663,4 +671,29 @@ aos.Planet.prototype = {
             throw 'unexpected factor in aos.populations';
         }
     },
+
+    setWantPolyhedronContextual: function (want) {
+        this.wantPolyhedronContextual = want;
+        this.renderPolyhedronContextual();
+    },
+
+    renderPolyhedronContextual: function () {
+        if (this.wantPolyhedronContextual) {
+            document.getElementById('contextualTitle').innerHTML = 'Earth<br><em>Planet</em>';
+            let contextualTxt = '';
+            if (this.renderModel.hoverTile === -1) {
+                contextualTxt = 'no tile';
+            } else {
+                const tile = this.tiles[this.renderModel.hoverTile];
+                if (tile.isLand) {
+                    contextualTxt = 'land';
+                } else {
+                    contextualTxt = 'ocean';
+                }
+            }
+            document.getElementById('contextualTxt').innerHTML = contextualTxt;
+        } else {
+        }
+    },
+
 };
