@@ -352,6 +352,17 @@ aos.Planet.prototype = {
         return qtyRemoved;
     },
 
+    getWaterRatio: function (planetResource) {
+        const source = planetResource ? this.resources : this.storedResources;
+        const freshQty = ((source.filter(function (res) { return res.name === 'Fresh water' }))[0]).quantity;
+        const saltQty = ((source.filter(function (res) { return res.name === 'Salt water' }))[0]).quantity;
+        if (freshQty + saltQty === 0) {
+            return 0
+        } else {
+            return freshQty / (freshQty + saltQty);
+        }
+    },
+
     produce: function () {
         this.storedResources[0].quantity = 0;
         this.tiles.filter(function (t) { return t.buildingTemplate !== '' && aos.buildingTemplates[t.buildingTemplate].type === 'Power Plant' }).forEach(function (tile) {
@@ -367,22 +378,45 @@ aos.Planet.prototype = {
         if (tile.buildingTemplate !== '') {
             tile.functional = true;
             const building = aos.buildingTemplates[tile.buildingTemplate];
+            let freshWaterRatio = 0;
             if (typeof building.produce.require !== 'undefined') {
                 building.produce.require.forEach(function (req) {
-                    const removeRes = this.removeResource(req.name, req.quantity, req.planetResource, true);
-                    if (removeRes !== req.quantity) {
-                        tile.functional = false;
+                    if (req.name === 'Water') {
+                        freshWaterRatio = this.getWaterRatio(req.planetResource);
+                        const removeRes1 = this.removeResource('Fresh water', req.quantity * freshWaterRatio, req.planetResource, true);
+                        if (removeRes1 !== req.quantity * freshWaterRatio) {
+                            tile.functional = false;
+                        }
+                        const removeRes2 = this.removeResource('Salt water', req.quantity * (1 - freshWaterRatio), req.planetResource, true);
+                        if (removeRes2 !== req.quantity * (1 - freshWaterRatio)) {
+                            tile.functional = false;
+                        }
+                    } else {
+                        const removeRes = this.removeResource(req.name, req.quantity, req.planetResource, true);
+                        if (removeRes !== req.quantity) {
+                            tile.functional = false;
+                        }
                     }
                 }, this);
                 if (tile.functional) {
                     building.produce.require.forEach(function (req) {
-                        this.removeResource(req.name, req.quantity, req.planetResource, false);
+                        if (req.name === 'Water') {
+                            this.removeResource('Fresh water', req.quantity * freshWaterRatio, req.planetResource, false);
+                            this.removeResource('Salt water', req.quantity * (1 - freshWaterRatio), req.planetResource, false);
+                        } else {
+                            this.removeResource(req.name, req.quantity, req.planetResource, false);
+                        }
                     }, this);
                 }
             }
             if (tile.functional) {
                 building.produce.product.forEach(function (prod) {
-                    this.addResource(prod.name, prod.to, prod.quantity);
+                    if (prod.name === 'Water') {
+                        this.addResource('Fresh water', prod.to, prod.quantity * freshWaterRatio);
+                        this.addResource('Salt water', prod.to, prod.quantity * (1 - freshWaterRatio));
+                    } else {
+                        this.addResource(prod.name, prod.to, prod.quantity);
+                    }
                 }, this);
             }
         }
