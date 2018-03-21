@@ -157,9 +157,9 @@ aos.populations =
     "Viruses": {
         "spontaneousBirth": true,
         "environment": [],
-        "naturalDecay": 0.999,
+        "naturalDecay": 0.998,
         "hostileDecay": 0.900,
-        "foodIntake": 0.001,
+        "foodIntake": 0.002,
         "food": [
             { "resource": "Acid cloud", "ratio": 0.40, "limit": 0.1 },
             { "resource": "Toxic waste", "ratio": 0.30, "limit": 0.1 },
@@ -170,7 +170,7 @@ aos.populations =
             { "constant": 1 }],
         "growthFactor2": [
             { "attribute": "availableFoodRatio" },
-            { "constant": 0.002 }],
+            { "constant": 0.004 }],
         "habitatSize1": [
             { "constant": 300000 }],
         "habitatSize2": [],

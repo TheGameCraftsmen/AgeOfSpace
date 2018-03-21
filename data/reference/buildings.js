@@ -258,7 +258,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "air",
+                    "name": "Air",
                     "quantity": 1000,
                     "to": "storage"
                 }
@@ -270,7 +270,7 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "air",
+                    "name": "Air",
                     "quantity": 1000,
                     "planetResource": true
                 }
@@ -330,7 +330,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "pollution",
+                    "name": "Pollution",
                     "quantity": 100,
                     "to": "storage"
                 }
@@ -342,8 +342,8 @@ aos.buildingTemplates = {
                     "planetResource": true
                 },
                 {
-                    "name": "pollution",
-                    "quantity": 1000,
+                    "name": "Pollution",
+                    "quantity": 100,
                     "planetResource": true
                 }
             ]
@@ -470,7 +470,7 @@ aos.buildingTemplates = {
         "produce": {
             "product": [
                 {
-                    "name": "Humans",
+                    "name": "Machines",
                     "quantity": 100,
                     "to": "planet"
                 },

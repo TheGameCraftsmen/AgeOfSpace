@@ -363,6 +363,32 @@ aos.Planet.prototype = {
         }
     },
 
+    getAirRatio: function (planetResource) {
+        const source = planetResource ? this.resources : this.storedResources;
+        const oxygenQty = ((source.filter(function (res) { return res.name === 'Oxygen' }))[0]).quantity;
+        const inertQty = ((source.filter(function (res) { return res.name === 'Inert gases' }))[0]).quantity;
+        const oxocarbonQty = ((source.filter(function (res) { return res.name === 'Oxocarbon' }))[0]).quantity;
+        const airSum = oxygenQty + inertQty + oxocarbonQty;
+        if (airSum === 0) {
+            return { oxygen: 0, inert: 0, oxocarbon: 1 };
+        } else {
+            return { oxygen: oxygenQty / airSum, inert: inertQty / airSum, oxocarbon: oxocarbonQty / airSum };
+        }
+    },
+
+    getPollutionRatio: function (planetResource) {
+        const source = planetResource ? this.resources : this.storedResources;
+        const qty1 = ((source.filter(function (res) { return res.name === 'Acid cloud' }))[0]).quantity;
+        const qty2 = ((source.filter(function (res) { return res.name === 'Toxic waste' }))[0]).quantity;
+        const qty3 = ((source.filter(function (res) { return res.name === 'Ground pollution' }))[0]).quantity;
+        const qtySum = qty1 + qty2 + qty3;
+        if (qtySum === 0) {
+            return { air: 0, liquid: 0, ground: 1 };
+        } else {
+            return { air: qty1 / qtySum, liquid: qty2 / qtySum, ground: qty3 / qtySum };
+        }
+    },
+
     produce: function () {
         this.storedResources[0].quantity = 0;
         this.tiles.filter(function (t) { return t.buildingTemplate !== '' && aos.buildingTemplates[t.buildingTemplate].type === 'Power Plant' }).forEach(function (tile) {
@@ -379,6 +405,8 @@ aos.Planet.prototype = {
             tile.functional = true;
             const building = aos.buildingTemplates[tile.buildingTemplate];
             let freshWaterRatio = 0;
+            let airRatio = 0;
+            let pollutionRatio = 0;
             if (typeof building.produce.require !== 'undefined') {
                 building.produce.require.forEach(function (req) {
                     if (req.name === 'Water') {
@@ -389,6 +417,34 @@ aos.Planet.prototype = {
                         }
                         const removeRes2 = this.removeResource('Salt water', req.quantity * (1 - freshWaterRatio), req.planetResource, true);
                         if (removeRes2 !== req.quantity * (1 - freshWaterRatio)) {
+                            tile.functional = false;
+                        }
+                    } else if (req.name === 'Air') {
+                        airRatio = this.getAirRatio(req.planetResource);
+                        const removeRes1 = this.removeResource('Oxygen', req.quantity * airRatio.oxygen, req.planetResource, true);
+                        if (removeRes1 !== req.quantity * airRatio.oxygen) {
+                            tile.functional = false;
+                        }
+                        const removeRes2 = this.removeResource('Inert gases', req.quantity * airRatio.inert, req.planetResource, true);
+                        if (removeRes2 !== req.quantity * airRatio.inert) {
+                            tile.functional = false;
+                        }
+                        const removeRes3 = this.removeResource('Oxocarbon', req.quantity * airRatio.oxocarbon, req.planetResource, true);
+                        if (removeRes3 !== req.quantity * airRatio.oxocarbon) {
+                            tile.functional = false;
+                        }
+                    } else if (req.name === 'Pollution') {
+                        pollutionRatio = this.getPollutionRatio(req.planetResource);
+                        const removeRes1 = this.removeResource('Acid cloud', req.quantity * pollutionRatio.air, req.planetResource, true);
+                        if (removeRes1 !== req.quantity * pollutionRatio.air) {
+                            tile.functional = false;
+                        }
+                        const removeRes2 = this.removeResource('Toxic waste', req.quantity * pollutionRatio.liquid, req.planetResource, true);
+                        if (removeRes2 !== req.quantity * pollutionRatio.liquid) {
+                            tile.functional = false;
+                        }
+                        const removeRes3 = this.removeResource('Ground pollution', req.quantity * pollutionRatio.ground, req.planetResource, true);
+                        if (removeRes3 !== req.quantity * pollutionRatio.ground) {
                             tile.functional = false;
                         }
                     } else {
@@ -403,6 +459,14 @@ aos.Planet.prototype = {
                         if (req.name === 'Water') {
                             this.removeResource('Fresh water', req.quantity * freshWaterRatio, req.planetResource, false);
                             this.removeResource('Salt water', req.quantity * (1 - freshWaterRatio), req.planetResource, false);
+                        } else if (req.name === 'Air') {
+                            this.removeResource('Oxygen', req.quantity * airRatio.oxygen, req.planetResource, false);
+                            this.removeResource('Inert gases', req.quantity * airRatio.inert, req.planetResource, false);
+                            this.removeResource('Oxocarbon', req.quantity * airRatio.oxocarbon, req.planetResource, false);
+                        } else if (req.name === 'Pollution') {
+                            this.removeResource('Acid cloud', req.quantity * pollutionRatio.air, req.planetResource, false);
+                            this.removeResource('Toxic waste', req.quantity * pollutionRatio.liquid, req.planetResource, false);
+                            this.removeResource('Ground pollution', req.quantity * pollutionRatio.ground, req.planetResource, false);
                         } else {
                             this.removeResource(req.name, req.quantity, req.planetResource, false);
                         }
@@ -414,6 +478,14 @@ aos.Planet.prototype = {
                     if (prod.name === 'Water') {
                         this.addResource('Fresh water', prod.to, prod.quantity * freshWaterRatio);
                         this.addResource('Salt water', prod.to, prod.quantity * (1 - freshWaterRatio));
+                    } else if (prod.name === 'Air') {
+                        this.addResource('Oxygen', prod.to, prod.quantity * airRatio.oxygen);
+                        this.addResource('Inert gases', prod.to, prod.quantity * airRatio.inert);
+                        this.addResource('Oxocarbon', prod.to, prod.quantity * airRatio.oxocarbon);
+                    } else if (prod.name === 'Pollution') {
+                        this.addResource('Acid cloud', prod.to, prod.quantity * pollutionRatio.air);
+                        this.addResource('Toxic waste', prod.to, prod.quantity * pollutionRatio.liquid);
+                        this.addResource('Ground pollution', prod.to, prod.quantity * pollutionRatio.ground);
                     } else {
                         this.addResource(prod.name, prod.to, prod.quantity);
                     }
