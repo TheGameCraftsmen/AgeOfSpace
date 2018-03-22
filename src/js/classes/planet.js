@@ -107,7 +107,6 @@ aos.Planet.prototype = {
             this.generateRandom();
         }
 
-        this.addResource('Metal', 'storage', 20000); // TODO remove this
         this.renderModel = new aos.Polyhedron();
         this.renderModel.initialize(this.size);
     },

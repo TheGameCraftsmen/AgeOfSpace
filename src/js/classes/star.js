@@ -73,6 +73,12 @@ aos.Star.prototype = {
             this.hasShip = true;
             this.ship = new aos.Ship();
             this.ship.init();
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Metal' }))[0]).quantity = 30000;
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Bacteria' }))[0]).quantity = 10000;
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Plants' }))[0]).quantity = 10000;
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Animals' }))[0]).quantity = 10000;
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Humans' }))[0]).quantity = 20000;
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Machines' }))[0]).quantity = 10000;
         }
         for (; nbPlanets > 0 ; nbPlanets--) {
             this.planets.push(new aos.Planet());
