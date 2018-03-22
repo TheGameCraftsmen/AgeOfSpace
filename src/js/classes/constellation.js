@@ -85,18 +85,27 @@ aos.Constellation.prototype = {
         // green for notable (15px radius)
         // red for common (10px radius)
         if (/*highlight*/ true) {
-            this.stars.forEach(function (star) {
-                ctx.beginPath();
+            this.stars.forEach(function (star) {                
                 if (star.hasShip) {
+                    ctx.beginPath();
                     ctx.strokeStyle = '#360';
                     ctx.lineWidth = 2;
                     ctx.arc(600 + star.x, 450 + star.y, 15, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }
+                if (star.planets
+                    .map(function (planet) { return planet.storedResources.map(function (res) { return res.name === 'Humans' ? res.quantity : 0 }).reduce(function (q1, q2) { return q1 + q2 }) })
+                    .reduce(function (p1, p2) { return p1 + p2 }) > 1000) {
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba(0, 128, 128, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
+                    ctx.fill();
                 } else {
                     //ctx.strokeStyle = '#600';
                     //ctx.lineWidth = 2;
                     //ctx.arc(600 + star.x, 450 + star.y, 10, 0, 2 * Math.PI);
-                }
-                ctx.stroke();
+                }                
             });
         }
 

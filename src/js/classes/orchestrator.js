@@ -267,7 +267,7 @@ aos.Orchestrator.prototype = {
 
             ctx.beginPath();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#066';
+            ctx.strokeStyle = '#360';
             ctx.arc(600 + shipX, 450 + shipY, 5, 0, 2 * Math.PI);
             ctx.stroke();
 
@@ -490,7 +490,10 @@ aos.Orchestrator.prototype = {
                     shipInTransit.from = this.dragStart;
                     shipInTransit.to = this.dragEnd;
                     shipInTransit.startTick = this.gameTime;
-                    shipInTransit.endTick = this.gameTime + 10000;
+                    const transitDistanceX = shipInTransit.from.x - shipInTransit.to.x;
+                    const transitDistanceY = shipInTransit.from.y - shipInTransit.to.y;
+                    const transitDistance = Math.sqrt(transitDistanceX * transitDistanceX + transitDistanceY * transitDistanceY);
+                    shipInTransit.endTick = this.gameTime + transitDistance * 20;
                     this.transits.push(shipInTransit);
                     this.dragStart.hasShip = false;
                     this.dragStart.ship = null;
