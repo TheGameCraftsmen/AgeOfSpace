@@ -705,6 +705,10 @@ aos.Planet.prototype = {
                     const qty = this.removeResource(cost.name, cost.quantity, false, true);
                     if (qty != cost.quantity) {
                         constructOk = false;
+                    } else if (building.type === 'ship' && aos.game.selectedStar.hasShip) {
+                        constructOk = false;
+                    } else if (building.type === 'ship' && aos.game.transits.filter(function (transit) { return transit.to === aos.game.selectedStar }).length > 0) {
+                        constructOk = false;
                     }
                 }, this);
                 if (constructOk) {
