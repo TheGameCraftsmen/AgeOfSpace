@@ -517,6 +517,10 @@ aos.Planet.prototype = {
                 } else {
                     storage.quantity *= populationRules.hostileDecay;
                 }
+                if (template.name === 'Bacteria' || template.name === 'Plants' || template.name === 'Animals' || template.name === 'Humans') {
+                    const virusPop = ((this.storedResources.filter(function (res) { return res.name === 'Viruses' }))[0]).quantity;
+                    storage.quantity *= (1 - 0.003 * Math.log(1 + virusPop));
+                }
                 if (storage.quantity < 0) {
                     storage.quantity = 0;
                 }

@@ -79,6 +79,7 @@ aos.Star.prototype = {
             ((this.ship.storedResources.filter(function (res) { return res.name === 'Animals' }))[0]).quantity = 10000;
             ((this.ship.storedResources.filter(function (res) { return res.name === 'Humans' }))[0]).quantity = 20000;
             ((this.ship.storedResources.filter(function (res) { return res.name === 'Machines' }))[0]).quantity = 10000;
+            ((this.ship.storedResources.filter(function (res) { return res.name === 'Viruses' }))[0]).quantity = 10000; // TODO remove me
         }
         for (; nbPlanets > 0 ; nbPlanets--) {
             this.planets.push(new aos.Planet());
