@@ -252,11 +252,11 @@ img {
     display: none;
 }
 
-#res0Ship {
+#res0Ship, #res10Ship, #res13Ship, #res17Ship {
     visibility: hidden;
 }
 
-#res0Storage > .resourceBar > .onTop {
+#res0Storage > .resourceBar > .onTop, #res10Storage > .resourceBar > .onTop, #res13Storage > .resourceBar > .onTop, #res17Storage > .resourceBar > .onTop {
     visibility: hidden;
 }
 

@@ -141,7 +141,10 @@ aos.Planet.prototype = {
     },
 
     generateSolar: function (planetId) {
-        this.landSize = (planetId === 2 ? 0.30 : 1.0); // (percent)
+        const planetSizes = [8, 12, 12, 8, 60, 60, 20, 20];
+        this.size = planetSizes[planetId];
+        const landSizeq = [1.0, 1.0, 0.30, 1.0, 0.0, 0.0, 0.0, 0.0]; // (percent)
+        this.landSize = landSizeq[planetId];
         this.buildTiles();
         aos.resources.forEach(function (resource, i) {
             this.addResource(resource.name, 'storage', 0);

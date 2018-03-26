@@ -112,7 +112,7 @@ aos.Resource.prototype = {
         }
         code += '</div>';
 
-        if (withIcon && this.type !== 'population' && this.type !== 'Energy') {
+        if (withIcon && this.type !== 'population' && this.type !== 'Energy' && this.name !== 'Ground pollution' && this.name !== 'Toxic waste' && this.name !== 'Acid cloud') {
             code += '<div class="resourceIcon halfWidthIcon"></div>';
             code += '<div class="resourceIcon onTop">';
             code += '<svg viewBox="0 0 512 512">'
