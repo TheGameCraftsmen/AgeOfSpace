@@ -141,7 +141,7 @@ aos.Resource.prototype = {
         //} else {
         //    this.htmlElement.style.display = 'block';
         //}
-        const percent = 100.0 * (Math.log(this.quantity + 1200.0) - 7) / 13.0;
+        const percent = this.type === 'Energy' ? 100.0 * aos.game.selectedStar.selectedPlanet.resources[this.index].quantity / aos.game.selectedStar.selectedPlanet.storedResources[this.index].quantity : 100.0 * (Math.log(this.quantity + 1200.0) - 7) / 13.0;
         this.htmlElement.firstChild.childNodes[5].firstChild.style.width = '' + percent + '%';
         if (this.quantity === 0) {
             this.htmlElement.firstChild.childNodes[5].firstChild.style.width = '0';
