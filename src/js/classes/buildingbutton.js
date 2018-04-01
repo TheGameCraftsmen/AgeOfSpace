@@ -55,32 +55,39 @@ aos.BuildingButton.prototype = {
             const template = aos.buildingTemplates[this.buildingTemplate];
             document.getElementById('contextualBlock').style.display = 'block';
             document.getElementById('contextualTitle').innerHTML = this.buildingTemplate + '<br><em>' + template.type + '</em>';
-            var Ctxt = document.getElementById('contextualTxt');
-            var ctext = "<h3>Construction cost</h3>"
-            ctext += "<table>";
-
-            for (let i = 0; i < template.constructionCost.length; i++) {
-                ctext += "<tr><td>" + template.constructionCost[i].name + "</Td><td width='10px'>:</Td><td>" + template.constructionCost[i].quantity + "</td></tr>";
-            }
-            ctext += "</table><br>";
-
-            ctext += "<h3><b>Yield</h3>";
-            ctext += "<table>";
-            for (let itProd = 0 ; itProd < template.produce.product.length ; itProd++) {
-                ctext += "<tr><td>" + template.produce.product[itProd].name + "</Td><td width='10px'>:</Td><td>" + template.produce.product[itProd].quantity + "</td></tr>";
-            }
-            ctext += "</table><br>";
-            ctext += "<h3>Running Condition</h3>";
-            ctext += "<table>";
-            if (typeof template.produce.require !== "undefined") {
-                for (let i = 0; i < template.produce.require.length; i++) {
-                    ctext += "<tr><td>" + template.produce.require[i].name + "</td><td width='10px'>:</Td><td>" + template.produce.require[i].quantity + "</td></tr>";
-                }
-            }
-            ctext += "</table>";
-            Ctxt.innerHTML = ctext;
+            const Ctxt = document.getElementById('contextualTxt');
+            Ctxt.innerHTML = this.getBuildingContextual(this.buildingTemplate, true);
         } else {
         }
     },
+
+    getBuildingContextual: function (buildingTemplateName, withConstruction) {
+        const template = aos.buildingTemplates[buildingTemplateName];
+        let ctext = '';
+        if (withConstruction) {
+            ctext += '<h3>Construction cost</h3>';
+            ctext += '<table>';
+
+            for (let i = 0; i < template.constructionCost.length; i++) {
+                ctext += '<tr><td>' + template.constructionCost[i].name + '</td><td width="10px">:</td><td>' + template.constructionCost[i].quantity + '</td></tr>';
+            }
+            ctext += '</table><br>';
+        }
+        ctext += '<h3><b>Yield</h3>';
+        ctext += '<table>';
+        for (let itProd = 0 ; itProd < template.produce.product.length ; itProd++) {
+            ctext += '<tr><td>' + template.produce.product[itProd].name + '</td><td width="10px">:</td><td>' + template.produce.product[itProd].quantity + '</td></tr>';
+        }
+        ctext += '</table><br>';
+        ctext += '<h3>Running Condition</h3>';
+        ctext += '<table>';
+        if (typeof template.produce.require !== 'undefined') {
+            for (let i = 0; i < template.produce.require.length; i++) {
+                ctext += '<tr><td>' + template.produce.require[i].name + '</td><td width="10px">:</td><td>' + template.produce.require[i].quantity + '</td></tr>';
+            }
+        }
+        ctext += '</table>';
+        return ctext;
+    }
 
 };

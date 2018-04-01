@@ -272,7 +272,7 @@ aos.Planet.prototype = {
     },
 
     generateAir: function () {
-        var compositionPercent = 0;
+        let compositionPercent = 0;
         for (let i = 0 ; i < aos.resources.length ; i++) {
             if (aos.resources[i].category == "air") {
                 let resource = new aos.Resource();
@@ -293,7 +293,7 @@ aos.Planet.prototype = {
     },
 
     generateLiquid: function () {
-        var compositionPercent = 0;
+        let compositionPercent = 0;
         for (let i = 0 ; i < aos.resources.length ; i++) {
             if (aos.resources[i].category == "liquid") {
                 let resource = new aos.Resource();
@@ -314,7 +314,7 @@ aos.Planet.prototype = {
     },
 
     generateGround: function () {
-        var compositionPercent = 0;
+        let compositionPercent = 0;
         for (let i = 0 ; i < aos.resources.length ; i++) {
             if (aos.resources[i].category == "ground") {
                 let resource = new aos.Resource();
@@ -795,16 +795,23 @@ aos.Planet.prototype = {
 
     renderPolyhedronContextual: function () {
         if (this.wantPolyhedronContextual) {
-            document.getElementById('contextualTitle').innerHTML = 'Earth<br><em>Planet</em>';
+            document.getElementById('contextualTitle').innerHTML = '' + aos.game.selectedStar.properName.name + ' ' + aos.game.selectedStar.selectedPlanetIndex + '<br><em>Planet</em>';
             let contextualTxt = '';
             if (this.renderModel.hoverTile === -1) {
-                contextualTxt = 'no tile';
+                contextualTxt = '';
             } else {
                 const tile = this.tiles[this.renderModel.hoverTile];
                 if (tile.isLand) {
-                    contextualTxt = 'land';
+                    contextualTxt = '<br><div>Land area</div>';
                 } else {
-                    contextualTxt = 'ocean';
+                    contextualTxt = '<br><div>Ocean area</div>';
+                }
+                if (tile.buildingTemplate === '') {
+                    contextualTxt += '<br><div>' + 'Empty' + '</div>';
+                } else {
+                    contextualTxt += '<br><div>' + 'Contains ' + tile.buildingTemplate + '</div><br>';
+                    const button = new aos.BuildingButton();
+                    contextualTxt += button.getBuildingContextual(tile.buildingTemplate, false);
                 }
             }
             document.getElementById('contextualTxt').innerHTML = contextualTxt;

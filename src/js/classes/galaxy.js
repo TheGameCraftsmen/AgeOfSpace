@@ -636,7 +636,7 @@ aos.Galaxy.prototype = {
             //document.getElementById('debug').innerHTML += '' + i + '/' + JSON.stringify(c.stars.length) + '/' /*+ JSON.stringify(c.stars)*/ + '<br/>';
         }, this);
         this.stars.forEach(function (star, i) {
-            star.properName = properName[i];
+            star.properName = i === 0 ? { name: 'Sun' } : properName[i];
         }, this);
         //document.getElementById('debug').innerHTML +=
         //    '' + 'stars' + '/'
