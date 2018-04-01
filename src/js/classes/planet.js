@@ -178,10 +178,10 @@ aos.Planet.prototype = {
 
             this.addResource('Salt water', 'planet', 0);
             this.addResource('Fresh water', 'planet', 0);
-            this.addResource('Toxic waste', 'planet', 0);
+            this.addResource('Toxic waste', 'planet', 10000);
 
-            this.addResource('Mineral', 'planet', 0);
-            this.addResource('Metal', 'planet', 0);
+            this.addResource('Mineral', 'planet', 9700000);
+            this.addResource('Metal', 'planet', 200000);
             this.addResource('Fissile material', 'planet', 10000);
             this.addResource('Ground pollution', 'planet', 0);
         } else if (planetId === 1) { // Venus
@@ -192,7 +192,7 @@ aos.Planet.prototype = {
 
             this.addResource('Salt water', 'planet', 0);
             this.addResource('Fresh water', 'planet', 0);
-            this.addResource('Toxic waste', 'planet', 0);
+            this.addResource('Toxic waste', 'planet', 10000);
 
             this.addResource('Mineral', 'planet', 9700000);
             this.addResource('Metal', 'planet', 200000);
@@ -220,12 +220,12 @@ aos.Planet.prototype = {
 
             this.addResource('Salt water', 'planet', 0);
             this.addResource('Fresh water', 'planet', 0);
-            this.addResource('Toxic waste', 'planet', 0);
+            this.addResource('Toxic waste', 'planet', 10000000);
 
             this.addResource('Mineral', 'planet', 0);
             this.addResource('Metal', 'planet', 0);
             this.addResource('Fissile material', 'planet', 0);
-            this.addResource('Ground pollution', 'planet', 0);
+            this.addResource('Ground pollution', 'planet', 10000000);
         } else if (planetId === 5) { // Saturn
             this.addResource('Oxygen', 'planet', 0);
             this.addResource('Inert gases', 'planet', 30000);
@@ -234,12 +234,12 @@ aos.Planet.prototype = {
 
             this.addResource('Salt water', 'planet', 0);
             this.addResource('Fresh water', 'planet', 0);
-            this.addResource('Toxic waste', 'planet', 0);
+            this.addResource('Toxic waste', 'planet', 10000000);
 
             this.addResource('Mineral', 'planet', 0);
             this.addResource('Metal', 'planet', 0);
             this.addResource('Fissile material', 'planet', 0);
-            this.addResource('Ground pollution', 'planet', 0);
+            this.addResource('Ground pollution', 'planet', 10000000);
         } else if (planetId === 6) { // Uranus
             this.addResource('Oxygen', 'planet', 0);
             this.addResource('Inert gases', 'planet', 150000);
@@ -248,12 +248,12 @@ aos.Planet.prototype = {
 
             this.addResource('Salt water', 'planet', 0);
             this.addResource('Fresh water', 'planet', 0);
-            this.addResource('Toxic waste', 'planet', 0);
+            this.addResource('Toxic waste', 'planet', 10000000);
 
             this.addResource('Mineral', 'planet', 0);
             this.addResource('Metal', 'planet', 0);
             this.addResource('Fissile material', 'planet', 0);
-            this.addResource('Ground pollution', 'planet', 0);
+            this.addResource('Ground pollution', 'planet', 10000000);
         } else if (planetId === 7) { // Neptune
             this.addResource('Oxygen', 'planet', 0);
             this.addResource('Inert gases', 'planet', 190000);
@@ -262,12 +262,12 @@ aos.Planet.prototype = {
 
             this.addResource('Salt water', 'planet', 0);
             this.addResource('Fresh water', 'planet', 0);
-            this.addResource('Toxic waste', 'planet', 0);
+            this.addResource('Toxic waste', 'planet', 10000000);
 
             this.addResource('Mineral', 'planet', 0);
             this.addResource('Metal', 'planet', 0);
             this.addResource('Fissile material', 'planet', 0);
-            this.addResource('Ground pollution', 'planet', 0);
+            this.addResource('Ground pollution', 'planet', 10000000);
         }
     },
 
