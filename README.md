@@ -1,4 +1,4 @@
-# age-of-space
+# Age of Space
 
 The purpose of this game is about age of space of humanity.
 Some AI predicate the end of humanity if humanity stays on planet Earth.
